@@ -23,6 +23,8 @@ class Particle:
     mass = property(lambda self: self.momentum[4])
     pt = property(lambda self: (self.px**2+self.py**2)**0.5)
     tLorentzVector = property(getTLorentzVector)
+    eta = property(lambda self: self.tLorentzVector.Eta())
+    phi = property(lambda self: self.tLorentzVector.Phi())
         
 class Event:
     def __init__(self,initstr):
