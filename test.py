@@ -56,6 +56,12 @@ for p in analysis.processes:
 #rescale histograms to cross section
 hInvariantMass.Scale(crossSection/hInvariantMass.Integral())
 hTransverseMass.Scale(crossSection/hTransverseMass.Integral())
+
+#Save Histograms to a file
+outfile = ROOT.TFile("outfile_lheanalyzer.root" ,"RECREATE")
+outfile.WriteTObject(hInvariantMass)
+outfile.WriteTObject(hTransverseMass)
+
 #draw histograms
 hTransverseMass.SetLineColor(ROOT.kRed)
 hInvariantMass.Draw("histo")
