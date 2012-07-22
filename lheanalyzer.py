@@ -115,7 +115,7 @@ class LorentzVector:
         self.py+=p.py
         self.pz+=p.pz
     def invariantMass(self):
-        return (self.energy**2-self.px**2-self.px**2-self.pz**2)**0.5
+        return (self.energy**2-self.px**2-self.py**2-self.pz**2)**0.5
         
     
 def invariantMass(p0,*particles):
