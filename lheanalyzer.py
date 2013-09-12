@@ -73,7 +73,6 @@ class LHEFile:
 
 
 class LHEAnalysis:
-    """Iterator for looping over a sequence backwards."""
     def __init__(self, filename):
         self.lhefile=LHEFile(filename)
         line=self.lhefile.next()
