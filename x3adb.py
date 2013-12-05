@@ -21,7 +21,7 @@ class x3adb:
         call=['cern-get-sso-cookie', '--krb', '--url', 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php', '--reprocess', '--outfile', self.cookiefile]
         x = subprocess.call(call)
         if x > 0:
-            logging.warning("Failed to retrieve a cookie, authentication not possible")
+            logging.warning("Failed to retrieve a cookie, authentication not possible "+str(x))
     def destroyauth(self):
         try:
             os.remove(self.cookiefile)
@@ -40,6 +40,9 @@ class x3adb:
     def editMCSample(self, id, sample):
         s = self.getAuthServerProxy()
         return s.editMCSample(id, sample)
+    def insertOrReplaceMCTags(self, id, tags):
+        s = self.getAuthServerProxy()
+        return s.insertOrReplaceMCTags(id, tags)
     def registerDataSample(self, sample):
         s = self.getAuthServerProxy()
         return s.registerDataSample(sample)
@@ -49,6 +52,9 @@ class x3adb:
     def getDataSample(self, sampleid):
         s = xmlrpclib.ServerProxy('https://olschew.web.cern.ch/olschew/x3adb/xmlrpc/x3adb_read.php')
         return s.getDataSample(sampleid)
+    def test(self):
+        s = self.getAuthServerProxy()
+        return s.test()
         
 def main():
     print "This is just a library"
