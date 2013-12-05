@@ -18,7 +18,7 @@ class x3adb:
         logging.info("Retrieving SSO cookie using cern-get-sso-cookie")
         self.obtainSSOCookies()
     def obtainSSOCookies(self):
-        call=['cern-get-sso-cookie', '--krb', '--url', 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php', '--reprocess', '--outfile', self.cookiefile]
+        call=['env','-i','cern-get-sso-cookie', '--krb', '--url', 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php', '--reprocess', '--outfile', self.cookiefile]
         x = subprocess.call(call)
         if x > 0:
             logging.warning("Failed to retrieve a cookie, authentication not possible "+str(x))
