@@ -7,58 +7,77 @@ import os
 class x3adb:
     def __init__(self, cookiefilepath='x3adb-ssocookie.txt'):
         self.cookiefile = os.path.abspath(cookiefilepath)
-    def authorize(self, username=None):
+        self.authurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php'
+        self.readurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc/x3adb_read.php'
+        self.domain  = 'olschew.web.cern.ch'
+    def authorize(self, username=None, trykerberos=3):
         print "Calling kinit, please enter your CERN password"
         call = ['kinit']
         if username is not None:
             call.append(username + "@CERN.CH")
-        x=subprocess.call(call)
-        print "Result of kinit: " +str(x)
-        logging.info("Result of kinit: " +str(x))
-        logging.info("Retrieving SSO cookie using cern-get-sso-cookie")
+        for i in range(trykerberos):
+            x = subprocess.call(call)
+            logging.info("Result of kinit: " + str(x))
+            if x == 0: break
+            print "kinit failed. Please try again."
         self.obtainSSOCookies()
     def obtainSSOCookies(self):
-        call=['env','-i','cern-get-sso-cookie', '--krb', '--url', 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php', '--reprocess', '--outfile', self.cookiefile]
+        call = ['env', '-i', 'cern-get-sso-cookie', '--krb', '--url', self.authurl, '--reprocess', '--outfile', self.cookiefile]
         x = subprocess.call(call)
         if x > 0:
-            logging.warning("Failed to retrieve a cookie, authentication not possible "+str(x))
+            logging.warning("Failed to retrieve a cookie, authentication not possible")
     def destroyauth(self):
         try:
             os.remove(self.cookiefile)
         except:
             logging.warning("Error while removing cookie file")
     def getAuthServerProxy(self):
-        domain = "olschew.web.cern.ch"
-        url = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php'
-        customtransport = transport(url)
-        customtransport.setcookies(self.cookiefile, domain)
-        s = xmlrpclib.ServerProxy(url, customtransport)
+        customtransport = transport(self.authurl)
+        customtransport.setcookies(self.cookiefile, self.domain)
+        s = xmlrpclib.ServerProxy(self.authurl, customtransport)
         return s
     def registerMCSample(self, sample):
-        s = self.getAuthServerProxy()
-        return s.registerMCSample(sample)
+        check = self.checksample(sample)
+        if check:
+            s = self.getAuthServerProxy()
+            return s.registerMCSample(sample)
     def editMCSample(self, id, sample):
-        s = self.getAuthServerProxy()
-        return s.editMCSample(id, sample)
+        check = self.checksample(sample)
+        if check:
+            s = self.getAuthServerProxy()
+            return s.editMCSample(id, sample)
     def insertOrReplaceMCTags(self, id, tags):
         s = self.getAuthServerProxy()
         return s.insertOrReplaceMCTags(id, tags)
     def registerDataSample(self, sample):
-        s = self.getAuthServerProxy()
-        return s.registerDataSample(sample)
+        check = self.checksample(sample)
+        if check:
+            s = self.getAuthServerProxy()
+            return s.registerDataSample(sample)
     def getMCSample(self, sampleid):
-        s = xmlrpclib.ServerProxy('https://olschew.web.cern.ch/olschew/x3adb/xmlrpc/x3adb_read.php')
+        s = xmlrpclib.ServerProxy(self.readurl)
         return s.getMCSample(sampleid)
     def getDataSample(self, sampleid):
-        s = xmlrpclib.ServerProxy('https://olschew.web.cern.ch/olschew/x3adb/xmlrpc/x3adb_read.php')
+        s = xmlrpclib.ServerProxy(self.readurl)
         return s.getDataSample(sampleid)
     def test(self):
         s = self.getAuthServerProxy()
         return s.test()
-        
+    def checksample(self,sample):
+        msg = None
+        if None in sample: msg = "None-item in sample"
+        if "tags" in sample:
+            if not type(sample['tags']) == list: msg = "Tags is not a list"
+        if "files" in sample:
+            if not type(sample['tags']) == list: msg = "Files is not a list"
+        if msg is not None:
+            logging.warning("Sample failed sanity checks: " + msg)
+            return False
+        return True
+
 def main():
     print "This is just a library"
-    
+
 
 
 class cookietransportrequest:
@@ -151,5 +170,5 @@ def transport(uri):
     else:
         return cookietransport()
     
-if __name__=="__main__":    
+if __name__ == "__main__":
     main()

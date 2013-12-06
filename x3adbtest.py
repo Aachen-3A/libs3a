@@ -13,7 +13,8 @@ def main():
     #Ein Sample erstellen
     files=["/neuertag","1/2/3.root"]
     tags = dict()
-    tags['MUSiC_test']="blub";
+    tags['MUSiC_test']="blub2";
+    tags['MUSiC_test2']="blub3";
     sample = dict()
     sample['original_name'] = "/neuertag"
     sample['skimmer_name'] = "CMS"
@@ -26,14 +27,19 @@ def main():
     sample['kfactor_reference'] = ""
     sample['prep_key'] = 0
     sample['parentsample'] = 0
+    sample = dict()
     sample['description'] = "bla"
-    sample['files'] = files
-    sample['tags'] = tags
+    #sample['files'] = files
+    #sample['tags'] = tags
 
     #Zum Schreiben muss man sich zunaechst autorisieren (lesen geht auch ohne)
     dblink.authorize(username="olschew")
-    neuessample = dblink.editMCSample(2,sample)
+    neuessample = dblink.test()
+    print sample
+    print "-----"
+    neuessample = dblink.registerMCSample(sample)
+    #neuessample = dblink.insertOrReplaceMCTags(2,tags)
     print neuessample
-
+    dblink.destroyauth()
 if __name__=="__main__":
     main()
