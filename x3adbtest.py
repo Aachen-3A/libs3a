@@ -1,10 +1,10 @@
-import x3adb
+import aix3adb
 import pprint
 def main():
     # Ein Datenbank-Objekt erstellen
     pp = pprint.PrettyPrinter(indent=4)
 
-    dblink=x3adb.x3adb()
+    dblink=aix3adb.aix3adb()
     # Ein Sample holen
     result = dblink.getMCSample(11)
     pp.pprint(result)

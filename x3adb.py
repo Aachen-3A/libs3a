@@ -4,8 +4,8 @@ import subprocess
 import cookielib
 import urlparse
 import os
-class x3adb:
-    def __init__(self, cookiefilepath='x3adb-ssocookie.txt'):
+class aix3adb:
+    def __init__(self, cookiefilepath='aix3adb-ssocookie.txt'):
         self.cookiefile = os.path.abspath(cookiefilepath)
         self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc_auth/x3adb_write.php'
         self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc/x3adb_read.php'
