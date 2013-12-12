@@ -4,6 +4,9 @@ import subprocess
 import cookielib
 import urlparse
 import os
+
+log = logging.getLogger( 'aix3adb' )
+
 class aix3adb:
     def __init__(self, cookiefilepath='aix3adb-ssocookie.txt'):
         self.cookiefile = os.path.abspath(cookiefilepath)
@@ -17,7 +20,7 @@ class aix3adb:
             call.append(username + "@CERN.CH")
         for i in range(trykerberos):
             x = subprocess.call(call)
-            logging.info("Result of kinit: " + str(x))
+            log.info("Result of kinit: " + str(x))
             if x == 0: break
             print "kinit failed. Please try again."
         self.obtainSSOCookies()
@@ -25,12 +28,12 @@ class aix3adb:
         call = ['env', '-i', 'cern-get-sso-cookie', '--krb', '--url', self.authurl, '--reprocess', '--outfile', self.cookiefile]
         x = subprocess.call(call)
         if x > 0:
-            logging.warning("Failed to retrieve a cookie, authentication not possible")
+            log.error("Failed to retrieve a cookie, authentication not possible")
     def destroyauth(self):
         try:
             os.remove(self.cookiefile)
         except:
-            logging.warning("Error while removing cookie file")
+            log.error("Failed to remove cookie file")
     def getAuthServerProxy(self):
         customtransport = transport(self.authurl)
         customtransport.setcookies(self.cookiefile, self.domain)
@@ -71,7 +74,7 @@ class aix3adb:
         if "files" in sample:
             if not type(sample['files']) == list: msg = "Files is not a list"
         if msg is not None:
-            logging.warning("Sample failed sanity checks: " + msg)
+            log.error("Sample failed sanity checks: " + msg)
             return False
         return True
 
