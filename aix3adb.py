@@ -67,9 +67,9 @@ class aix3adb:
         msg = None
         if None in sample: msg = "None-item in sample"
         if "tags" in sample:
-            if not type(sample['tags']) == list: msg = "Tags is not a list"
+            if not type(sample['tags']) == dict: msg = "Tags is not a dict"
         if "files" in sample:
-            if not type(sample['tags']) == list: msg = "Files is not a list"
+            if not type(sample['files']) == list: msg = "Files is not a list"
         if msg is not None:
             logging.warning("Sample failed sanity checks: " + msg)
             return False
