@@ -42,8 +42,10 @@ class aix3adb:
     def registerMCSample(self, sample):
         check = self.checksample(sample)
         if check:
-            s = self.getAuthServerProxy()
-            return s.registerMCSample(sample)
+            return self.tryServerAuthFunction(self.doRegisterMCSample, sample)
+    def doRegisterMCSample(self, sample):
+        s = self.getAuthServerProxy()
+        return s.registerMCSample(sample)
     def editMCSample(self, id, sample):
         check = self.checksample(sample)
         if check:
@@ -55,8 +57,10 @@ class aix3adb:
     def registerDataSample(self, sample):
         check = self.checksample(sample)
         if check:
-            s = self.getAuthServerProxy()
-            return s.registerDataSample(sample)
+            return self.tryServerAuthFunction(self.doRegisterDataSample, sample)
+    def doRegisterDataSample(self, sample):
+        s = self.getAuthServerProxy()
+        return s.registerDataSample(sample)
     def getMCSample(self, sampleid):
         s = xmlrpclib.ServerProxy(self.readurl)
         return s.getMCSample(sampleid)
@@ -77,6 +81,13 @@ class aix3adb:
             log.error("Sample failed sanity checks: " + msg)
             return False
         return True
+    def tryServerAuthFunction(self, funct, sample):
+        try:
+            return funct(sample)
+        except xmlrpclib.ProtocolError:
+            self.destroyauth()
+            self.authorize()
+            return funct(sample)
 
 def main():
     print "This is just a library"
