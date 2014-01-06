@@ -116,6 +116,7 @@ class cookietransportrequest:
  
     cookies = []
     def setcookies(self,cookiefile, domain):
+        self.cookies = []
         jar=cookielib.MozillaCookieJar(cookiefile)
         jar.load(ignore_discard=False, ignore_expires=False)
         for cookie in jar:
