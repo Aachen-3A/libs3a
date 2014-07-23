@@ -54,7 +54,7 @@ class rounding:
         try:
             x=min(nonzerolist)
         except ValueError:
-            return tuple('0'*(len(numbers)+1))
+            return tuple(['0']*(len(numbers))+ [0])
         res=[]
         if x < -self.negdigits or x > self.posdigits:
             expo=int(x)
