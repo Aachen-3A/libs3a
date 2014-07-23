@@ -7,6 +7,22 @@ class rounding:
     def __init__(self,sigdigits=2, negdigits=3, posdigits=3):
         self.sigdigits, self.negdigits, self.posdigits = sigdigits, negdigits, posdigits
 
+    def latex(self, n, err1=None, err2=None):
+        if err1 is None:
+            return self.latexValue(n)
+        elif err2 is None:
+            return self.latexValueError(n, err1)
+        else:
+            return self.latexValueError(n, err1, err2)
+
+    def html(self, n, err1=None, err2=None):
+        if err1 is None:
+            return self.htmlValue(n)
+        elif err2 is None:
+            return self.htmlValueError(n, err1)
+        else:
+            return self.htmlValueError(n, err1, err2)
+
     def latexValue(self, n):
         value, expo = self.sdr(n)
         if expo != 0:
