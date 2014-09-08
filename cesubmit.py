@@ -1,8 +1,8 @@
 #! /usr/bin/env python2
 
 import logging
-logging.basicConfig(level=logging.INFO)
-log = logging.getLogger( __name__ )
+#logging.basicConfig(level=logging.INFO)
+#log = logging.getLogger( __name__ )
 import time
 import sys
 import os
@@ -87,7 +87,7 @@ class Job:
                 self.error = stdout
                 break
             self.frontEndStatus = "SENT"
-            log.info('No Error while submitting.')
+            log.info('Submission successful.')
             for line in stdout.splitlines():
                 if "https://" in line:
                     self.jobid = line.strip()
