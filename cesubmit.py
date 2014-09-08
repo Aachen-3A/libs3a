@@ -1,7 +1,7 @@
 #! /usr/bin/env python2
 
 import logging
-#logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger( __name__ )
 import time
 import sys
@@ -42,10 +42,10 @@ class Job:
             'StdError  = "err.txt";\n'
             'outputsandboxbasedesturi="gsiftp://localhost";\n'
             )
+
         jdl += 'InputSandbox = { "' + ('", "'.join(["./prologue.sh", self.executable]+self.inputfiles+self.task.inputfiles)) + '"};\n'
         stds=["out.txt", "err.txt"]
         jdl += 'OutputSandbox = { "' + ('", "'.join(stds+self.outputfiles+self.task.outputfiles)) + '"};\n'
-        #jdl += 'Environment = {"PATH=/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw-patch/CMSSW_5_3_14_patch2/bin/slc5_amd64_gcc462:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw-patch/CMSSW_5_3_14_patch2/external/slc5_amd64_gcc462/bin:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw/CMSSW_5_3_14/bin/slc5_amd64_gcc462:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/llvm/3.2/bin:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/gcc/4.6.2/bin:/cvmfs/cms.cern.ch/common:/cvmfs/cms.cern.ch/bin", "PYTHONPATH=/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw-patch/CMSSW_5_3_14_patch2/python:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw-patch/CMSSW_5_3_14_patch2/lib/slc5_amd64_gcc462:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw/CMSSW_5_3_14/bin/slc5_amd64_gcc462:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw/CMSSW_5_3_14/lib/slc5_amd64_gcc462:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/coral/CORAL_2_3_21-cms38/slc5_amd64_gcc462/python:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/coral/CORAL_2_3_21-cms38/slc5_amd64_gcc462/lib:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/pyqt/4.8.1/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/py2-scipy/0.8.0/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/py2-matplotlib/1.0.1/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/python-ldap/2.3.5/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/sip/4.11.2/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/py2-pycurl/7.19.0/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/py2-numpy/1.6.1/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/py2-ipython/0.10/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/py2-cx-oracle/5.1-cms11/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/py2-cjson/1.0.5/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/das-client/1.9.5/bin:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/elementtree/1.2.6/share/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/rivet/1.8.2/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/pyminuit2/0.0.1-cms39/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/professor/1.0.0-cms40/lib/python2.6/site-packages:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/lib:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/dbs-client/DBS_2_1_9-cms3/lib:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/dbs-client/DBS_2_1_9-cms3/lib/DBSAPI:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/cvs2git/5419/lib", "LD_LIBRARY_PATH=/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw-patch/CMSSW_5_3_14_patch2/lib/slc5_amd64_gcc462:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw-patch/CMSSW_5_3_14_patch2/external/slc5_amd64_gcc462/lib:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/cms/cmssw/CMSSW_5_3_14/lib/slc5_amd64_gcc462:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/llvm/3.2/lib:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/gcc/4.6.2/lib64:/cvmfs/cms.cern.ch/slc5_amd64_gcc462/external/gcc/4.6.2/lib"};\n'
         jdl += 'Arguments = "' + (' '.join(["./"+os.path.basename(self.executable)] + self.arguments)) + '";\n'
         jdl += "]"
         self.jdlfilename = "job"+str(self.nodeid)+".jdl"
@@ -54,6 +54,10 @@ class Job:
         jdl_file.close()
         self.frontEndStatus = "JDLWRITTEN"
     def submit(self):
+        startdir = os.getcwd()
+        if startdir!=self.task.directory:
+            os.chdir(self.task.directory)
+
         #get a proxy for at least 4 days
         checkAndRenewVomsProxy(604800)
         for i in range(50):
@@ -89,6 +93,7 @@ class Job:
                     self.jobid = line.strip()
                     log.info("Submitted job "+self.jobid)
             break
+        os.chdir(startdir)
         return process.returncode, stdout
     def getStatus(self):
         if self.frontEndStatus == "RETRIEVED" or self.frontEndStatus == "PURGED":
@@ -135,15 +140,24 @@ class Job:
         if self.status in ["PENDING", "IDLE", "RUNNING", "REALLY-RUNNING", "HELD"]:
             self.cancel()
         self.purge()
+        self.cleanUp()
         self.infos=dict()
         self.submit()
+    def cleanUp(self):
+        if self.jobid == None:
+            return
+        idDir=str(self.jobid).replace("https://","").replace(":","_").replace("/","_")
+        if os.path.exists(self.task.directory+"/"+idDir):
+            os.mkdir(self.task.directory+"/"+"bak")
+            shutil.move(self.task.directory+"/"+idDir,self.task.directory+"/"+"bak")
+
 
 class Task:
     @classmethod
     def load(cls, directory):
         f = open(os.path.join(directory, "task.pkl"),'rb')
         obj = pickle.load(f)
-        f.close()          
+        f.close()
         obj.directory = os.path.abspath(directory)
         obj.mode = "OPEN"
         return obj
@@ -190,7 +204,9 @@ class Task:
             pool = multiprocessing.Pool(processes)
             result = pool.map_async(submitWorker, self.jobs)
             pool.close()
-            pool.join()
+            #pool.join()
+            while pool._cache:
+                time.sleep(1)
             self.jobs = result.get()
             for job in self.jobs:  #because the task and jobs have been pickled, the references have to be restored
                 job.task = self
@@ -273,6 +289,7 @@ class Task:
             job.infos=infos
     def getStatus(self):
         self._getStatusMultiple()
+        time.sleep(10)
         retrieved, done, running = True, True, False
         for job in self.jobs:
             if job.frontEndStatus!="RETRIEVED":
