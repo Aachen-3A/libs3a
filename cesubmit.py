@@ -273,14 +273,14 @@ class Task:
         checkAndRenewVomsProxy(604800)
         jobids = [job.jobid for job in self.jobs if job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
         if not jobids: return
-        command = ["glite-ce-job-status"] + jobids
+        command = ["glite-ce-job-status", "-L1"] + jobids
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
         if process.returncode!=0:
             log.warning('Status retrieval failed for task '+self.name)
             log.info(stdout)
             log.info(stderr)
-        result = parseStatusMultiple(stdout)
+        result = parseStatusMultipleL1(stdout)
         for job in self.jobs:
             try:
                 infos = result[job.jobid]
@@ -370,7 +370,7 @@ def parseStatus(stdout):
     return result
 
 def parseStatusMultiple(stdout):
-    # parses the output of glite-ce-job-status to a dict
+    # parses the output of glite-ce-job-status to a dict for multiple jobids
     result = dict()
     jobid = None
     for line in stdout.splitlines():
@@ -383,6 +383,30 @@ def parseStatusMultiple(stdout):
             jobid = value
             result[jobid]=dict()
         result[jobid][key] = value
+    return result
+
+def parseStatusMultipleL1(stdout):
+    # parses the output of glite-ce-job-status -L1 to a dict
+    result = dict()
+    jobid = None
+    for line in stdout.splitlines():
+        try:
+            key, value = line.split("=",1)
+        except ValueError:
+            continue
+        if "Command" in key: continue
+        key, value = key.strip("\t* "), value.strip()[1:-1]
+        if key=="JobID":
+            jobid = value
+            result[jobid]=dict()
+            result[jobid]["history"]=list()
+        if key=="Status":
+            status=value.split()[0][0:-1]
+            timestamp=value.split()[-1][1:]
+            result[jobid]["history"].append( (status, timestamp,) )
+            result[jobid]["Status"] = status
+        else:
+            result[jobid][key] = value
     return result
 
 class ProxyError( Exception ):
