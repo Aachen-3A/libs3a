@@ -36,7 +36,7 @@ def getFilesfromFile(cfgFile):
         sample=line.strip()
         log.debug( " ".join([user,tag,sample,config]))
         folder="/%s/MUSiC/%s/%s" % (user,tag,sample)
-        if folder in known_folders:
+        if folder in known_folders and len(known_folders[folder])>0:
             file_lists=known_folders[folder]
         else:
             time.sleep(4)
@@ -219,7 +219,7 @@ def main():
     makeExe(options.user)
 
     thisdir=os.getcwd()
-    if os.path.exists(options.Output) or !options.force:
+    if os.path.exists(options.Output) or not options.force:
         log.error("The outpath "+options.Output+" already exists pick a new one or use --force")
         sys.exit(3)
     else:
@@ -228,7 +228,7 @@ def main():
     os.remove(thisdir+"/runtemp.sh")
 
     for sample in sampleList:
-        task=cesubmit.Task(sample,options.Output+"/"+sample,scramArch='slc6_amd64_gcc481', cmsswVersion='CMSSW_7_0_7_patch1')
+        task=cesubmit.Task(sample,options.Output+"/"+sample,scramArch=scram_arch, cmsswVersion=cmssw_version)
 
         task.executable=options.Output+"/runtemp.sh"
         task.inputfiles=[]
