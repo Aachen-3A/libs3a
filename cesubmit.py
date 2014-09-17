@@ -1,8 +1,7 @@
 #! /usr/bin/env python2
 
-import logging
+#import logging
 #logging.basicConfig(level=logging.INFO)
-#log = logging.getLogger( __name__ )
 import time
 import sys
 import os
@@ -11,8 +10,15 @@ import pickle
 import shutil
 from collections import defaultdict
 import multiprocessing
+import logging
+import glob
+log = logging.getLogger(__name__)
+#log = multiprocessing.get_logger()
 def submitWorker(job):
     job.submit()
+    return job
+def resubmitWorker(job):
+    job.resubmit()
     return job
 
 class Job:
@@ -102,6 +108,7 @@ class Job:
             command = ["glite-ce-job-status", self.jobid]
         except AttributeError:
             return
+        log.debug("Getting status "+self.jobid)
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
         if process.returncode!=0:
@@ -110,8 +117,7 @@ class Job:
             log.info(stderr)
         self.infos = parseStatus(stdout)
     def getOutput(self):
-        #log.info("pwd "+os.getcwd())
-        #log.info("glite-ce-job-output"+ "--noint"+ "--dir"+ self.task.directory+ self.jobid)
+        log.debug("Getting output "+self.jobid)
         command = ["glite-ce-job-output", "--noint", "--dir", self.task.directory, self.jobid]
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -121,6 +127,7 @@ class Job:
             self.purge()
             self.frontEndStatus = "RETRIEVED"
     def cancel(self):
+        log.debug("Canceling "+self.jobid)
         command = ["glite-ce-job-cancel", "--noint", self.jobid]
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -129,6 +136,7 @@ class Job:
         else:
             self.frontEndStatus = "CANCELLED"
     def purge(self):
+        log.debug("Purging "+self.jobid)
         command = ["glite-ce-job-purge", "--noint", self.jobid]
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -143,13 +151,20 @@ class Job:
         self.cleanUp()
         self.infos=dict()
         self.submit()
+    @property
+    def outputSubDirectory(self):
+        return str(self.jobid).replace("https://","").replace(":","_").replace("/","_")
     def cleanUp(self):
-        if self.jobid == None:
+        print "cleanup"
+        if self.jobid is None:
             return
-        idDir=str(self.jobid).replace("https://","").replace(":","_").replace("/","_")
-        if os.path.exists(self.task.directory+"/"+idDir):
-            os.mkdir(self.task.directory+"/"+"bak")
-            shutil.move(self.task.directory+"/"+idDir,self.task.directory+"/"+"bak")
+        if os.path.exists(os.path.join(self.task.directory, self.outputSubDirectory)):
+            print os.path.join(self.task.directory, self.outputSubDirectory)
+            try:
+                os.mkdir(os.path.join(self.task.directory,"bak"))
+            except OSError:
+                pass
+            shutil.move(os.path.join(self.task.directory, self.outputSubDirectory), os.path.join(self.task.directory, "bak"))
 
 
 class Task:
@@ -175,6 +190,7 @@ class Task:
         self.mode = mode
         self.frontEndStatus=""
     def save(self):
+        log.debug('Save task %s',self.name)
         f = open(os.path.join(self.directory, "task.pkl"), 'wb')
         pickle.dump(self, f)
         f.close()
@@ -189,6 +205,7 @@ class Task:
         job.task = self
         self.jobs.append(job)
     def submit(self, processes=0):
+        log.debug('Submit task %s',self.name)
         # create directory
         self.createdir()
         startdir = os.getcwd()
@@ -200,35 +217,44 @@ class Task:
             self.jobs[i].nodeid = i
             self.jobs[i].writeJdl()
         #multiprocessing
+        self._dosubmit(range(len(self.jobs)), processes, submitWorker)
+        self.frontEndStatus="SUBMITTED"
+        os.chdir(startdir)
+        print self.jobs[0].__dict__
+        self.save()
+    def _dosubmit(self, nodeids, processes, worker):
+        jobs = [j for j in self.jobs if j.nodeid in nodeids]
         if processes:
             pool = multiprocessing.Pool(processes)
-            result = pool.map_async(submitWorker, self.jobs)
+            result = pool.map_async(worker, jobs)
             pool.close()
             #pool.join()
             while pool._cache:
                 time.sleep(1)
-            self.jobs = result.get()
-            for job in self.jobs:  #because the task and jobs have been pickled, the references have to be restored
+            res = result.get()
+            for job in res:  #because the task and jobs have been pickled, the references have to be restored
                 job.task = self
+                self.jobs[job.nodeid]=job
         else:
-            for job in self.jobs:
+            for job in jobs:
                 job.submit()
-        # submit jobs
-        os.chdir(startdir)
-        self.frontEndStatus="SUBMITTED"
+    #def resubmitByStatus(self, statusList):
+        #startdir = os.getcwd()
+        #os.chdir(self.directory)
+        #checkAndRenewVomsProxy(604800)
+        #for job in self.jobs:
+            #if job.status in statusList and job.frontEndStatus not in ["RETRIEVED", "PURGED"]:
+                #job.resubmit()
+        ## submit jobs
+        #os.chdir(startdir)
+        #self.frontEndStatus="SUBMITTED"
+        #self.save()
+    def resubmit(self, nodeids, processes=0):
+        log.debug('Resubmit (some) jobs of task %s',self.name)
+        self._dosubmit(nodeids, processes, resubmitWorker)
         self.save()
-    def resubmitByStatus(self, statusList):
-        startdir = os.getcwd()
-        os.chdir(self.directory)
-        checkAndRenewVomsProxy(604800)
-        for job in self.jobs:
-            if job.status in statusList and job.frontEndStatus not in ["RETRIEVED", "PURGED"]:
-                job.resubmit()
-        # submit jobs
-        os.chdir(startdir)
-        self.frontEndStatus="SUBMITTED"
-        self.save()
-
+        self.cleanUp()
+            
     def makePrologue(self):
         executable = (
         '#!/bin/sh -e\n'
@@ -288,8 +314,8 @@ class Task:
                 continue
             job.infos=infos
     def getStatus(self):
+        log.debug('Get status of task %s',self.name)
         self._getStatusMultiple()
-        time.sleep(10)
         retrieved, done, running = True, True, False
         for job in self.jobs:
             if job.frontEndStatus!="RETRIEVED":
@@ -323,26 +349,27 @@ class Task:
         #self.save()
         #return self.frontEndStatus
     def getOutput(self):
-        checkAndRenewVomsProxy(604800)
-        jobids = [job.jobid for job in self.jobs if "DONE" in job.status and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        if not jobids: return
-        command = ["glite-ce-job-output", "--noint", "--dir", self.directory]+jobids
-        process = subprocess.Popen(command, stdout=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        if process.returncode!=0:
-            log.warning('Output retrieval failed for task '+self.name)
-        else:
-            for job in self.jobs:
-                if job.jobid in jobids:
-                    job.purge()
-                    job.frontEndStatus = "RETRIEVED"
+        log.info('Get output of (some) jobs of task %s',self.name)
+        ###checkAndRenewVomsProxy(604800)
+        #jobids = [job.jobid for job in self.jobs if "DONE" in job.status and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
+        #if not jobids: return
+        #command = ["glite-ce-job-output", "--noint", "--dir", self.directory]+jobids
+        #process = subprocess.Popen(command, stdout=subprocess.PIPE)
+        #stdout, stderr = process.communicate()
+        #if process.returncode!=0:
+            #log.warning('Output retrieval failed for task '+self.name)
+        #else:
+            #for job in self.jobs:
+                #if job.jobid in jobids:
+                    #job.purge()
+                    #job.frontEndStatus = "RETRIEVED"
 
-        #for job in self.jobs:
-            #try:
-                #if "DONE" in job.status and job.frontEndStatus!="RETRIEVED" and job.frontEndStatus!="PURGED":
-                    #job.getOutput()
-            #except TypeError:
-                #pass
+        for job in self.jobs:
+            try:
+                if "DONE" in job.status and job.frontEndStatus!="RETRIEVED" and job.frontEndStatus!="PURGED":
+                    job.getOutput()
+            except TypeError:
+                pass
         self.save()
 
     def jobStatusNumbers(self):
@@ -355,7 +382,20 @@ class Task:
                 pass
         jobStatusNumbers["total"]=len(self.jobs)
         return jobStatusNumbers
+    def cleanUp(self):
+        log.debug('Cleaning up task %s',self.name)
+        subdirs=[job.outputSubDirectory for job in self.jobs if job.jobid is not None]
+        for checkdir in glob.glob(os.path.join(self.directory,"*")):
+            if os.path.isdir(checkdir) and os.path.basename(checkdir)!="bak":
+                if os.path.basename(checkdir) not in subdirs:
+                    try:
+                        os.mkdir(os.path.join(self.directory,"bak"))
+                    except OSError:
+                        pass
+                    shutil.move(checkdir, os.path.join(self.directory, "bak"))
 
+
+        
 
 def parseStatus(stdout):
     # parses the output of glite-ce-job-status to a dict
