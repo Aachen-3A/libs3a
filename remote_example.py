@@ -1,8 +1,8 @@
-#!/bin/env python
-
+#>/bin/env python
+import sys
 import cesubmit
 from listFiles import getdcachelist
-import binConfig
+import binConfig_example as binconfig
 import checkEnvironment
 from datetime import datetime
 import optparse,os,time,cPickle,subprocess,shutil
@@ -219,7 +219,7 @@ def main():
     makeExe(options.user)
 
     thisdir=os.getcwd()
-    if os.path.exists(options.Output) or !options.force:
+    if os.path.exists(options.Output) or not options.force:
         log.error("The outpath "+options.Output+" already exists pick a new one or use --force")
         sys.exit(3)
     else:
