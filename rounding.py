@@ -66,7 +66,7 @@ class rounding:
             return '{0} <span style="position: relative; display: inline-block; line-height: 1; margin-right: .3em">&nbsp;<sup style="display: block; font-size: .5em; line-height: 1">+{1}</sup><sub style="display: block; font-size: .5em; line-height: 1">-{2}</sub></span>'.format(a, b, c)
 
     def sdr(self, *numbers):
-            nonzerolist = [math.floor(math.log10(abs(f))) for f in numbers if f!=0]
+        nonzerolist = [math.floor(math.log10(abs(f))) for f in numbers if f!=0]
         try:
             x=min(nonzerolist)
         except ValueError:
