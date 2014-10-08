@@ -2,7 +2,7 @@
 import sys
 import cesubmit
 from listFiles import getdcachelist
-import binConfig_example as binconfig
+import binConfig_example as binConfig
 import checkEnvironment
 from datetime import datetime
 import optparse,os,time,cPickle,subprocess,shutil
@@ -238,8 +238,9 @@ def main():
 
 
         standardArg=["--NoCcControl", "--NoCcEventClass","--ECMerger","2","-o","MusicOutDir",sampleList[sample][1]]
-
+        print "down under"
         for f in sampleList[sample][0]:
+            print f
             job=cesubmit.Job()
             job.arguments=standardArg+f
             task.addJob(job)
