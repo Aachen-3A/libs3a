@@ -39,7 +39,7 @@ class Job:
             '[Type = "Job";\n'
             'VirtualOrganisation = "cms";\n'
             'AllowZippedISB = true;\n'
-            'Requirements = (RegExp("rwth-aachen.de", other.GlueCEUniqueId)) && (RegExp("cream", other.GlueCEUniqueId)) && !(RegExp("short", other.GlueCEUniqueId));\n'
+            #'Requirements = (RegExp("rwth-aachen.de", other.GlueCEUniqueId)) && (RegExp("cream", other.GlueCEUniqueId)) && !(RegExp("short", other.GlueCEUniqueId));\n'
             'ShallowRetryCount = 10;\n'
             'RetryCount = 3;\n'
             'MyProxyServer = "";\n'
@@ -68,7 +68,7 @@ class Job:
         checkAndRenewVomsProxy(604800)
         for i in range(50):
             #command = ['glite-ce-job-submit', '-a', '-r', 'ce201.cern.ch:8443/cream-lsf-grid_cms', self.jdlfilename]
-            command = ['glite-ce-job-submit', '-a', '-r', 'grid-ce.physik.rwth-aachen.de:8443/cream-pbs-cms', self.jdlfilename]
+            command = ['glite-ce-job-submit', '-a', '-r', self.task.ceId, self.jdlfilename]
             process = subprocess.Popen(command, stdout=subprocess.PIPE)
             stdout, stderr = process.communicate()
             if "FATAL" in stdout and "Submissions are disabled!" in stdout:
@@ -175,8 +175,11 @@ class Task:
         f.close()
         obj.directory = os.path.abspath(directory)
         obj.mode = "OPEN"
+        # for downward compatibility with old task.pkl files. This can be removed in the future
+        if not 'ceId' in obj.__dict__:
+            obj.ceId = 'grid-ce.physik.rwth-aachen.de:8443/cream-pbs-cms'
         return obj
-    def __init__(self, name, directory = None, mode="RECREATE", scramArch='slc5_amd64_gcc462', cmsswVersion='CMSSW_5_3_14'):
+    def __init__(self, name, directory = None, mode="RECREATE", scramArch='slc5_amd64_gcc462', cmsswVersion='CMSSW_5_3_14', ceId='grid-ce.physik.rwth-aachen.de:8443/cream-pbs-cms'):
         self.name = name
         self.directory=directory
         if self.directory is None:
@@ -184,10 +187,11 @@ class Task:
         self.directory = os.path.abspath(self.directory)
         self.jdlfilename = name+".jdl"
         self.inputfiles, self.outputfiles, self.jobs, self.executable = [], [], [], None
+        self.mode = mode
         self.scramArch = scramArch
         self.cmsswVersion = cmsswVersion
+        self.ceId = ceId
         self.jobs = []
-        self.mode = mode
         self.frontEndStatus=""
     def save(self):
         log.debug('Save task %s',self.name)
@@ -238,17 +242,7 @@ class Task:
         else:
             for job in jobs:
                 job.submit()
-    #def resubmitByStatus(self, statusList):
-        #startdir = os.getcwd()
-        #os.chdir(self.directory)
-        #checkAndRenewVomsProxy(604800)
-        #for job in self.jobs:
-            #if job.status in statusList and job.frontEndStatus not in ["RETRIEVED", "PURGED"]:
-                #job.resubmit()
-        ## submit jobs
-        #os.chdir(startdir)
-        #self.frontEndStatus="SUBMITTED"
-        #self.save()
+
     def resubmit(self, nodeids, processes=0):
         log.debug('Resubmit (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, resubmitWorker)
@@ -330,40 +324,9 @@ class Task:
         elif done: self.frontEndStatus="DONE"
         self.save()
         return self.frontEndStatus
-    #def getStatus(self):
-        #checkAndRenewVomsProxy(604800)
-        #for job in self.jobs:
-            #job.getStatus()
-        #retrieved, done, running = True, True, False
-        #for job in self.jobs:
-            #if job.frontEndStatus!="RETRIEVED":
-                #retrieved=False
-            #if "RUNNING" in job.status:
-                #running=True
-                #break
-            #if "DONE" not in job.status:
-                #done = False
-        #if running: self.frontEndStatus="RUNNING"
-        #elif retrieved: self.frontEndStatus="RETRIEVED"
-        #elif done: self.frontEndStatus="DONE"
-        #self.save()
-        #return self.frontEndStatus
+
     def getOutput(self):
         log.info('Get output of (some) jobs of task %s',self.name)
-        ###checkAndRenewVomsProxy(604800)
-        #jobids = [job.jobid for job in self.jobs if "DONE" in job.status and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        #if not jobids: return
-        #command = ["glite-ce-job-output", "--noint", "--dir", self.directory]+jobids
-        #process = subprocess.Popen(command, stdout=subprocess.PIPE)
-        #stdout, stderr = process.communicate()
-        #if process.returncode!=0:
-            #log.warning('Output retrieval failed for task '+self.name)
-        #else:
-            #for job in self.jobs:
-                #if job.jobid in jobids:
-                    #job.purge()
-                    #job.frontEndStatus = "RETRIEVED"
-
         for job in self.jobs:
             try:
                 if "DONE" in job.status and job.frontEndStatus!="RETRIEVED" and job.frontEndStatus!="PURGED":
@@ -426,7 +389,7 @@ def parseStatusMultiple(stdout):
     return result
 
 def parseStatusMultipleL1(stdout):
-    # parses the output of glite-ce-job-status -L1 to a dict
+    # parses the output of glite-ce-job-status -L1 to a dict, this includes the status history
     result = dict()
     jobid = None
     for line in stdout.splitlines():
@@ -453,7 +416,7 @@ class ProxyError( Exception ):
     pass
 
 def timeLeftVomsProxy():
-    """Returns True if the proxy is valid longer than time, False otherwise."""
+    """Return the time left for the proxy."""
     proc = subprocess.Popen( ['voms-proxy-info', '-timeleft' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
     output = proc.communicate()[0]
     if proc.returncode != 0:
