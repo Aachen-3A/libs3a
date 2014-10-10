@@ -1,7 +1,4 @@
 #! /usr/bin/env python2
-
-#import logging
-#logging.basicConfig(level=logging.INFO)
 import time
 import sys
 import os
@@ -12,11 +9,14 @@ from collections import defaultdict
 import multiprocessing
 import logging
 import glob
+#logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 #log = multiprocessing.get_logger()
+
 def submitWorker(job):
     job.submit()
     return job
+
 def resubmitWorker(job):
     job.resubmit()
     return job
@@ -154,17 +154,6 @@ class Job:
     @property
     def outputSubDirectory(self):
         return str(self.jobid).replace("https://","").replace(":","_").replace("/","_")
-    def cleanUp(self):
-        print "cleanup"
-        if self.jobid is None:
-            return
-        if os.path.exists(os.path.join(self.task.directory, self.outputSubDirectory)):
-            print os.path.join(self.task.directory, self.outputSubDirectory)
-            try:
-                os.mkdir(os.path.join(self.task.directory,"bak"))
-            except OSError:
-                pass
-            shutil.move(os.path.join(self.task.directory, self.outputSubDirectory), os.path.join(self.task.directory, "bak"))
 
 
 class Task:
