@@ -293,9 +293,9 @@ class Task:
         for job in self.jobs:
             try:
                 infos = result[job.jobid]
+                job.infos = infos
             except:
-                continue
-            job.infos=infos
+                job.infos = dict()
     def getStatus(self):
         log.debug('Get status of task %s',self.name)
         self._getStatusMultiple()
@@ -326,13 +326,24 @@ class Task:
 
     def jobStatusNumbers(self):
         jobStatusNumbers=defaultdict(int)
+        good, bad = 0, 0
         for job in self.jobs:
             try:
                 jobStatusNumbers[job.status]+=1
                 jobStatusNumbers[job.frontEndStatus]+=1
+                if job.status in ["ABORTED", "DONE-FAILED"]:
+                    bad += 1
+                if job.status == "DONE-OK":
+                    if "ExitCode" in job.infos:
+                        if job.infos["ExitCode"] == "0":
+                            good += 1
+                        else:
+                            bad += 1
             except AttributeError:
                 pass
         jobStatusNumbers["total"]=len(self.jobs)
+        jobStatusNumbers["good"] = good
+        jobStatusNumbers["bad"] = bad
         return jobStatusNumbers
     def cleanUp(self):
         log.debug('Cleaning up task %s',self.name)
