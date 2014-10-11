@@ -188,6 +188,12 @@ class Text:
     def width(self):
         return min(self._width, self.parent.getmaxyx()[1])
 
+def colWidthsReducerMaximum(colWidths, totalWidth):
+    # reduces the maximum width by 1 as long as the desired total width is reached
+    while sum(colWidths) > totalWidth:
+        colWidths[max(xrange(len(colWidths)),key=colWidths.__getitem__)]-=1
+    return colWidths
+    
 class SelectTable:
     """A Table where a single row can be selected
     """
@@ -195,7 +201,7 @@ class SelectTable:
         self.parent = screen
         self.top, self.left = top+1, left
         self._height = default(height, screen.getmaxyx()[0]-top)-1
-        self._width = default(width, screen.getmaxyx()[1]-1)
+        self._width = default(width, screen.getmaxyx()[1])
         self.pad = curses.newpad(maxrows, self.width)
         self.header = curses.newwin(1, self.width, top, left)
         self.cursor, self.position = 0, 0
@@ -203,18 +209,16 @@ class SelectTable:
     def setColHeaders(self, headers, colwidths=None):
         self.colHeaders = headers
         if colwidths is None:
-            x=int(math.floor(self.width/len(self.colHeaders)))-1
+            x=int(math.floor((self.width-1)/len(self.colHeaders)))
             self.colWidths = [x]*len(self.colHeaders)
         else:
-            self.colWidths = colwidths
+            self.colWidths = colWidthsReducerMaximum(colwidths, self.width-1)
         self._drawColHeaders()
     def _drawColHeaders(self):
         for i in range(len(self.colHeaders)):
-            try:
-                self.header.addstr(0, sum(self.colWidths[:i]), ("{0:^"+str(self.colWidths[i])+"."+str(self.colWidths[i]-1)+"}").format(self.colHeaders[i]), curses.A_UNDERLINE)
-            except:
-                raise Exception(str(self.colWidths)+", "+str(("{0:^"+str(self.colWidths[i]-1)+"."+str(self.colWidths[i]-1)+"} ").format(self.colHeaders[i])))
-        self.header.addstr(0, sum(self.colWidths), " "*(self.width-sum(self.colWidths)-1), curses.A_UNDERLINE)
+            self.header.addstr(0, sum(self.colWidths[:i]), ("{0:^"+str(self.colWidths[i])+"."+str(self.colWidths[i]-1)+"}").format(self.colHeaders[i]), curses.A_UNDERLINE)
+        if self.width-sum(self.colWidths)-1 > 0:
+            self.header.addstr(0, sum(self.colWidths), " "*(self.width-sum(self.colWidths)-1), curses.A_UNDERLINE)
         
     def addRow(self, row, formatting=None, key=None):
         self.rows.append(row)
