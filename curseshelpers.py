@@ -197,15 +197,20 @@ def colWidthsReducerMaximum(colWidths, totalWidth):
 class SelectTable:
     """A Table where a single row can be selected
     """
-    def __init__(self, screen, maxrows=1000, top=1, left=0, height=None, width=None):
+    def __init__(self, screen, maxrows=1000, top=1, left=0, height=None, width=None, footer=False):
+        if footer:
+            nfooterlines = 1
+        else:
+            nfooterlines = 0
         self.parent = screen
         self.top, self.left = top+1, left
-        self._height = default(height, screen.getmaxyx()[0]-top)-1
+        self._height = default(height, screen.getmaxyx()[0]-top)-1-nfooterlines
         self._width = default(width, screen.getmaxyx()[1])
         self.pad = curses.newpad(maxrows, self.width)
         self.header = curses.newwin(1, self.width, top, left)
         self.cursor, self.position = 0, 0
         self.rows, self.formats, self.keys = [], [], []
+        self.colFooters = None
     def setColHeaders(self, headers, colwidths=None):
         self.colHeaders = headers
         if colwidths is None:
@@ -214,6 +219,19 @@ class SelectTable:
         else:
             self.colWidths = colWidthsReducerMaximum(colwidths, self.width-1)
         self._drawColHeaders()
+    def setFooters(self, footers):
+        self.colFooters = footers
+        self.footer = curses.newwin(1, self.width, self.top+self.height, self.left)
+        self._drawFooters()
+    def _drawFooters(self):
+        if self.colFooters is not None:
+            for cell, i in zip(self.colFooters, range(len(self.colFooters))):
+                if isinstance(cell, (int, long, float, complex)):
+                    direction=">"
+                else:
+                    direction="<"
+                self.footer.addstr(0, sum(self.colWidths[:i]), ("{0:"+direction+str(self.colWidths[i]-1)+"."+str(self.colWidths[i]-1)+"} ").format(str(cell)))
+
     def _drawColHeaders(self):
         for i in range(len(self.colHeaders)):
             self.header.addstr(0, sum(self.colWidths[:i]), ("{0:^"+str(self.colWidths[i])+"."+str(self.colWidths[i]-1)+"}").format(self.colHeaders[i]), curses.A_UNDERLINE)
@@ -231,6 +249,9 @@ class SelectTable:
         self.pad.refresh(self.position, 0, self.top, self.left, self.top+self.height-1, self.left+self.width-1)
         self._drawColHeaders()
         self.header.refresh()
+        if self.colFooters is not None:
+            self._drawFooters()
+            self.footer.refresh()
     def goUp(self):
         oldcursor = self.cursor
         self.cursor=max(self.cursor-1, 0)
@@ -339,11 +360,12 @@ def outputWrapper(func, nlines, *args, **kwds):
 def main(stdscr):
     #curses.noecho()
     #curses.curs_set(0)
-    #stdscr.keypad(1)
-    #table = SelectTable(stdscr)
-    #table.setColHeaders(["Spaltennamensuper","Spalte 2", "Spalte 3", "Spalte 4"],[10,10,10,10])
-    #for i in range(100):
-        #table.addRow([i,"zwei","drei","vier"])
+    stdscr.keypad(0)
+    table = SelectTable(stdscr, footer=True)
+    table.setColHeaders(["Spaltennamensuper","Spalte 2", "Spalte 3", "Spalte 4"])
+    for i in range(100):
+        table.addRow([i,"zwei","drei","vier"])
+    table.setFooters(["1234567890","!$%/()=?","abcderfghijklmnopqrstuvwxyz","ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
     #table = Text(stdscr)
     #table.readFile("curseshelpers.py")
     #table = MultiText(stdscr)
@@ -353,31 +375,31 @@ def main(stdscr):
     ##logText.addText("hallo")
     ##logText.addText("hihi")
     ##logText.refresh()
-    logger=logging.getLogger('curseshelpers')
-    handler=CursesLoggingHandler(stdscr, top=10, left=0, height=10)
+    #logger=logging.getLogger('curseshelpers')
+    #handler=CursesLoggingHandler(stdscr, top=10, left=0, height=10)
     #handler=CursesLoggingHandler(logText)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
+    #logger.setLevel(logging.DEBUG)
+    #logger.addHandler(handler)
     try:
         while True:
             stdscr.refresh()
-            #table.refresh()
+            table.refresh()
             x = stdscr.getch()
-            if x==ord("e"):
+            #if x==ord("e"):
                 #logText.addText("test")
-                logger.warning("blubbbbbbbbbb")
+                #logger.warning("blubbbbbbbbbb")
                 #x=handler.flush()
                 #raise(Exception("P"))
                 #logText.refresh()
-            #if x==ord("i"):
-                #table.goUp()
-            #if x==ord("j"):
-                #table.goDown()
-            #if x==ord("k"):
-                #table.home()
-            #if x==ord("l"):
-                #table.end()
-            if x==ord("q"):
+            if x==ord("i"):
+                table.goUp()
+            if x==ord("j"):
+                table.goDown()
+            if x==ord("k"):
+                table.home()
+            if x==ord("l"):
+                table.end()
+            if x==ord("q") or x==27:
                 #logger.handlers=[]
                 #del logger
                 break
@@ -402,5 +424,5 @@ def main2(stdscr):
     
 if __name__ == "__main__":
     #print locals()
-    outputWrapper(main2,5)
-    #curses.wrapper(main)
+    #outputWrapper(main2,5)
+    curses.wrapper(main)
