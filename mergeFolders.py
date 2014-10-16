@@ -48,19 +48,20 @@ def multiextractRoot(splited):
     os.chdir( splited[0] )
     if os.path.getsize(splited[1])==0.:
         return
-    if "outFile.root" in os.listdir(splited[0]):
-        if os.path.getsize(splited[0]+"/outFile.root") >os.path.getsize(splited[1])*1.2:
+    if "SpecialHistos.root" in os.listdir(splited[0]):
+        if os.path.getsize(splited[0]+"/SpecialHistos.root") >os.path.getsize(splited[1])*1.2:
             return
     #print os.listdir(splited[0])
-    subprocess.call("tar -xzf %s outFile.root"%(splited[1]),shell=True)
+    subprocess.call("tar -xzf %s MusicOutDir/SpecialHistos.root"%(splited[1]),shell=True)
+    subprocess.call("mv MusicOutDir/SpecialHistos.root SpecialHistos.root",shell=True)
     os.chdir( thidir )
     
 def extractRootFiles(options):
     log.info("Extracting Files.....")
     
     for i in glob.glob(options.inputFolder+"/*/*/"):
-        if len(glob.glob(i+"result.tar.gz"))==0:
-            log.warning("There is some thing worng in %s no .tar.gz"%(i))
+        if len(glob.glob(i+"MusicOutDir.tar.gz"))==0:
+            log.warning("There is some thing worng in %s no MusicOutDir.tar.gz"%(i))
     if len(glob.glob(options.inputFolder+"/*/*/*tail")):
         log.warning("There is some thing worng:")
         for i in glob.glob(options.inputFolder+"/*/*/*tail"):
@@ -70,7 +71,7 @@ def extractRootFiles(options):
     allFiles=[]
     for i in glob.glob(options.inputFolder+"/*/*/*.tar.gz"):
         splited=os.path.split(i)
-        #if "outFile.root" in os.listdir(splited[0]):
+        #if "SpecialHistos.root" in os.listdir(splited[0]):
             #continue
         allFiles.append(splited)
     if len(allFiles)>0:
