@@ -12,7 +12,7 @@ import subprocess
 
 ## Check if crab can write to specified site
 #
-# @type options A optparse options object
+# @type options a optparse options object
 # @param options  Options for this function. Used Option(s): workingArea
 # @type site string
 # @param site The Site symbol [default:T2_DE_RWTH]
@@ -161,7 +161,7 @@ def conditionalLog(crablog,message,logtype="info"):
 # - options where previous definitions should be kept
 # - options where previous definitions should be overriden
 # @type Optparse parser instance
-# @param A previously created parser oject which should be extenden [default: new instance]
+# @param parser A previously created parser oject which should be extenden [default: new instance]
 # @return A new or extenden optparse parser instance    
 def crab_commandlineOptions(parser = optparse.OptionParser( 'usage: %prog' )):
     
