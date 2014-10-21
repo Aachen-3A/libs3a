@@ -32,7 +32,7 @@ def crab_checkwrite(options,site='T2_DE_RWTH',path='noPath',crablog=None):
         runPath ="./"
     p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%runPath,shell=True)
     (stringlist,string_err) = p.communicate()
-    if not "Able to write to /store/user/"  in stringlist:
+    if not "Able to write to /store/user/%s on site %s"%(options.user,site)  in stringlist:
         conditionalLog(crablog, "The crab checkwrite command failed for site: %s"%site , 'error')
         conditionalLog(crablog, string_err , 'error')
         return False
