@@ -105,9 +105,11 @@ class Job:
         if self.frontEndStatus == "RETRIEVED" or self.frontEndStatus == "PURGED":
             return
         try:
-            command = ["glite-ce-job-status", self.jobid]
+            if self.jobid is None:
+                return
         except AttributeError:
             return
+        command = ["glite-ce-job-status", self.jobid]
         log.debug("Getting status "+self.jobid)
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -191,7 +193,7 @@ class Task:
         for job in self.jobs:
             try:
                 f.write(job.jobid+"\n")
-            except AttributeError:
+            except (AttributeError, TypeError):
                 pass
         f.close()
     def addJob(self, job):
@@ -213,7 +215,7 @@ class Task:
         self._dosubmit(range(len(self.jobs)), processes, submitWorker)
         self.frontEndStatus="SUBMITTED"
         os.chdir(startdir)
-        print self.jobs[0].__dict__
+        #print self.jobs[0].__dict__
         self.save()
     def _dosubmit(self, nodeids, processes, worker):
         jobs = [j for j in self.jobs if j.nodeid in nodeids]
