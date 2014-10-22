@@ -102,12 +102,7 @@ class Job:
         os.chdir(startdir)
         return process.returncode, stdout
     def getStatus(self):
-        if self.frontEndStatus == "RETRIEVED" or self.frontEndStatus == "PURGED":
-            return
-        try:
-            if self.jobid is None:
-                return
-        except AttributeError:
+        if self.frontEndStatus == "RETRIEVED" or self.frontEndStatus == "PURGED" or self.jobid is None:
             return
         command = ["glite-ce-job-status", self.jobid]
         log.debug("Getting status "+self.jobid)
@@ -194,7 +189,7 @@ class Task:
             try:
                 f.write(job.jobid+"\n")
             except (AttributeError, TypeError):
-                pass
+                f.write("None\n")
         f.close()
     def addJob(self, job):
         job.task = self
