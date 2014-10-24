@@ -9,6 +9,7 @@ from collections import defaultdict
 import multiprocessing
 import logging
 import glob
+import re
 #logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 #log = multiprocessing.get_logger()
@@ -290,9 +291,10 @@ class Task:
         for job in self.jobs:
             try:
                 infos = result[job.jobid]
-                job.infos = infos
-            except:
-                job.infos = dict()
+                if len(infos)>0:
+                    job.infos = infos
+            except KeyError:
+                log.warning('Failed to get status of job %s of task %s',job.jobid, self.name)
     def getStatus(self):
         log.debug('Get status of task %s',self.name)
         self._getStatusMultiple()
@@ -311,14 +313,29 @@ class Task:
         self.save()
         return self.frontEndStatus
 
-    def getOutput(self):
-        log.info('Get output of (some) jobs of task %s',self.name)
-        for job in self.jobs:
-            try:
-                if "DONE" in job.status and job.frontEndStatus!="RETRIEVED" and job.frontEndStatus!="PURGED":
-                    job.getOutput()
-            except TypeError:
-                pass
+    def getOutput(self, connections=1):
+        jobs = [job for job in self.jobs if job.status=="DONE-OK" and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
+        jobids = [job.jobid for job in jobs]
+        if not jobids: return
+        log.info('Get output of %s jobs of task %s',str(len(jobids)), self.name)
+        command = ["glite-ce-job-output", "-s", str(connections), "--noint", "--dir", self.directory] + jobids
+        process = subprocess.Popen(command, stdout=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+        if process.returncode!=0:
+            log.warning('Output retrieval failed for task '+self.name)
+            log.info(stdout)
+            log.info(stderr)
+        else:
+            succesfulljobids = parseGetOutput(stdout)
+            log.info('Successfully retrieved %s jobs', str(len(succesfulljobids)))
+            for job in jobs:
+                if job.jobid in succesfulljobids:
+                    job.purge()
+                    job.frontEndStatus = "RETRIEVED"
+                    log.debug('Successfully retrieved job %s', job.jobid)
+                else:
+                    job.frontEndStatus = "FAILED2RETRIEVE"
+                    log.warning('Failed to retrieve job %s', job.jobid)
         self.save()
 
     def jobStatusNumbers(self):
@@ -356,6 +373,19 @@ class Task:
 
 
         
+def parseGetOutput(stdout):
+    successfuljobidlist=[]
+    for line in stdout.splitlines():
+        if "https" not in line: continue
+        regex = re.compile("\[(https.*?)\]")
+        r = regex.search(line)
+        try:
+            jobid = r.groups()[0]
+        except IndexError:
+            continue
+        if "output will be stored" in line:
+            successfuljobidlist.append(jobid)
+    return successfuljobidlist
 
 def parseStatus(stdout):
     # parses the output of glite-ce-job-status to a dict
