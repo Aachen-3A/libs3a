@@ -22,8 +22,8 @@ import subprocess
 # @param logging Logging object where function adds log messages. Messages
 #                 are sent to the prompt if no log object is specified.
 def crab_checkwrite(options,site='T2_DE_RWTH',path='noPath',crablog=None):    
-    log.info("Checking if user can write in output storage")
     cmd = ['crab checkwrite --site %s --voGroup=dcms'%site ]
+    conditionalLog(crablog,"Checking if user can write in output storage")
     if not 'noPath' in path:
         cmd[0] +=' --lfn=%s'%(path)
     if options.workingArea:
@@ -37,7 +37,7 @@ def crab_checkwrite(options,site='T2_DE_RWTH',path='noPath',crablog=None):
         conditionalLog(crablog, string_err , 'error')
         return False
     else:
-        log.info("Checkwrite was sucessfully called.")
+        conditionalLog(crablog,"Checkwrite was sucessfully called.")
         return True
 
 ## Check if crab can write to specified site
