@@ -71,6 +71,7 @@ def crab_submit(options,name,crablog=None):
 # @type crablog A logging object instance 
 # @param logging Logging object where function adds log messages. Messages
 #                 are sent to the prompt if no log object is specified. 
+# @returns users hypernews name
 def crab_checkHNname(options,crablog=None):
     cmd = 'crab checkHNname --voGroup=dcms'
     if options.workingArea:
