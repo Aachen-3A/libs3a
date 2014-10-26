@@ -165,6 +165,9 @@ def conditionalLog(crablog,message,logtype="info"):
 # @param parser A previously created parser oject which should be extenden [default: new instance]
 # @return A new or extenden optparse parser instance    
 def crab_commandlineOptions(parser = optparse.OptionParser( 'usage: %prog' )):
+    # we first need to call parse_args with a dummy string at the beginning to
+    # check for existing options later
+    (currentoptions, args ) = parser.parse_args([" "])
     
     # The following block shows how variables should be added, where
     # conflicts are possible if the option is overridden by this function
@@ -178,10 +181,10 @@ def crab_commandlineOptions(parser = optparse.OptionParser( 'usage: %prog' )):
       
     # options where it is checked if they exists and new options are added
     # otherwise
-    if not hasattr(parser, 'dry_run'):
+    if not hasattr(currentoptions, 'dry_run'):
         parser.add_option( '--dry-run', action='store_true', default=False, 
                         help='Do everything except calling CRAB or registering samples to the database.' )
-    if not hasattr(parser, 'workingArea'):
+    if not hasattr(currentoptions, 'workingArea'):
         parser.add_option( '--workingArea',metavar='DIR',default=os.getcwd(),help='The area (full or relative path) where to create the CRAB project directory. ' 
                              'If the area doesn\'t exist, CRAB will try to create it using the mkdir command' \
                             ' (without -p option). Defaults to the current working directory.'       )
