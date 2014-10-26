@@ -87,7 +87,7 @@ def crab_checkHNname(options,crablog=None):
             return hnname
     return "noHNname"
 
-## Check if crab can write to specified site
+## Check crab status
 #
 # @type options A optparse options object
 # @param options  Options for this function. Used Option(s): workingArea, dry-run
