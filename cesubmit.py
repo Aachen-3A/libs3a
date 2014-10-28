@@ -146,8 +146,7 @@ class Job:
         if self.status in ["PENDING", "IDLE", "RUNNING", "REALLY-RUNNING", "HELD"]:
             self.cancel()
         self.purge()
-        self.cleanUp()
-        self.infos=dict()
+        self.infos = dict()
         self.submit()
     @property
     def outputSubDirectory(self):
@@ -228,9 +227,10 @@ class Task:
                 self.jobs[job.nodeid]=job
         else:
             for job in jobs:
-                job.submit()
+                worker(job)
 
     def resubmit(self, nodeids, processes=0):
+        if len(nodeids)==0: return
         log.debug('Resubmit (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, resubmitWorker)
         self.save()
@@ -277,9 +277,9 @@ class Task:
             shutil.rmtree(self.directory)
         os.makedirs(self.directory)
     def _getStatusMultiple(self):
-        checkAndRenewVomsProxy(604800)
-        jobids = [job.jobid for job in self.jobs if job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        if not jobids: return
+        jobs = [job for job in self.jobs if job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
+        jobids = [job.jobid for job in jobs]
+        if not jobids: return 0
         command = ["glite-ce-job-status", "-L1"] + jobids
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -288,16 +288,18 @@ class Task:
             log.info(stdout)
             log.info(stderr)
         result = parseStatusMultipleL1(stdout)
-        for job in self.jobs:
+        for job in jobs:
             try:
                 infos = result[job.jobid]
                 if len(infos)>0:
                     job.infos = infos
             except KeyError:
                 log.warning('Failed to get status of job %s of task %s',job.jobid, self.name)
+        return len(jobids)
     def getStatus(self):
         log.debug('Get status of task %s',self.name)
-        self._getStatusMultiple()
+        numberOfJobs = self._getStatusMultiple()
+        oldfestatus = self.frontEndStatus
         retrieved, done, running = True, True, False
         for job in self.jobs:
             if job.frontEndStatus!="RETRIEVED":
@@ -310,7 +312,8 @@ class Task:
         if running: self.frontEndStatus="RUNNING"
         elif retrieved: self.frontEndStatus="RETRIEVED"
         elif done: self.frontEndStatus="DONE"
-        self.save()
+        if numberOfJobs > 0 or oldfestatus != self.frontEndStatus:
+            self.save()
         return self.frontEndStatus
 
     def getOutput(self, connections=1):
@@ -327,7 +330,7 @@ class Task:
             log.info(stderr)
         else:
             succesfulljobids = parseGetOutput(stdout)
-            log.info('Successfully retrieved %s jobs', str(len(succesfulljobids)))
+            log.info('Tried to retrieved %s jobs', str(len(succesfulljobids)))
             for job in jobs:
                 if job.jobid in succesfulljobids:
                     job.purge()
@@ -336,7 +339,7 @@ class Task:
                 else:
                     job.frontEndStatus = "FAILED2RETRIEVE"
                     log.warning('Failed to retrieve job %s', job.jobid)
-        self.save()
+            self.save()
 
     def jobStatusNumbers(self):
         jobStatusNumbers=defaultdict(int)
