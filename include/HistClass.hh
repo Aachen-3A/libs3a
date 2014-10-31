@@ -446,7 +446,7 @@ namespace HistClass {
     /*! \brief Function to give one 1D histogram from the map alphanumeric bin labels without number
      *
      * \param[in] name Name of the histogram that should get bin names
-     * \param[in] Number of bins that should be renamed
+     * \param[in] n_bins of bins that should be renamed
      * \param[in] d_mydisc Array with the names that th bins should get
      */
     static void NameBins(const char * name, const uint n_bins, TString* d_mydisc)
@@ -463,7 +463,7 @@ namespace HistClass {
      *
      * \param[in] n_histo Number of the histogram that should get bin names
      * \param[in] name Name of the histogram that should get bin names
-     * \param[in] Number of bins that should be renamed
+     * \param[in] n_bins of bins that should be renamed
      * \param[in] d_mydisc Array with the names that th bins should get
      */
     static void NameBins(Int_t n_histo, const char * name, const uint n_bins, TString* d_mydisc)
