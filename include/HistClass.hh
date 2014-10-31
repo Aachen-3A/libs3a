@@ -252,7 +252,7 @@ namespace HistClass {
         if(it!=histo.end()){
             it->second->Fill(value,weight);
         }else{
-            std::cerr << "(Fill) No hist: " << Form("h1_%s", name) << " in map " << n_histo << std::endl;
+            std::cerr << "(Fill) No hist: " << Form("h1_%s", name) << " in map " << std::endl;
         }
     }
 
