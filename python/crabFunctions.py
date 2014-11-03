@@ -7,7 +7,7 @@
 import os,sys
 import optparse
 import subprocess
-
+import logging
 ## The CrabController class
 #
 # This class can be used to manage Analyses using crab3
@@ -17,9 +17,34 @@ class CrabController():
     ## The constructor.
     # @type self: CrabController
     # @param self: The object pointer.
-    def __init__(self):
+    # @type self: A logging logger instance
+    # @param self: A previously defined logger. Crab log messages will use this logger as their parent logger.
+    def __init__(self, logger = None):
         self.workingArea = os.getcwd()
         self.dry_run = False
+        if logger is not None:
+            self.logger = logger.getChild("CrabController")
+        else:
+            # add instance logger as logger to root
+            self.logger = logging.getLogger("CrabController")
+            # check if handlers are present for root logger
+            # we assume that the default logging is not configured
+            # if handler is present
+            if len(logging.getLogger().handlers) < 1 :
+                logging.basicConfig( level=logging._levelNames[ 'DEBUG' ])
+                
+                # create console handler and set level to debug
+                ch = logging.StreamHandler()
+                ch.setLevel(logging.DEBUG)
+                # create formatter
+                formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
+                
+                # add formatter to ch
+                ch.setFormatter(formatter)
+                
+                # add ch to logger
+                logging.getLogger().addHandler(ch)
+                
     ## Check if crab can write to specified site
     #
     # @type self: CrabController
@@ -28,22 +53,19 @@ class CrabController():
     # @param site The Site symbol [default:T2_DE_RWTH]
     # @type path string
     # @param path lfn path to check write permission in. see twiki WorkBookCRAB3Tutorial
-    # @type crablog A logging object instance 
-    # @param logging Logging object where function adds log messages. Messages
-    #                 are sent to the prompt if no log object is specified.
-    def crab_checkwrite(self,site='T2_DE_RWTH',path='noPath',crablog=None):    
+    def crab_checkwrite(self,site='T2_DE_RWTH',path='noPath'):    
         cmd = ['crab checkwrite --site %s --voGroup=dcms'%site ]
-        conditionalLog(crablog,"Checking if user can write in output storage")
+        self.logger.info("Checking if user can write in output storage")
         if not 'noPath' in path:
             cmd[0] +=' --lfn=%s'%(path)
         p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
         (stringlist,string_err) = p.communicate()
         if not "Able to write to /store/user/%s on site %s"%(self.user,site)  in stringlist:
-            conditionalLog(crablog, "The crab checkwrite command failed for site: %s"%site , 'error')
-            conditionalLog(crablog, string_err , 'error')
+            self.logger.error( "The crab checkwrite command failed for site: %s"%site )
+            self.logger.error( string_err )
             return False
         else:
-            conditionalLog(crablog,"Checkwrite was sucessfully called.")
+            self.logger.info("Checkwrite was sucessfully called.")
             return True
     
     ## Check if crab can write to specified site
@@ -54,12 +76,9 @@ class CrabController():
     # @param site The Site symbol [default:T2_DE_RWTH]
     # @type name string
     # @param name The crab3 request name, a.k.a the sample name
-    # @type crablog A logging object instance 
-    # @param logging Logging object where function adds log messages. Messages
-    #                 are sent to the prompt if no log object is specified.        
-    def crab_submit(self,name,crablog=None):
+    def crab_submit(self,name):
         if self.dry_run:
-            conditionalLog(crablog,'Dry-run: Created config file. crab command would have been: %s'%cmd)
+            self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
         else:
             p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
             (stringlist,string_err) = p.communicate()
@@ -69,11 +88,8 @@ class CrabController():
     #
     # @type self: CrabController
     # @param self: The object pointer.
-    # @type crablog A logging object instance 
-    # @param logging Logging object where function adds log messages. Messages
-    #                 are sent to the prompt if no log object is specified. 
     # @returns users hypernews name
-    def crab_checkHNname(self,crablog=None):
+    def crab_checkHNname(self):
         cmd = 'crab checkHNname --voGroup=dcms'
         p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
         (string_out,string_err) = p.communicate()
@@ -90,23 +106,20 @@ class CrabController():
     # @param self: The object pointer.
     # @type name string
     # @param name The crab3 request name, a.k.a the sample name
-    # @type crablog A logging object instance 
-    # @param logging Logging object where function adds log messages. Messages
-    #                 are sent to the prompt if no log object is specified.   
-    def crab_status(self,name,crablog=None):
+    def crab_status(self,name):
         cmd = 'crab status crab_%s --long --json'%name
         if self.dry_run:
-            conditionalLog(crablog,'Dry-run: Created config file. crab command would have been: %s'%cmd)
+            self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
         else:
             try:
                 p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
                 (stdout,stderr) = p.communicate()
             except:
-                conditionalLog(crablog,"error running crab status subprocess for %s"%name,'error')
+                self.logger.error("error running crab status subprocess for %s"%name)
                 sys.exit(1)
             
-            conditionalLog(crablog,"crab status called for task %s"%name)
-            conditionalLog(crablog,'crab status crab_%s --long --json'%name)
+            self.logger.info("crab status called for task %s"%name)
+            self.logger.info('crab status crab_%s --long --json'%name)
             #try to fetch the JSON output fro stdout
             try:
                 # split output in lines and rverse order
@@ -122,31 +135,12 @@ class CrabController():
                 del jsondump
                 return statusJSON
             except:
-                conditionalLog( crablog, 'Error parsing crab status json output, please check cout below ', 'error')
-                conditionalLog( crablog, stdout, 'error')
-                conditionalLog( crablog, "current working directory %s"%self.workingArea, 'error')
+                self.logger.error( "Error: current working directory %s"%self.workingArea)
+                self.logger.error('Error parsing crab status json output, please check cout below ')
+                self.logger.error(stdout)
                 sys.exit(1)
     
-    
-    ## Prints log message either to logging object if given or print log message to prompt
-    #
-    # @type crablog A logging object instance 
-    # @param crablog Logging object where function adds log messages. Messages
-    #                 are sent to the prompt if no log object is specified.  
-    # @type message string
-    # @param message  Message which should be written to lof
-    # @type logtype string
-    # @param logtype log category for this message (info,error,warning)
-    def conditionalLog(crablog,message,logtype="info"):
-        for basetype in ['info','warning','error']:
-            if basetype in logtype:
-                try:
-                    logToCall = getattr(crablog, basetype)
-                    logToCall(message)
-                except:
-                    print "%s: %s"%(basetype,message)
-    
-    ## Populates a existing optparse parser or returns a new one with options for crab functions
+    ## Populates an existing optparse parser or returns a new one with options for crab functions
     #
     # This functions populates a previously created (or new) instance of a
     # optparse parser object with options needed by crab functions.
