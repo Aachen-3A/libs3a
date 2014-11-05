@@ -54,7 +54,7 @@ class CrabController():
     # @param site The Site symbol [default:T2_DE_RWTH]
     # @type path string
     # @param path lfn path to check write permission in. see twiki WorkBookCRAB3Tutorial
-    def crab_checkwrite(self,site='T2_DE_RWTH',path='noPath'):    
+    def checkwrite(self,site='T2_DE_RWTH',path='noPath'):    
         cmd = ['crab checkwrite --site %s --voGroup=dcms'%site ]
         self.logger.info("Checking if user can write in output storage")
         if not 'noPath' in path:
@@ -77,7 +77,7 @@ class CrabController():
     # @param site The Site symbol [default:T2_DE_RWTH]
     # @type name string
     # @param name The crab3 request name, a.k.a the sample name
-    def crab_submit(self,name):
+    def submit(self,name):
         if self.dry_run:
             self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
         else:
@@ -90,7 +90,7 @@ class CrabController():
     # @type self: CrabController
     # @param self: The object pointer.
     # @returns users hypernews name
-    def crab_checkHNname(self):
+    def checkHNname(self):
         cmd = 'crab checkHNname --voGroup=dcms'
         p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
         (string_out,string_err) = p.communicate()
@@ -107,7 +107,7 @@ class CrabController():
     # @param self: The object pointer.
     # @type name string
     # @param name The crab3 request name, a.k.a the sample name
-    def crab_status(self,name):
+    def status(self,name):
         cmd = 'crab status crab_%s --long --json'%name
         if self.dry_run:
             self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
@@ -152,7 +152,7 @@ class CrabController():
     # @type Optparse parser instance
     # @param parser A previously created parser oject which should be extenden [default: new instance]
     # @return A new or extenden optparse parser instance    
-    def crab_commandlineOptions(parser = optparse.OptionParser( 'usage: %prog' )):
+    def commandlineOptions(parser = optparse.OptionParser( 'usage: %prog' )):
         # we first need to call parse_args with a dummy string at the beginning to
         # check for existing options later
         (currentoptions, args ) = parser.parse_args([" "])
