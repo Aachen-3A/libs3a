@@ -135,7 +135,13 @@ class CrabController():
                 del rawjson
                 statusJSON = json.loads(jsondump)
                 del jsondump
-                return statusJSON
+                import ast
+                try:
+                    statusDict = ast.literal_eval(statusJSON)
+                    return statusDict
+                except:
+                    self.logger.error("Can not parse Crab request JSON output")
+                    return {}
             except:
                 self.logger.error( "Error: current working directory %s"%self.workingArea)
                 self.logger.error('Error parsing crab status json output, please check cout below ')
