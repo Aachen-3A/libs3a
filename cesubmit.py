@@ -233,6 +233,7 @@ class Task:
         if len(nodeids)==0: return
         log.debug('Resubmit (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, resubmitWorker)
+        self.frontEndStatus = "SUBMITTED"
         self.save()
         self.cleanUp()
             
@@ -293,6 +294,8 @@ class Task:
                 infos = result[job.jobid]
                 if len(infos)>0:
                     job.infos = infos
+                else:
+                    log.warning('Failed to get status of job %s of task %s',job.jobid, self.name)
             except KeyError:
                 log.warning('Failed to get status of job %s of task %s',job.jobid, self.name)
         return len(jobids)
