@@ -119,6 +119,7 @@ class CrabController():
                 self.logger.error("error running crab status subprocess for %s"%name)
                 sys.exit(1)
             
+            #~ self.logger.info(stdout)
             self.logger.info("crab status called for task %s"%name)
             self.logger.info('crab status crab_%s --long --json'%name)
             #try to fetch the JSON output fro stdout
@@ -152,7 +153,7 @@ class CrabController():
     # @type Optparse parser instance
     # @param parser A previously created parser oject which should be extenden [default: new instance]
     # @return A new or extenden optparse parser instance    
-    def commandlineOptions(parser = optparse.OptionParser( 'usage: %prog' )):
+    def commandlineOptions(self,parser = optparse.OptionParser( 'usage: %prog' )):
         # we first need to call parse_args with a dummy string at the beginning to
         # check for existing options later
         (currentoptions, args ) = parser.parse_args([" "])
