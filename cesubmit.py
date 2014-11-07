@@ -22,6 +22,10 @@ def resubmitWorker(job):
     job.resubmit()
     return job
 
+def killWorker(job):
+    job.kill()
+    return job
+
 class Job:
     def __init__(self):
         self.inputfiles, self.outputfiles, self.arguments , self.executable = [], [], [], None
@@ -142,6 +146,11 @@ class Job:
             log.warning('Purging failed for job id '+self.jobid)
         else:
             self.frontEndStatus = "PURGED"
+    def kill(self):
+        self.cancel()
+        self.purge()
+        self.infos = dict()
+
     def resubmit(self):
         if self.status in ["PENDING", "IDLE", "RUNNING", "REALLY-RUNNING", "HELD"]:
             self.cancel()
@@ -236,6 +245,11 @@ class Task:
         self.frontEndStatus = "SUBMITTED"
         self.save()
         self.cleanUp()
+    def kill(self, nodeids, processes=0):
+        log.debug('Kill (some) jobs of task %s',self.name)
+        self._dosubmit(nodeids, processes, killWorker)
+        self.save()
+        self.cleanUp()
             
     def makePrologue(self):
         executable = (
@@ -303,10 +317,12 @@ class Task:
         log.debug('Get status of task %s',self.name)
         numberOfJobs = self._getStatusMultiple()
         oldfestatus = self.frontEndStatus
-        retrieved, done, running = True, True, False
+        retrieved, done, running, purged = True, True, False, True
         for job in self.jobs:
             if job.frontEndStatus!="RETRIEVED":
                 retrieved=False
+            if job.frontEndStatus!="PURGED":
+                purged = False
             if "RUNNING" in job.status:
                 running=True
                 break
@@ -315,6 +331,7 @@ class Task:
         if running: self.frontEndStatus="RUNNING"
         elif retrieved: self.frontEndStatus="RETRIEVED"
         elif done: self.frontEndStatus="DONE"
+        elif purged: self.frontEndStatus="PURGED"
         if numberOfJobs > 0 or oldfestatus != self.frontEndStatus:
             self.save()
         return self.frontEndStatus
