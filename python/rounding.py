@@ -13,7 +13,7 @@ class rounding:
         elif err2 is None:
             return self.latexValueError(n, err1)
         else:
-            return self.latexValueError(n, err1, err2)
+            return self.latexValueUpDownError(n, err1, err2)
 
     def html(self, n, err1=None, err2=None):
         if err1 is None:
@@ -21,7 +21,7 @@ class rounding:
         elif err2 is None:
             return self.htmlValueError(n, err1)
         else:
-            return self.htmlValueError(n, err1, err2)
+            return self.htmlValueUpDownError(n, err1, err2)
 
     def latexValue(self, n):
         value, expo = self.sdr(n)
@@ -40,9 +40,9 @@ class rounding:
     def latexValueUpDownError( self, n, up, down ):
         a, b, c, expo = self.sdr( n, up, down )
         if expo != 0:
-            return '${0}^{{+{1}}}_{{-{2}}}\cdot10^{{{3}}}$'.format(a, b, c, exp)
+            return '${0}^{{+{1}}}_{{-{2}}}\cdot10^{{{3}}}$'.format(a, b, c, expo)
         else:
-            return '${0}^{{+{1}}}_{{-{2}}}$'.format(a, b)
+            return '${0}^{{+{1}}}_{{-{2}}}$'.format(a, b, c)
 
     def htmlValue(self, n):
         value, expo = self.sdr(n)
