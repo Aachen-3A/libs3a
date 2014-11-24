@@ -233,6 +233,155 @@ class CrabController():
         #                       help='Dummy option for future integration') 
             
         return parser
-                         
+
+
+## Class for a single CrabRequest
+#
+# This class represents one crab3 task/request
+class CrabTask:
     
+    ## The object constructor
+    #
+    # @type self: CrabTask
+    # @param self: The object pointer.
+    # @type taskname: String
+    # @param taskname: The object pointer.
+    # @type initUpdate: Boolean
+    # @param initUpdate: Flag if crab status should be called when an instance is created
+    def __init__(self, taskname , crabController = None , initUpdate = True, localDir = "", outlfn = "" , StorageFileList = [] ):
+        self.name = taskname
+        self.uuid = uuid.uuid4()
+        #~ self.lock = multiprocessing.Lock()       
+        if crabController is None:
+            self.controller =  CrabController()
+        else:
+            self.controller =  crabController
+        self.jobs = {}
+        self.localDir = localDir
+        self.outlfn = outlfn
+        self.StorageFileList = StorageFileList
+        self.isUpdating = False
+        #variables for statistics
+        self.nJobs = 0
+        self.state = "NOSTATE"
+        self.maxjobnumber = 0
+        self.nUnsubmitted   = 0 
+        self.nIdle = 0
+        self.nRunning = 0
+        self.nTransferring    = 0
+        self.nCooloff    = 0
+        self.nFailed    = 0
+        self.nFinished    = 0
+        self.nComplete    = 0
+        
+        #start with first updates
+        if initUpdate:
+            self.update()
+            self.updateJobStats()
+            
+    ## Function to update Task in associated Jobs
+    #
+    # @type self: CrabTask
+    # @param self: The object pointer.        
+    def update(self):
+        #~ self.lock.acquire()
+        self.isUpdating = True
+        self.state = "UPDATING"
+        self.state , self.jobs = self.controller.status(self.name) 
+        self.nJobs = len(self.jobs.keys())
+        self.updateJobStats()
+        self.isUpdating = False
+        self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
+        #~ if "COMPLETE" in self.state:
+            #~ if nComplete == nJobs:
+                #~ self.state = "DONE"
+            #~ else:
+                #~ self.state = "COMPLETE"
+        #~ self.lock.release()
+    ## Function to update JobStatistics
+    #
+    # @type self: CrabTask
+    # @param self: The object pointer.           
+    # @type dCacheFilelist: list of strings
+    # @param dCacheFilelist: A list of files on the dCache           
+    def updateJobStats(self,dCacheFileList = None):
+        jobKeys = sorted(self.jobs.keys())
+        try:
+            intJobkeys = [int(x) for x in jobKeys]
+        except:
+            print "error parsing job numers to int" 
+        
+        #maxjobnumber = max(intJobkeys)
+        
+        stateDict = {'unsubmitted':0,'idle':0,'running':0,'transferring':0,'cooloff':0,'failed':0,'finished':0}
+        nComplete = 0
     
+        # loop through jobs
+        for key in jobKeys:
+            job = self.jobs[key]
+             #check if all completed files are on decache
+            for statekey in stateDict.keys():
+                if statekey in job['State']:
+                    stateDict[statekey]+=1
+                    # check if finished fails are found on dCache if dCacheFilelist is given
+                    if dCacheFileList is not None:
+                        outputFilename = "%s_%s"%( sample, key)
+                        if 'finished' in statekey and any(outputFilename in s for s in dCacheFileList):
+                            nComplete +=1
+        
+        for state in stateDict:
+            attrname = "n" + state.capitalize()
+            setattr(self, attrname, stateDict[state])
+        self.nComplete = nComplete    
+
+## Class holds job statistics for several Crab tasks
+#
+# This class saves and updates statistics from a given list of CrabTask objects.
+class TaskStats:
+       
+    ## The object constructor
+    #
+    # @type self: TaskStats
+    # @param self: The object pointer.
+    # @type tasklist: List of CrabTask objects
+    # @param tasklist: (Optional) List of CrabTasks for which statistics should be calculated
+    def __init__(self, tasklist = None):
+        if tasklist is not None:
+            self.updateStats(tasklist)
+        else:
+            self.clearStats()
+            
+    ## This function updates the statistics for a given tasklist
+    #
+    # @type self: TaskStats
+    # @param self: The object pointer.
+    # @type tasklist: List of CrabTask objects
+    # @param tasklist: List of CrabTasks for which statistics should be calculated        
+    def updateStats(self,tasklist):
+        self.clearStats()
+        self.nTasks = len(tasklist)
+        for task in tasklist:
+            if not task.isUpdating:
+                self.nUnsubmitted   += task.nUnsubmitted
+                self.nIdle += task.nIdle 
+                self.nRunning += task.nRunning
+                self.nTransferring    += task.nTransferring 
+                self.nCooloff    += task.nCooloff
+                self.nFailed    += task.nFailed
+                self.nFinished    += task.nFinished
+                self.nComplete    += task.nComplete
+            
+    ## This function sets all counts to zero
+    #
+    # @type self: TaskStats
+    # @param self: The object pointer. 
+    def clearStats(self):
+        self.nTasks = 0
+        self.nUnsubmitted   = 0 
+        self.nIdle = 0
+        self.nRunning = 0
+        self.nTransferring    = 0
+        self.nCooloff    = 0
+        self.nFailed    = 0
+        self.nFinished    = 0
+        self.nComplete    = 0
