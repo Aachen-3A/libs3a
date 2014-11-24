@@ -8,6 +8,10 @@ import os,sys
 import optparse
 import subprocess
 import logging
+import datetime
+import uuid
+
+import multiprocessing
 
 ## The CrabController class
 #
@@ -20,12 +24,22 @@ class CrabController():
     # @param self: The object pointer.
     # @type self: A logging logger instance
     # @param self: A previously defined logger. Crab log messages will use this logger as their parent logger.
-    def __init__(self, logger = None):
-        self.workingArea = os.getcwd()
+    def __init__(self, logger = None , workingArea = None, voGroup = None):
+        if workingArea is not None:
+            self.workingArea = workingArea
+        else:
+            self.workingArea = os.getcwd()
         self.dry_run = False
+        if voGroup is not None:
+            self.voGroup = voGroup
+        else:
+            voGroup = "dcms"
+        
+        
         if logger is not None:
             self.logger = logger.getChild("CrabController")
         else:
+            raise(Exception)
             # add instance logger as logger to root
             self.logger = logging.getLogger("CrabController")
             # check if handlers are present for root logger
@@ -54,8 +68,9 @@ class CrabController():
     # @param site The Site symbol [default:T2_DE_RWTH]
     # @type path string
     # @param path lfn path to check write permission in. see twiki WorkBookCRAB3Tutorial
+    # @return boolean which is True if user can write to site and False otherwise
     def checkwrite(self,site='T2_DE_RWTH',path='noPath'):    
-        cmd = ['crab checkwrite --site %s --voGroup=dcms'%site ]
+        cmd = ['crab checkwrite --site %s --voGroup=%s'% ( site, self.voGroup ) ]
         self.logger.info("Checking if user can write in output storage")
         if not 'noPath' in path:
             cmd[0] +=' --lfn=%s'%(path)
