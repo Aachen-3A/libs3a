@@ -4,9 +4,10 @@ import time
 import math
 import logging
 import logging.handlers
+
 from logging.handlers import RotatingFileHandler
 import multiprocessing, threading, logging, sys, traceback
-#logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 import Queue
 
 def test():
@@ -43,7 +44,6 @@ class BottomText:
         for text in self.text:
             for line in text.splitlines():
                 rows+=list(chunks(line,self.width))
-                #~ rows+=list(line)
         rownumber=self.height-1
         for row in reversed(rows):
             if rownumber==-1: break
