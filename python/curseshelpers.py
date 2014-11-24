@@ -4,9 +4,11 @@ import time
 import math
 import logging
 import logging.handlers
-import sys
-logger = logging.getLogger(__name__)
-    
+from logging.handlers import RotatingFileHandler
+import multiprocessing, threading, logging, sys, traceback
+#logger = logging.getLogger(__name__)
+import Queue
+
 def test():
     logger.warning("test")
 def default(x, y):
@@ -17,29 +19,6 @@ def chunks(l, n):
     """
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
-#class CursesFormatter(logging.BufferingFormatter):
-        #def __init__(self):
-            #fmtstr = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
-            #logging.BufferingFormatter.__init__(self, logging.Formatter(fmtstr))
-
-#class CursesLoggingHandler(logging.handlers.BufferingHandler):
-    #def __init__(self, screen, top=1, left=0, height=None, width=None):
-    ##def __init__(self, logText):
-        #logging.handlers.BufferingHandler.__init__(self, 0)
-        #self.setFormatter(CursesFormatter())
-        #self.text = BottomText(screen, top=10, left=0, height=10)
-    #def flush(self):
-        #try:
-            #self.text.addText(self.formatter.format(self.buffer))
-            #self.buffer = []
-            #self.text.refresh()
-        #except:
-            #pass
-    #def shouldFlush(self, record):
-        #return True
-    #def close(self):
-        #self.text=None
-        #logging.Handler.close(self)
 
 class BottomText:
     def __init__(self, screen, top=1, left=0, height=None, width=None):
@@ -64,6 +43,7 @@ class BottomText:
         for text in self.text:
             for line in text.splitlines():
                 rows+=list(chunks(line,self.width))
+                #~ rows+=list(line)
         rownumber=self.height-1
         for row in reversed(rows):
             if rownumber==-1: break
@@ -136,9 +116,6 @@ class MultiText:
     @property
     def width(self):
         return min(self._width, self.parent.getmaxyx()[1])
-
-
-
 
 class Text:
     def __init__(self, screen, maxrows=2000, top=1, left=0, height=None, width=None):
@@ -330,6 +307,82 @@ class StdOutWrapper:
         #the refresh function should be here, but this does not work :(
         pass
 
+class CursesHandler(logging.Handler):
+    
+    def __init__(self, stdscr,bottomText, level=logging.DEBUG):
+        logging.Handler.__init__(self, level)
+        self.bottomText = bottomText
+        self.stdscr = stdscr
+        formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
+    def emit(self, record):
+        attr = {"DEBUG":curses.A_NORMAL, 
+                "INFO":curses.A_NORMAL, 
+                "WARNING":curses.A_BOLD, 
+                "ERROR":curses.A_BOLD, 
+                "CRITICAL":curses.A_STANDOUT}
+        
+        self.bottomText.addText(self.format(record)+"\n")
+
+# http://stackoverflow.com/questions/641420/how-should-i-log-while-using-multiprocessing-in-python
+class CursesMultiHandler(logging.Handler):
+    def __init__(self, stdscr,bottomText, log_q,level=logging.DEBUG):
+        logging.Handler.__init__(self)
+
+        self._handler = CursesHandler(stdscr , bottomText, level)
+        #~ self.queue = multiprocessing.Queue(-1)
+        self.queue = log_q
+
+        t = threading.Thread(target=self.receive)
+        t.daemon = True
+        t.start()
+
+    def setFormatter(self, fmt):
+        logging.Handler.setFormatter(self, fmt)
+        self._handler.setFormatter(fmt)
+
+    def receive(self):
+        while True:
+            try:
+                record = self.queue.get_nowait()
+                self._handler.emit(record)
+            except (KeyboardInterrupt, SystemExit):
+                raise
+            except Queue.Empty:
+                pass
+            except EOFError:
+                break
+            except:
+                traceback.print_exc(file=sys.stderr)
+
+    def send(self, s):
+        self.queue.put_nowait(s)
+
+    def _format_record(self, record):
+        # ensure that exc_info and args
+        # have been stringified.  Removes any chance of
+        # unpickleable things inside and possibly reduces
+        # message size sent over the pipe
+        if record.args:
+            record.msg = record.msg % record.args
+            record.args = None
+        if record.exc_info:
+            dummy = self.format(record)
+            record.exc_info = None
+
+        return record
+
+    def emit(self, record):
+        try:
+            s = self._format_record(record)
+            self.send(s)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            self.handleError(record)
+
+    def close(self):
+        self._handler.close()
+        logging.Handler.close(self)
 
 def outputWrapper(func, nlines, *args, **kwds):
     """Wrapper function similar to curses.wrapper(), but displays the stdout/stderr
@@ -345,17 +398,17 @@ def outputWrapper(func, nlines, *args, **kwds):
             curses.start_color()
         except:
             pass
-        mystdout = StdOutWrapper(stdscr, nlines)
-        sys.stdout = mystdout
-        sys.stderr = mystdout
+        #~ mystdout = StdOutWrapper(stdscr, nlines)
+        #~ sys.stdout = mystdout
+        #~ sys.stderr = mystdout
         return func(stdscr, *args, **kwds)
     finally:
         stdscr.keypad(0)
         curses.echo()
         curses.nocbreak()
         curses.endwin()
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
+        #~ sys.stdout = sys.__stdout__
+        #~ sys.stderr = sys.__stderr__
 
 def main(stdscr):
     #curses.noecho()
