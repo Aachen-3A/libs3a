@@ -88,11 +88,32 @@ class CrabController():
     #
     # @type self: CrabController
     # @param self: The object pointer.
-    # @type site string
-    # @param site The Site symbol [default:T2_DE_RWTH]
     # @type name string
     # @param name The crab3 request name, a.k.a the sample name
     def submit(self,name):
+        cmd = "crab submit --voGroup=%s %s"%( self.voGroup ,name)
+        if self.dry_run:
+            self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
+        else:
+            p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
+            (stringlist,string_err) = p.communicate()
+            self.logger.info(crablog,"crab sumbit called for task %s"%name)
+
+    ## Resubmit all failed tasks in job or specified list of jobs in task
+    #
+    # @type self: CrabController
+    # @param self: The object pointer.
+    # @type name string
+    # @param name The crab3 request name, a.k.a the sample name
+    # @type joblist list of strings
+    # @param joblist The crab3 request name, a.k.a the sample name
+    def resubmit(self,name,joblist = None):
+        if str.startswith(name, "crab_ "):
+            cmd = 'crab resubmit %s'%name
+        else:
+            cmd = "crab resubmit crab_%s "%name
+        if joblist is not None:
+            cmd+="--jobids %s"%','.join(joblist)
         if self.dry_run:
             self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
         else:
@@ -141,6 +162,9 @@ class CrabController():
             try:
                 # split output in lines and rverse order
                 stdout = stdout.splitlines()
+                for line in stdout:
+                    if line.strip().startswith("Task status:"):
+                        state = line.split(":")[1].strip() 
                 stdout.reverse()
                 # get the json output from stdout    
                 rawjson = stdout[1]
@@ -153,10 +177,10 @@ class CrabController():
                 import ast
                 try:
                     statusDict = ast.literal_eval(statusJSON)
-                    return statusDict
+                    return state,statusDict
                 except:
                     self.logger.error("Can not parse Crab request JSON output")
-                    return {}
+                    return "NOSTATE",{}
             except:
                 self.logger.error( "Error: current working directory %s"%self.workingArea)
                 self.logger.error('Error parsing crab status json output, please check cout below ')
