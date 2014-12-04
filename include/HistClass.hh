@@ -356,6 +356,29 @@ namespace HistClass {
         }
     }
 
+    static void WriteAll(const char * name, const char * contains)
+    {
+        i_cont = contains.split(":")
+        std::map<std::string, TH1D * >::iterator it;
+        for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
+            if(std::string::npos!=it->first.find(name)){
+                it->second -> Write();
+            }
+        }
+    }
+
+    static void WriteAll(const char * name, const char * contains, const char * vetos)
+    {
+        i_cont = contains.split("i")
+        i_veto = vetos.split("i")
+        std::map<std::string, TH1D * >::iterator it;
+        for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
+            if(std::string::npos!=it->first.find(name)){
+                it->second -> Write();
+            }
+        }
+    }
+
     /*! \brief Function to write many TTrees and TNtupleDs of the maps
      *
      * This function writes all TTrees and TNtupleDs of the maps
