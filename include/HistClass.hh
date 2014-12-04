@@ -356,6 +356,44 @@ namespace HistClass {
         }
     }
 
+    std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+        std::stringstream ss(s);
+        std::string item;
+        while (std::getline(ss, item, delim)) {
+            elems.push_back(item);
+        }
+        return elems;
+    }
+
+    std::vector<std::string> split(const std::string &s, char delim) {
+        std::vector<std::string> elems;
+        split(s, delim, elems);
+        return elems;
+    }
+
+    static void WriteAll(const char * name, const std::string contains)
+    {
+        std::vector<std::string> i_cont = split(contains,':');
+        std::map<std::string, TH1D * >::iterator it;
+        for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
+            if(std::string::npos!=it->first.find(name)){
+                it->second -> Write();
+            }
+        }
+    }
+
+    static void WriteAll(const char * name, const std::string contains, const std::string vetos)
+    {
+        std::vector<std::string> i_cont = split(contains,':');
+        std::vector<std::string> i_veto = split(vetos,':');
+        std::map<std::string, TH1D * >::iterator it;
+        for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
+            if(std::string::npos!=it->first.find(name)){
+                it->second -> Write();
+            }
+        }
+    }
+
     /*! \brief Function to write many TTrees and TNtupleDs of the maps
      *
      * This function writes all TTrees and TNtupleDs of the maps
