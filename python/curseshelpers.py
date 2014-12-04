@@ -4,11 +4,13 @@ import time
 import math
 import logging
 import logging.handlers
-
-from logging.handlers import RotatingFileHandler
-import multiprocessing, threading, logging, sys, traceback
-logger = logging.getLogger(__name__)
+import multiprocessing
+import threading
+import sys
+import traceback
 import Queue
+
+logger = logging.getLogger(__name__)
 
 def test():
     logger.warning("test")
@@ -39,6 +41,7 @@ class BottomText:
     def refresh(self):
         self.pad.refresh()
     def _redraw(self):
+        self.pad.clear()
         rownumber=0
         rows=[]
         for text in self.text:
@@ -313,7 +316,6 @@ class CursesHandler(logging.Handler):
         logging.Handler.__init__(self, level)
         self.bottomText = bottomText
         self.stdscr = stdscr
-        formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
     def emit(self, record):
         attr = {"DEBUG":curses.A_NORMAL, 
                 "INFO":curses.A_NORMAL, 
@@ -383,99 +385,3 @@ class CursesMultiHandler(logging.Handler):
     def close(self):
         self._handler.close()
         logging.Handler.close(self)
-
-def outputWrapper(func, nlines, *args, **kwds):
-    """Wrapper function similar to curses.wrapper(), but displays the stdout/stderr
-    in the last nlines lines of the curses window and also displays the last 100 lines on exit.
-    """
-
-    try:
-        stdscr = curses.initscr()
-        curses.noecho()
-        curses.cbreak()
-        stdscr.keypad(1)
-        try:
-            curses.start_color()
-        except:
-            pass
-        #~ mystdout = StdOutWrapper(stdscr, nlines)
-        #~ sys.stdout = mystdout
-        #~ sys.stderr = mystdout
-        return func(stdscr, *args, **kwds)
-    finally:
-        stdscr.keypad(0)
-        curses.echo()
-        curses.nocbreak()
-        curses.endwin()
-        #~ sys.stdout = sys.__stdout__
-        #~ sys.stderr = sys.__stderr__
-
-def main(stdscr):
-    #curses.noecho()
-    #curses.curs_set(0)
-    stdscr.keypad(0)
-    table = SelectTable(stdscr, footer=True)
-    table.setColHeaders(["Spaltennamensuper","Spalte 2", "Spalte 3", "Spalte 4"])
-    for i in range(100):
-        table.addRow([i,"zwei","drei","vier"])
-    table.setFooters(["1234567890","!$%/()=?","abcderfghijklmnopqrstuvwxyz","ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
-    #table = Text(stdscr)
-    #table.readFile("curseshelpers.py")
-    #table = MultiText(stdscr)
-    #table.addFile("Header 1", "curseshelpers.py")
-    #table.addFile("Header 2", "curseshelpers.py")
-    #logText = BottomText(stdscr, top=10, left=0, height=10)
-    ##logText.addText("hallo")
-    ##logText.addText("hihi")
-    ##logText.refresh()
-    #logger=logging.getLogger('curseshelpers')
-    #handler=CursesLoggingHandler(stdscr, top=10, left=0, height=10)
-    #handler=CursesLoggingHandler(logText)
-    #logger.setLevel(logging.DEBUG)
-    #logger.addHandler(handler)
-    try:
-        while True:
-            stdscr.refresh()
-            table.refresh()
-            x = stdscr.getch()
-            #if x==ord("e"):
-                #logText.addText("test")
-                #logger.warning("blubbbbbbbbbb")
-                #x=handler.flush()
-                #raise(Exception("P"))
-                #logText.refresh()
-            if x==ord("i"):
-                table.goUp()
-            if x==ord("j"):
-                table.goDown()
-            if x==ord("k"):
-                table.home()
-            if x==ord("l"):
-                table.end()
-            if x==ord("q") or x==27:
-                #logger.handlers=[]
-                #del logger
-                break
-    finally:
-        handler.close()
-        pass
-        #logger.removeHandler(handler)
-        #stdscr.keypad(0)
-        #curses.echo()
-        #curses.nocbreak()
-        #curses.endwin()
-        #handler.text=None
-        #logger.handlers=[]
-
-def main2(stdscr):
-    while True:
-        stdscr.refresh()
-        x = stdscr.getch()
-        if x==ord("e"):
-            print("blubbbbbbbbbb")
-
-    
-if __name__ == "__main__":
-    #print locals()
-    #outputWrapper(main2,5)
-    curses.wrapper(main)
