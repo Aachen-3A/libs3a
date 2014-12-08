@@ -74,17 +74,18 @@ class CrabController():
     # @return boolean which is True if user can write to site and False otherwise
     def checkwrite(self,site='T2_DE_RWTH',path='noPath'):    
         cmd = ['crab checkwrite --site %s --voGroup=%s'% ( site, self.voGroup ) ]
-        self.logger.info("Checking if user can write in output storage")
         if not 'noPath' in path:
             cmd[0] +=' --lfn=%s'%(path)
+
+        if self.username is None: self.checkusername()
+        self.logger.info( "Checking if user can write to /store/user/%s on site %s with voGroup %s"%(self.username, site, self.voGroup) ) 
+
         p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
         (stringlist,string_err) = p.communicate()
-        if self.username is None: self.checkusername()
-        self.logger.info( "search for: Able to write to /store/user/%s on site %s"%(self.username,site) )
-        if not "Able to write to /store/user/%s on site %s"%(self.username,site)  in stringlist:
+        if not "Able to write in /store/user/%s on site %s"%(self.username,site)  in stringlist:
             self.logger.error( "The crab checkwrite command failed for site: %s"%site )
-            self.logger.error( string_err )
-            self.logger.error( stringlist )
+            self.logger.debug( stringlist )
+            self.logger.debug( string_err )
             return False
         else:
             self.logger.info("Checkwrite was sucessfully called.")
@@ -103,7 +104,7 @@ class CrabController():
         else:
             p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
             (stringlist,string_err) = p.communicate()
-            self.logger.info(crablog,"crab sumbit called for task %s"%name)
+            self.logger.info("crab sumbit called for task %s"%name)
 
     ## Resubmit all failed tasks in job or specified list of jobs in task
     #
@@ -137,7 +138,6 @@ class CrabController():
         cmd = 'crab checkusername --voGroup=dcms'
         p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
         (string_out,string_err) = p.communicate()
-        self.logger.warning( string_out )
         string_out = string_out.split("\n")
         for line in string_out:
             # depreceated string: if "Your CMS HyperNews username is" in line:
