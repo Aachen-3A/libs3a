@@ -24,7 +24,7 @@ class CrabController():
     # @param self: The object pointer.
     # @type self: A logging logger instance
     # @param self: A previously defined logger. Crab log messages will use this logger as their parent logger.
-    def __init__(self, logger = None , workingArea = None, voGroup = None):
+    def __init__(self, logger = None , workingArea = None, voGroup = None, username = None):
         if workingArea is not None:
             self.workingArea = workingArea
         else:
@@ -33,9 +33,12 @@ class CrabController():
         if voGroup is not None:
             self.voGroup = voGroup
         else:
-            voGroup = "dcms"
-        
-        
+            self.voGroup = "dcms"
+        if username is not None:
+            self.username = username
+        else:
+            self.username = None
+            
         if logger is not None:
             self.logger = logger.getChild("CrabController")
         else:
@@ -76,9 +79,12 @@ class CrabController():
             cmd[0] +=' --lfn=%s'%(path)
         p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
         (stringlist,string_err) = p.communicate()
-        if not "Able to write to /store/user/%s on site %s"%(self.user,site)  in stringlist:
+        if self.username is None: self.checkusername()
+        self.logger.info( "search for: Able to write to /store/user/%s on site %s"%(self.username,site) )
+        if not "Able to write to /store/user/%s on site %s"%(self.username,site)  in stringlist:
             self.logger.error( "The crab checkwrite command failed for site: %s"%site )
             self.logger.error( string_err )
+            self.logger.error( stringlist )
             return False
         else:
             self.logger.info("Checkwrite was sucessfully called.")
@@ -126,14 +132,18 @@ class CrabController():
     # @type self: CrabController
     # @param self: The object pointer.
     # @returns users hypernews name
-    def checkHNname(self):
-        cmd = 'crab checkHNname --voGroup=dcms'
+    def checkusername(self):
+        #depreceated string: cmd = 'crab checkHNname --voGroup=dcms'
+        cmd = 'crab checkusername --voGroup=dcms'
         p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
         (string_out,string_err) = p.communicate()
+        self.logger.warning( string_out )
         string_out = string_out.split("\n")
         for line in string_out:
-            if "Your CMS HyperNews username is" in line:
+            # depreceated string: if "Your CMS HyperNews username is" in line:
+            if "Username is" in line:
                 hnname = line.split(":")[1].strip()
+                self.username = hnname
                 return hnname
         return "noHNname"
     
