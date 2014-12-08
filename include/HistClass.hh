@@ -371,25 +371,58 @@ namespace HistClass {
         return elems;
     }
 
-    static void WriteAll(const char * name, const std::string contains)
+    static void WriteAll(const char * name, const char * contains_i)
     {
+        const std::string contains(contains_i);
         std::vector<std::string> i_cont = split(contains,':');
         std::map<std::string, TH1D * >::iterator it;
         for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
             if(std::string::npos!=it->first.find(name)){
-                it->second -> Write();
+                bool do_write = false;
+                for (int i = 0; i < i_cont.size(); i++) {
+                    if (std::string::npos!=it->first.find(i_cont[i])){
+                        do_write = true;
+                    }else{
+                        do_write = false;
+                        break;
+                    }
+                }
+                if ( do_write ) {
+                    it->second -> Write();
+                }
             }
         }
     }
 
-    static void WriteAll(const char * name, const std::string contains, const std::string vetos)
+    static void WriteAll(const char * name, const char * contains_i, const char * vetos_i)
     {
+        const std::string contains(contains_i);
+        const std::string vetos(vetos_i);
         std::vector<std::string> i_cont = split(contains,':');
         std::vector<std::string> i_veto = split(vetos,':');
         std::map<std::string, TH1D * >::iterator it;
         for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
             if(std::string::npos!=it->first.find(name)){
-                it->second -> Write();
+                bool do_write = false;
+                for (int i = 0; i < i_cont.size(); i++) {
+                    if (std::string::npos!=it->first.find(i_cont[i])){
+                        do_write = true;
+                    }else{
+                        do_write = false;
+                        break;
+                    }
+                }
+                for (int i = 0; i < i_veto.size(); i++) {
+                    if (std::string::npos!=it->first.find(i_veto[i])){
+                        do_write = false;
+                        break;
+                    }else{
+                        do_write = true;
+                    }
+                }
+                if ( do_write ) {
+                    it->second -> Write();
+                }
             }
         }
     }
