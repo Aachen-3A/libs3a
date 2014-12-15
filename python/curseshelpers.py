@@ -23,7 +23,119 @@ def chunks(l, n):
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
 
-class BottomText:
+class BaseElement:
+    def refresh(self):
+        pass
+    def goLeft(self):
+        pass
+    def goRight(self):
+        pass
+    def goUp(self):
+        pass
+    def goDown(self):
+        pass
+    def pageUp(self):
+        pass
+    def pageDown(self):
+        pass
+    def home(self):
+        pass
+    def end(self):
+        pass
+
+class TabbedText(BaseElement):
+    def __init__(self, screen, top=0, left=0, height=None, width=None):
+        self.parent = screen
+        self.top, self.left = top, left
+        self._height = default(height, screen.getmaxyx()[0]-top)
+        self._width = default(width, screen.getmaxyx()[1])
+        self.heading = curses.newwin(2, self.width, top, left)
+        self.pads = []
+        self.positions = []
+        self.text = []
+        self.activeCard = 0
+        self._nrows = []
+    def clear(self):
+        self.text = []
+        self.pads = []
+        self._redraw()
+    def addFile(self, title, filename):
+        f = open(filename, 'r')
+        self.addText(title, f.read())
+        f.close()
+    def _countLines(self, text):
+        lines=0
+        for line in text.splitlines():
+            lines += 1+(len(line ) // self.width)
+        return lines
+    def addText(self, title, text):
+        self.text.append( (title, text) )
+        newpad = curses.newpad(max(self.height, self._countLines(text)), self.width)
+        self.pads.append(newpad)
+        self.positions.append(0)
+        self._redraw()
+    def refresh(self):
+        self._redrawHeading()
+        self.heading.refresh()
+        self.pads[self.activeCard].refresh(self.positions[self.activeCard], 0, self.top + 2, self.left, self.top + 2 + self.height - 1, self.left + self.width - 1)
+    def goLeft(self):
+        self.activeCard = (self.activeCard - 1) % len(self.text)
+    def goRight(self):
+        self.activeCard = (self.activeCard + 1) % len(self.text)
+    def goUp(self):
+        self.positions[self.activeCard]=max(0, self.positions[self.activeCard] - 1)
+    def goDown(self):
+        self.positions[self.activeCard]=min(self.positions[self.activeCard] + 1, self.nrows - self.height)
+    def pageUp(self):
+        self.positions[self.activeCard]=max(self.positions[self.activeCard] - self.height, 0)
+    def pageDown(self):
+        self.positions[self.activeCard]=min(self.positions[self.activeCard] + self.height, self.nrows - self.height)
+    def home(self):
+        self.positions[self.activeCard] = 0
+    def end(self):
+        self.positions[self.activeCard] = self.nrows-self.height
+    def _redrawHeading(self):
+        self.heading.clear()
+        ncards = len(self.text)
+        cardSpacing = 1
+        cardWidth = (self.width-1) // ncards - 2 * (cardSpacing + 1)
+        cardid = 0
+        for (title, text) in self.text:
+            self.heading.addstr(0, ((cardSpacing+1)*2+cardWidth)*cardid, "{0}{1}{0}".format((1+cardSpacing)*" ",cardWidth*"_"))
+            self.heading.addstr(1, ((cardSpacing+1)*2+cardWidth)*cardid, ("{0}/{1:^"+str(cardWidth)+"."+str(cardWidth)+"}\{0}").format(cardSpacing*"_",title))
+            if cardid==self.activeCard:
+                self.heading.addstr(1, ((cardSpacing+1)*2+cardWidth)*cardid+cardSpacing+1, ("{0:^"+str(cardWidth)+"."+str(cardWidth)+"}").format(title), curses.A_REVERSE)
+            cardid += 1
+            
+    def _redraw(self):
+        self._redrawHeading()
+        textid=0
+        self._nrows=[]
+        for (title, text) in self.text:
+            rownumber=0
+            for line in text.splitlines():
+                rows=list(chunks(line,self.width))
+                for row in rows:
+                    try:
+                        self.pads[textid].addstr(rownumber, 0, row)
+                    except:
+                        raise Exception(row+" xxx "+str(rownumber) +" "+str(self._countLines(self.text[0][1])))
+                        raise Exception(str(len(row))+" "+ str(self.parent.getmaxyx()[1]))
+                    rownumber+=1
+            self._nrows.append(rownumber)
+            textid+=1
+    @property
+    def height(self):
+        return min(self._height,self.parent.getmaxyx()[0]-self.top-3)
+    @property
+    def width(self):
+        return min(self._width, self.parent.getmaxyx()[1])
+    @property
+    def nrows(self):
+        return self._nrows[self.activeCard]
+
+
+class BottomText(BaseElement):
     def __init__(self, screen, top=1, left=0, height=None, width=None):
         self.parent = screen
         self.top, self.left = top, left
@@ -62,7 +174,7 @@ class BottomText:
     def width(self):
         return min(self._width, self.parent.getmaxyx()[1])
 
-class MultiText:
+class MultiText(BaseElement):
     def __init__(self, screen, maxrows=20000, top=1, left=0, height=None, width=None):
         self.parent = screen
         self.top, self.left = top, left
@@ -120,7 +232,7 @@ class MultiText:
     def width(self):
         return min(self._width, self.parent.getmaxyx()[1])
 
-class Text:
+class Text(BaseElement):
     def __init__(self, screen, maxrows=2000, top=1, left=0, height=None, width=None):
         self.parent = screen
         self.top, self.left = top, left
@@ -174,7 +286,7 @@ def colWidthsReducerMaximum(colWidths, totalWidth):
         colWidths[max(xrange(len(colWidths)),key=colWidths.__getitem__)]-=1
     return colWidths
     
-class SelectTable:
+class SelectTable(BaseElement):
     """A Table where a single row can be selected
     """
     def __init__(self, screen, maxrows=1000, top=1, left=0, height=None, width=None, footer=False):
