@@ -44,7 +44,7 @@ class BaseElement:
         pass
 
 class TabbedText(BaseElement):
-    def __init__(self, screen, top=0, left=0, height=None, width=None):
+    def __init__(self, screen, maxrows=20000, top=0, left=0, height=None, width=None):
         self.parent = screen
         self.top, self.left = top, left
         self._height = default(height, screen.getmaxyx()[0]-top)
@@ -55,6 +55,7 @@ class TabbedText(BaseElement):
         self.text = []
         self.activeCard = 0
         self._nrows = []
+        self.maxrows = maxrows
     def clear(self):
         self.text = []
         self.pads = []
@@ -70,7 +71,7 @@ class TabbedText(BaseElement):
         return lines
     def addText(self, title, text):
         self.text.append( (title, text) )
-        newpad = curses.newpad(max(self.height, self._countLines(text)), self.width)
+        newpad = curses.newpad(min(self.maxrows, max(self.height, self._countLines(text))), self.width)
         self.pads.append(newpad)
         self.positions.append(0)
         self._redraw()
@@ -118,9 +119,9 @@ class TabbedText(BaseElement):
                 for row in rows:
                     try:
                         self.pads[textid].addstr(rownumber, 0, row)
-                    except:
-                        raise Exception(row+" xxx "+str(rownumber) +" "+str(self._countLines(self.text[0][1])))
-                        raise Exception(str(len(row))+" "+ str(self.parent.getmaxyx()[1]))
+                    except curses.error:
+                        self.pads[textid].addstr(rownumber-1, 0, "Maximum rows reached, please use a different viewer for more lines ",curses.A_REVERSE)
+                        break
                     rownumber+=1
             self._nrows.append(rownumber)
             textid+=1
