@@ -356,21 +356,63 @@ namespace HistClass {
         }
     }
 
-    std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    /*! Example to create a nice folder structure in your output folder
+     *   //void specialAna::channel_writer(TFile* file, const char* channel) {
+     *       //file1->cd();
+     *       //file1->mkdir(channel);
+     *       //for ( int i = 0; i < channel_stages[channel]; i++) {
+     *           //char n_satge = (char)(((int)'0')+i);
+     *           //file1->mkdir(TString::Format("%s/Stage_%c", channel, n_satge));
+     *           //file1->cd(TString::Format("%s/Stage_%c/", channel, n_satge));
+     *           //HistClass::WriteAll(TString::Format("_%s_", channel),TString::Format("%s:_%c_", channel, n_satge),TString::Format("sys"));
+     *           //file1->cd();
+     *           //file1->mkdir(TString::Format("%s/Stage_%c/sys", channel, n_satge));
+     *           //file1->cd(TString::Format("%s/Stage_%c/sys/", channel, n_satge));
+     *           //HistClass::WriteAll(TString::Format("_%s_", channel),TString::Format("_%c_:sys", n_satge));
+     *       //}
+     *       //file1->cd();
+     *   //}
+    */
+
+    /*! \brief Function split a string at a delimiter
+     *
+     * This function splits a given string at a given delimineter,
+     * and pushes the results in a given vector.
+     * \param[in] &s String that should be split
+     * \param[in] delim Delimiter where the string should be split
+     * \param[in] &elems Vector in which the substrings should be pushed
+    */
+    void split(const std::string &s, char delim, std::vector<std::string> &elems) {
         std::stringstream ss(s);
         std::string item;
         while (std::getline(ss, item, delim)) {
             elems.push_back(item);
         }
-        return elems;
     }
 
+    /*! \brief Function split a string at a delimiter and return the results
+     *
+     * This function splits a given string at a given delimineter,
+     * and returns the resulting substrings as a vector.
+     * \param[in] &s String that should be split
+     * \param[in] delim Delimiter where the string should be split
+     * \param[out] elems Vector in which the substrings were pushed
+    */
     std::vector<std::string> split(const std::string &s, char delim) {
         std::vector<std::string> elems;
         split(s, delim, elems);
         return elems;
     }
 
+    /*! \brief Function to write many 1D histograms which contain specific strings of the map
+     *
+     * This function writes all histograms of the map with that
+     * contain the given string in there name. The written histo-
+     * grams also have to contain a list of strings that are sepe-
+     * rated by a ';'.
+     * \param[in] name String that all histogram names that should be written contain
+     * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
+     */
     static void WriteAll(const char * name, const char * contains_i)
     {
         const std::string contains(contains_i);
@@ -394,6 +436,17 @@ namespace HistClass {
         }
     }
 
+    /*! \brief Function to write many 1D histograms which (not) contain specific strings of the map
+     *
+     * This function writes all histograms of the map with that
+     * contain the given string in there name. The written histo-
+     * grams also have to contain a list of strings that are sepe-
+     * rated by a ':'. In this version also a list of strings that
+     * should not be contained in the histogram name can be given.
+     * \param[in] name String that all histogram names that should be written contain
+     * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
+     * \param[in] vetos_i String that of names (seperated by ':') that the histogram name should not contain
+     */
     static void WriteAll(const char * name, const char * contains_i, const char * vetos_i)
     {
         const std::string contains(contains_i);
@@ -416,8 +469,6 @@ namespace HistClass {
                     if (std::string::npos!=it->first.find(i_veto[i])){
                         do_write = false;
                         break;
-                    }else{
-                        do_write = true;
                     }
                 }
                 if ( do_write ) {
