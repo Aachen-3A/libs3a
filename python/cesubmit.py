@@ -205,13 +205,18 @@ class Task:
         self.jobs.append(job)
     def submit(self, processes=0):
         log.debug('Submit task %s',self.name)
+        if len(self.jobs)==0:
+            log.error('No jobs in task %s',self.name)
+            return
         # create directory
         self.createdir()
         startdir = os.getcwd()
         os.chdir(self.directory)
+        log.debug('Make prologue %s',self.name)
         self.makePrologue()
         checkAndRenewVomsProxy(604800)
         #enumerate jobs and create jdl files
+        log.debug('Create %d jdl file',len(self.jobs))
         for i in range(len(self.jobs)):
             self.jobs[i].nodeid = i
             self.jobs[i].writeJdl()
@@ -466,9 +471,11 @@ class ProxyError( Exception ):
     pass
 
 def timeLeftVomsProxy():
+    log.debug('Check time left of VomsProxy')
     """Return the time left for the proxy."""
     proc = subprocess.Popen( ['voms-proxy-info', '-timeleft' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
     output = proc.communicate()[0]
+    log.debug('Check time left of VomsProxy [Done]')
     if proc.returncode != 0:
         return False
     else:
@@ -493,8 +500,10 @@ def renewVomsProxy( voms='cms:/cms/dcms', passphrase=None ):
         raise ProxyError( 'Proxy initialization command failed.')
 
 def checkAndRenewVomsProxy( time=604800, voms='cms:/cms/dcms', passphrase=None ):
+    log.debug('Check and renew VomsProxy')
     """Check if the proxy is valid longer than time and renew if needed."""
     if not checkVomsProxy( time ):
         renewVomsProxy(passphrase=passphrase)
         if not checkVomsProxy( time ):
             raise ProxyError( 'Proxy still not valid long enough!' )
+    log.debug('Check and renew VomsProxy [Done]')
