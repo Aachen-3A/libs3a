@@ -360,6 +360,25 @@ namespace HistClass {
         }
     }
 
+    /*! \brief Function to write many 2D histograms of the map
+     *
+     * This function writes all histograms of the map with the
+     * default options, otherwise it writes all histograms that
+     * contain the given string in there name.
+     * \param[in] name Optional string that all histogram names that should be written contain (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name = "")
+    {
+        std::map<std::string, TH2D * >::iterator it;
+        for (std::map<std::string, TH2D * >::iterator it=histo2.begin(); it!=histo2.end(); ++it){
+            if(strcmp( name, "") != 0 && std::string::npos!=it->first.find(name)){
+                it->second -> Write();
+            }else if(strcmp( name, "") == 0){
+                it->second -> Write();
+            }
+        }
+    }
+
     /*! Example to create a nice folder structure in your output folder
      *   //void specialAna::channel_writer(TFile* file, const char* channel) {
      *       //file1->cd();
@@ -413,7 +432,7 @@ namespace HistClass {
      * This function writes all histograms of the map with that
      * contain the given string in there name. The written histo-
      * grams also have to contain a list of strings that are sepe-
-     * rated by a ';'.
+     * rated by a ':'.
      * \param[in] name String that all histogram names that should be written contain
      * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
      */
@@ -423,6 +442,38 @@ namespace HistClass {
         std::vector<std::string> i_cont = split(contains,':');
         std::map<std::string, TH1D * >::iterator it;
         for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
+            if(std::string::npos!=it->first.find(name)){
+                bool do_write = false;
+                for (uint i = 0; i < i_cont.size(); i++) {
+                    if (std::string::npos!=it->first.find(i_cont[i])){
+                        do_write = true;
+                    }else{
+                        do_write = false;
+                        break;
+                    }
+                }
+                if ( do_write ) {
+                    it->second -> Write();
+                }
+            }
+        }
+    }
+
+    /*! \brief Function to write many 2D histograms which contain specific strings of the map
+     *
+     * This function writes all histograms of the map with that
+     * contain the given string in there name. The written histo-
+     * grams also have to contain a list of strings that are sepe-
+     * rated by a ':'.
+     * \param[in] name String that all histogram names that should be written contain
+     * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
+     */
+    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name, const char * contains_i)
+    {
+        const std::string contains(contains_i);
+        std::vector<std::string> i_cont = split(contains,':');
+        std::map<std::string, TH2D * >::iterator it;
+        for (std::map<std::string, TH2D * >::iterator it=histo2.begin(); it!=histo2.end(); ++it){
             if(std::string::npos!=it->first.find(name)){
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
@@ -459,6 +510,48 @@ namespace HistClass {
         std::vector<std::string> i_veto = split(vetos,':');
         std::map<std::string, TH1D * >::iterator it;
         for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
+            if(std::string::npos!=it->first.find(name)){
+                bool do_write = false;
+                for (uint i = 0; i < i_cont.size(); i++) {
+                    if (std::string::npos!=it->first.find(i_cont[i])){
+                        do_write = true;
+                    }else{
+                        do_write = false;
+                        break;
+                    }
+                }
+                for (uint i = 0; i < i_veto.size(); i++) {
+                    if (std::string::npos!=it->first.find(i_veto[i])){
+                        do_write = false;
+                        break;
+                    }
+                }
+                if ( do_write ) {
+                    it->second -> Write();
+                }
+            }
+        }
+    }
+
+    /*! \brief Function to write many 2D histograms which (not) contain specific strings of the map
+     *
+     * This function writes all histograms of the map with that
+     * contain the given string in there name. The written histo-
+     * grams also have to contain a list of strings that are sepe-
+     * rated by a ':'. In this version also a list of strings that
+     * should not be contained in the histogram name can be given.
+     * \param[in] name String that all histogram names that should be written contain
+     * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
+     * \param[in] vetos_i String that of names (seperated by ':') that the histogram name should not contain
+     */
+    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name, const char * contains_i, const char * vetos_i)
+    {
+        const std::string contains(contains_i);
+        const std::string vetos(vetos_i);
+        std::vector<std::string> i_cont = split(contains,':');
+        std::vector<std::string> i_veto = split(vetos,':');
+        std::map<std::string, TH2D * >::iterator it;
+        for (std::map<std::string, TH2D * >::iterator it=histo2.begin(); it!=histo2.end(); ++it){
             if(std::string::npos!=it->first.find(name)){
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
