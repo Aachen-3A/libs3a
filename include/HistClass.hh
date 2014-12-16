@@ -421,7 +421,7 @@ namespace HistClass {
         for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
             if(std::string::npos!=it->first.find(name)){
                 bool do_write = false;
-                for (int i = 0; i < i_cont.size(); i++) {
+                for (uint i = 0; i < i_cont.size(); i++) {
                     if (std::string::npos!=it->first.find(i_cont[i])){
                         do_write = true;
                     }else{
@@ -457,7 +457,7 @@ namespace HistClass {
         for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
             if(std::string::npos!=it->first.find(name)){
                 bool do_write = false;
-                for (int i = 0; i < i_cont.size(); i++) {
+                for (uint i = 0; i < i_cont.size(); i++) {
                     if (std::string::npos!=it->first.find(i_cont[i])){
                         do_write = true;
                     }else{
@@ -465,7 +465,7 @@ namespace HistClass {
                         break;
                     }
                 }
-                for (int i = 0; i < i_veto.size(); i++) {
+                for (uint i = 0; i < i_veto.size(); i++) {
                     if (std::string::npos!=it->first.find(i_veto[i])){
                         do_write = false;
                         break;
