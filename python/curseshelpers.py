@@ -4,9 +4,14 @@ import time
 import math
 import logging
 import logging.handlers
+import multiprocessing
+import threading
 import sys
+import traceback
+import Queue
+
 logger = logging.getLogger(__name__)
-    
+
 def test():
     logger.warning("test")
 def default(x, y):
@@ -17,31 +22,121 @@ def chunks(l, n):
     """
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
-#class CursesFormatter(logging.BufferingFormatter):
-        #def __init__(self):
-            #fmtstr = "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"
-            #logging.BufferingFormatter.__init__(self, logging.Formatter(fmtstr))
 
-#class CursesLoggingHandler(logging.handlers.BufferingHandler):
-    #def __init__(self, screen, top=1, left=0, height=None, width=None):
-    ##def __init__(self, logText):
-        #logging.handlers.BufferingHandler.__init__(self, 0)
-        #self.setFormatter(CursesFormatter())
-        #self.text = BottomText(screen, top=10, left=0, height=10)
-    #def flush(self):
-        #try:
-            #self.text.addText(self.formatter.format(self.buffer))
-            #self.buffer = []
-            #self.text.refresh()
-        #except:
-            #pass
-    #def shouldFlush(self, record):
-        #return True
-    #def close(self):
-        #self.text=None
-        #logging.Handler.close(self)
+class BaseElement:
+    def refresh(self):
+        pass
+    def goLeft(self):
+        pass
+    def goRight(self):
+        pass
+    def goUp(self):
+        pass
+    def goDown(self):
+        pass
+    def pageUp(self):
+        pass
+    def pageDown(self):
+        pass
+    def home(self):
+        pass
+    def end(self):
+        pass
 
-class BottomText:
+class TabbedText(BaseElement):
+    def __init__(self, screen, maxrows=20000, top=0, left=0, height=None, width=None):
+        self.parent = screen
+        self.top, self.left = top, left
+        self._height = default(height, screen.getmaxyx()[0]-top)
+        self._width = default(width, screen.getmaxyx()[1])
+        self.heading = curses.newwin(2, self.width, top, left)
+        self.pads = []
+        self.positions = []
+        self.text = []
+        self.activeCard = 0
+        self._nrows = []
+        self.maxrows = maxrows
+    def clear(self):
+        self.text = []
+        self.pads = []
+        self._redraw()
+    def addFile(self, title, filename):
+        f = open(filename, 'r')
+        self.addText(title, f.read())
+        f.close()
+    def _countLines(self, text):
+        lines=0
+        for line in text.splitlines():
+            lines += 1+(len(line ) // self.width)
+        return lines
+    def addText(self, title, text):
+        self.text.append( (title, text) )
+        newpad = curses.newpad(min(self.maxrows, max(self.height, self._countLines(text))), self.width)
+        self.pads.append(newpad)
+        self.positions.append(0)
+        self._redraw()
+    def refresh(self):
+        self._redrawHeading()
+        self.heading.refresh()
+        self.pads[self.activeCard].refresh(self.positions[self.activeCard], 0, self.top + 2, self.left, self.top + 2 + self.height - 1, self.left + self.width - 1)
+    def goLeft(self):
+        self.activeCard = (self.activeCard - 1) % len(self.text)
+    def goRight(self):
+        self.activeCard = (self.activeCard + 1) % len(self.text)
+    def goUp(self):
+        self.positions[self.activeCard]=max(0, self.positions[self.activeCard] - 1)
+    def goDown(self):
+        self.positions[self.activeCard]=min(self.positions[self.activeCard] + 1, self.nrows - self.height)
+    def pageUp(self):
+        self.positions[self.activeCard]=max(self.positions[self.activeCard] - self.height, 0)
+    def pageDown(self):
+        self.positions[self.activeCard]=min(self.positions[self.activeCard] + self.height, self.nrows - self.height)
+    def home(self):
+        self.positions[self.activeCard] = 0
+    def end(self):
+        self.positions[self.activeCard] = self.nrows-self.height
+    def _redrawHeading(self):
+        self.heading.clear()
+        ncards = len(self.text)
+        cardSpacing = 1
+        cardWidth = (self.width-1) // ncards - 2 * (cardSpacing + 1)
+        cardid = 0
+        for (title, text) in self.text:
+            self.heading.addstr(0, ((cardSpacing+1)*2+cardWidth)*cardid, "{0}{1}{0}".format((1+cardSpacing)*" ",cardWidth*"_"))
+            self.heading.addstr(1, ((cardSpacing+1)*2+cardWidth)*cardid, ("{0}/{1:^"+str(cardWidth)+"."+str(cardWidth)+"}\{0}").format(cardSpacing*"_",title))
+            if cardid==self.activeCard:
+                self.heading.addstr(1, ((cardSpacing+1)*2+cardWidth)*cardid+cardSpacing+1, ("{0:^"+str(cardWidth)+"."+str(cardWidth)+"}").format(title), curses.A_REVERSE)
+            cardid += 1
+            
+    def _redraw(self):
+        self._redrawHeading()
+        textid=0
+        self._nrows=[]
+        for (title, text) in self.text:
+            rownumber=0
+            for line in text.splitlines():
+                rows=list(chunks(line,self.width))
+                for row in rows:
+                    try:
+                        self.pads[textid].addstr(rownumber, 0, row)
+                    except curses.error:
+                        self.pads[textid].addstr(rownumber-1, 0, "Maximum rows reached, please use a different viewer for more lines ",curses.A_REVERSE)
+                        break
+                    rownumber+=1
+            self._nrows.append(rownumber)
+            textid+=1
+    @property
+    def height(self):
+        return min(self._height,self.parent.getmaxyx()[0]-self.top-3)
+    @property
+    def width(self):
+        return min(self._width, self.parent.getmaxyx()[1])
+    @property
+    def nrows(self):
+        return self._nrows[self.activeCard]
+
+
+class BottomText(BaseElement):
     def __init__(self, screen, top=1, left=0, height=None, width=None):
         self.parent = screen
         self.top, self.left = top, left
@@ -59,6 +154,7 @@ class BottomText:
     def refresh(self):
         self.pad.refresh()
     def _redraw(self):
+        self.pad.clear()
         rownumber=0
         rows=[]
         for text in self.text:
@@ -79,7 +175,7 @@ class BottomText:
     def width(self):
         return min(self._width, self.parent.getmaxyx()[1])
 
-class MultiText:
+class MultiText(BaseElement):
     def __init__(self, screen, maxrows=20000, top=1, left=0, height=None, width=None):
         self.parent = screen
         self.top, self.left = top, left
@@ -137,10 +233,7 @@ class MultiText:
     def width(self):
         return min(self._width, self.parent.getmaxyx()[1])
 
-
-
-
-class Text:
+class Text(BaseElement):
     def __init__(self, screen, maxrows=2000, top=1, left=0, height=None, width=None):
         self.parent = screen
         self.top, self.left = top, left
@@ -194,7 +287,7 @@ def colWidthsReducerMaximum(colWidths, totalWidth):
         colWidths[max(xrange(len(colWidths)),key=colWidths.__getitem__)]-=1
     return colWidths
     
-class SelectTable:
+class SelectTable(BaseElement):
     """A Table where a single row can be selected
     """
     def __init__(self, screen, maxrows=1000, top=1, left=0, height=None, width=None, footer=False):
@@ -330,99 +423,78 @@ class StdOutWrapper:
         #the refresh function should be here, but this does not work :(
         pass
 
-
-def outputWrapper(func, nlines, *args, **kwds):
-    """Wrapper function similar to curses.wrapper(), but displays the stdout/stderr
-    in the last nlines lines of the curses window and also displays the last 100 lines on exit.
-    """
-
-    try:
-        stdscr = curses.initscr()
-        curses.noecho()
-        curses.cbreak()
-        stdscr.keypad(1)
-        try:
-            curses.start_color()
-        except:
-            pass
-        mystdout = StdOutWrapper(stdscr, nlines)
-        sys.stdout = mystdout
-        sys.stderr = mystdout
-        return func(stdscr, *args, **kwds)
-    finally:
-        stdscr.keypad(0)
-        curses.echo()
-        curses.nocbreak()
-        curses.endwin()
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
-def main(stdscr):
-    #curses.noecho()
-    #curses.curs_set(0)
-    stdscr.keypad(0)
-    table = SelectTable(stdscr, footer=True)
-    table.setColHeaders(["Spaltennamensuper","Spalte 2", "Spalte 3", "Spalte 4"])
-    for i in range(100):
-        table.addRow([i,"zwei","drei","vier"])
-    table.setFooters(["1234567890","!$%/()=?","abcderfghijklmnopqrstuvwxyz","ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
-    #table = Text(stdscr)
-    #table.readFile("curseshelpers.py")
-    #table = MultiText(stdscr)
-    #table.addFile("Header 1", "curseshelpers.py")
-    #table.addFile("Header 2", "curseshelpers.py")
-    #logText = BottomText(stdscr, top=10, left=0, height=10)
-    ##logText.addText("hallo")
-    ##logText.addText("hihi")
-    ##logText.refresh()
-    #logger=logging.getLogger('curseshelpers')
-    #handler=CursesLoggingHandler(stdscr, top=10, left=0, height=10)
-    #handler=CursesLoggingHandler(logText)
-    #logger.setLevel(logging.DEBUG)
-    #logger.addHandler(handler)
-    try:
-        while True:
-            stdscr.refresh()
-            table.refresh()
-            x = stdscr.getch()
-            #if x==ord("e"):
-                #logText.addText("test")
-                #logger.warning("blubbbbbbbbbb")
-                #x=handler.flush()
-                #raise(Exception("P"))
-                #logText.refresh()
-            if x==ord("i"):
-                table.goUp()
-            if x==ord("j"):
-                table.goDown()
-            if x==ord("k"):
-                table.home()
-            if x==ord("l"):
-                table.end()
-            if x==ord("q") or x==27:
-                #logger.handlers=[]
-                #del logger
-                break
-    finally:
-        handler.close()
-        pass
-        #logger.removeHandler(handler)
-        #stdscr.keypad(0)
-        #curses.echo()
-        #curses.nocbreak()
-        #curses.endwin()
-        #handler.text=None
-        #logger.handlers=[]
-
-def main2(stdscr):
-    while True:
-        stdscr.refresh()
-        x = stdscr.getch()
-        if x==ord("e"):
-            print("blubbbbbbbbbb")
-
+class CursesHandler(logging.Handler):
     
-if __name__ == "__main__":
-    #print locals()
-    #outputWrapper(main2,5)
-    curses.wrapper(main)
+    def __init__(self, stdscr,bottomText, level=logging.DEBUG):
+        logging.Handler.__init__(self, level)
+        self.bottomText = bottomText
+        self.stdscr = stdscr
+    def emit(self, record):
+        attr = {"DEBUG":curses.A_NORMAL, 
+                "INFO":curses.A_NORMAL, 
+                "WARNING":curses.A_BOLD, 
+                "ERROR":curses.A_BOLD, 
+                "CRITICAL":curses.A_STANDOUT}
+        
+        self.bottomText.addText(self.format(record)+"\n")
+
+# http://stackoverflow.com/questions/641420/how-should-i-log-while-using-multiprocessing-in-python
+class CursesMultiHandler(logging.Handler):
+    def __init__(self, stdscr,bottomText, log_q,level=logging.DEBUG):
+        logging.Handler.__init__(self)
+
+        self._handler = CursesHandler(stdscr , bottomText, level)
+        #~ self.queue = multiprocessing.Queue(-1)
+        self.queue = log_q
+
+        t = threading.Thread(target=self.receive)
+        t.daemon = True
+        t.start()
+
+    def setFormatter(self, fmt):
+        logging.Handler.setFormatter(self, fmt)
+        self._handler.setFormatter(fmt)
+
+    def receive(self):
+        while True:
+            try:
+                record = self.queue.get_nowait()
+                self._handler.emit(record)
+            except (KeyboardInterrupt, SystemExit):
+                raise
+            except Queue.Empty:
+                pass
+            except EOFError:
+                break
+            except:
+                traceback.print_exc(file=sys.stderr)
+
+    def send(self, s):
+        self.queue.put_nowait(s)
+
+    def _format_record(self, record):
+        # ensure that exc_info and args
+        # have been stringified.  Removes any chance of
+        # unpickleable things inside and possibly reduces
+        # message size sent over the pipe
+        if record.args:
+            record.msg = record.msg % record.args
+            record.args = None
+        if record.exc_info:
+            dummy = self.format(record)
+            record.exc_info = None
+
+        return record
+
+    def emit(self, record):
+        try:
+            s = self._format_record(record)
+            self.send(s)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            self.handleError(record)
+
+    def close(self):
+        self._handler.close()
+        logging.Handler.close(self)
