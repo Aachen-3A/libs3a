@@ -7,29 +7,12 @@ import os
 
 log = logging.getLogger( 'aix3adb' )
 
-class aix3adbBaseElement:
-    def __init__(self, dictionary=dict() ):
-        print "xxx",dictionary,"xxx"
-        for key in dictionary:
-            setattr(self, key, dictionary[key])
-class MCSample(aix3adbBaseElement):
-    pass
-class DataSample(aix3adbBaseElement):
-    pass
-class MCSkim(aix3adbBaseElement):
-    pass
-class DataSkim(aix3adbBaseElement):
-    pass
-
 class aix3adb:
     def __init__(self, cookiefilepath='aix3adb-ssocookie.txt'):
         self.cookiefile = os.path.abspath(cookiefilepath)
-        self.authurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php'
-        self.readurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc/x3adb_read.php'
-        self.domain  = 'olschew.web.cern.ch'
-        #self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc_auth/x3adb_write.php'
-        #self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc/x3adb_read.php'
-        #self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
+        self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc_auth/x3adb_write.php'
+        self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc/x3adb_read.php'
+        self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
     def authorize(self, username=None, trykerberos=3):
         print "Calling kinit, please enter your CERN password"
         call = ['kinit']
@@ -56,59 +39,49 @@ class aix3adb:
         customtransport.setcookies(self.cookiefile, self.domain)
         s = xmlrpclib.ServerProxy(self.authurl, customtransport)
         return s
-    def insertMCSample(self, sample):
-        return self.tryServerAuthFunction(self.doInsertMCSample, sample)
-    def doInsertMCSample(self, sample):
+    def registerMCSample(self, sample):
+        check = self.checksample(sample)
+        if check:
+            return self.tryServerAuthFunction(self.doRegisterMCSample, sample)
+    def doRegisterMCSample(self, sample):
         s = self.getAuthServerProxy()
-        f = s.insertMCSample(sample.__dict__)
-        print f
-        return MCSample(f)
-    def insertMCSkim(self, skim):
-        return self.tryServerAuthFunction(self.doInsertMCSkim, skim)
-    def doInsertMCSkim(self, sample):
-        s = self.getAuthServerProxy()
-        return MCSkim(s.insertMCSkim(skim.__dict__))
+        return s.registerMCSample(sample)
     def editMCSample(self, id, sample):
-        return self.tryServerAuthFunction(self.doEditMCSample, id, sample)
+        check = self.checksample(sample)
+        if check:
+            return self.tryServerAuthFunction(self.doEditMCSample, id, sample)
     def doEditMCSample(self, id, sample):
         s = self.getAuthServerProxy()
         return s.editMCSample(id, sample)
     def insertOrReplaceMCTags(self, id, tags):
         s = self.getAuthServerProxy()
         return s.insertOrReplaceMCTags(id, tags)
-    def insertDataSample(self, sample):
-        return self.tryServerAuthFunction(self.doInsertDataSample, sample)
-    def doInsertDataSample(self, sample):
+    def registerDataSample(self, sample):
+        check = self.checksample(sample)
+        if check:
+            return self.tryServerAuthFunction(self.doRegisterDataSample, sample)
+    def doRegisterDataSample(self, sample):
         s = self.getAuthServerProxy()
-        return DataSample(s.insertDataSample(sample.__dict__))
-    def insertDataSkim(self, skim):
-        return self.tryServerAuthFunction(self.doInsertDataSakim, skim)
-    def doInsertDataSkim(self, sample):
-        s = self.getAuthServerProxy()
-        return DataSkim(s.insertDataSkim(sample.__dict__))
+        return s.registerDataSample(sample)
     def editDataSample(self, id, sample):
-        return self.tryServerAuthFunction(self.doEditDataSample, id, sample)
+        check = self.checksample(sample)
+        if check:
+            return self.tryServerAuthFunction(self.doEditDataSample, id, sample)
     def doEditDataSample(self, id, sample):
         s = self.getAuthServerProxy()
         return s.editDataSample(id, sample)
     def getMCSample(self, sampleid):
         s = xmlrpclib.ServerProxy(self.readurl)
-        return MCSample(s.getMCSample(sampleid))
+        return s.getMCSample(sampleid)
     def getDataSample(self, sampleid):
         s = xmlrpclib.ServerProxy(self.readurl)
-        return DataSample(s.getDataSample(sampleid))
-    def getMCSkim(self, sampleid):
+        return s.getDataSample(sampleid)
+    def searchMCSamples(self, searchdict):
         s = xmlrpclib.ServerProxy(self.readurl)
-        return MCSkim(s.getMCSkim(sampleid))
-    def getDataSkim(self, sampleid):
+        return s.searchMCSamples(searchdict)
+    def searchDataSamples(self, searchdict):
         s = xmlrpclib.ServerProxy(self.readurl)
-        return DataSkim(s.getDataSkim(sampleid))
-    #def searchMCSamples(self, searchdict):
-        #s = xmlrpclib.ServerProxy(self.readurl)
-        #return s.searchMCSamples(searchdict)
-    #def searchDataSamples(self, searchdict):
-        #s = xmlrpclib.ServerProxy(self.readurl)
-        #return s.searchDataSamples(searchdict)
+        return s.searchDataSamples(searchdict)
     def test(self):
         s = self.getAuthServerProxy()
         return s.test()
