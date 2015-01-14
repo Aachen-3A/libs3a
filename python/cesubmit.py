@@ -138,12 +138,16 @@ class Job:
         else:
             self.frontEndStatus = "CANCELLED"
     def purge(self):
+        try:
+            jobid=self.jobid
+        except AttributeError:
+            return
         log.debug("Purging "+self.jobid)
-        command = ["glite-ce-job-purge", "--noint", self.jobid]
+        command = ["glite-ce-job-purge", "--noint", jobid]
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
         if process.returncode!=0:
-            log.warning('Purging failed for job id '+self.jobid)
+            log.warning('Purging failed for job id '+jobid)
         else:
             self.frontEndStatus = "PURGED"
     def kill(self):
