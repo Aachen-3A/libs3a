@@ -7,18 +7,36 @@ import os
 
 log = logging.getLogger( 'aix3adb' )
 
-class aix3adbBaseElement:
+def tryServerAuth(funct):
+   def func_wrapper(instance, *args, **kwargs):
+        try:
+            return funct(instance, *args, **kwargs)
+        except xmlrpclib.ProtocolError:
+            instance.destroyauth()
+            instance.authorize()
+            return funct(instance, *args, **kwargs)
+   return func_wrapper
+
+class Aix3adbException(Exception):
+    pass
+
+class Aix3adbBaseElement:
     def __init__(self, dictionary=dict() ):
-        print "xxx",dictionary,"xxx"
         for key in dictionary:
+            if key=="error":
+                raise Aix3adbException(dictionary[key])
             setattr(self, key, dictionary[key])
-class MCSample(aix3adbBaseElement):
+
+class MCSample(Aix3adbBaseElement):
     pass
-class DataSample(aix3adbBaseElement):
+
+class DataSample(Aix3adbBaseElement):
     pass
-class MCSkim(aix3adbBaseElement):
+
+class MCSkim(Aix3adbBaseElement):
     pass
-class DataSkim(aix3adbBaseElement):
+
+class DataSkim(Aix3adbBaseElement):
     pass
 
 class aix3adb:
@@ -56,80 +74,72 @@ class aix3adb:
         customtransport.setcookies(self.cookiefile, self.domain)
         s = xmlrpclib.ServerProxy(self.authurl, customtransport)
         return s
+    # inserts
+    @tryServerAuth
     def insertMCSample(self, sample):
-        return self.tryServerAuthFunction(self.doInsertMCSample, sample)
-    def doInsertMCSample(self, sample):
         s = self.getAuthServerProxy()
         f = s.insertMCSample(sample.__dict__)
         print f
         return MCSample(f)
-    def insertMCSkim(self, skim):
-        return self.tryServerAuthFunction(self.doInsertMCSkim, skim)
-    def doInsertMCSkim(self, sample):
-        s = self.getAuthServerProxy()
-        return MCSkim(s.insertMCSkim(skim.__dict__))
-    def editMCSample(self, id, sample):
-        return self.tryServerAuthFunction(self.doEditMCSample, id, sample)
-    def doEditMCSample(self, id, sample):
-        s = self.getAuthServerProxy()
-        return s.editMCSample(id, sample)
-    def insertOrReplaceMCTags(self, id, tags):
-        s = self.getAuthServerProxy()
-        return s.insertOrReplaceMCTags(id, tags)
+    @tryServerAuth
     def insertDataSample(self, sample):
-        return self.tryServerAuthFunction(self.doInsertDataSample, sample)
-    def doInsertDataSample(self, sample):
         s = self.getAuthServerProxy()
         return DataSample(s.insertDataSample(sample.__dict__))
-    def insertDataSkim(self, skim):
-        return self.tryServerAuthFunction(self.doInsertDataSakim, skim)
-    def doInsertDataSkim(self, sample):
+    @tryServerAuth
+    def insertMCSkim(self, sample):
+        s = self.getAuthServerProxy()
+        return MCSkim(s.insertMCSkim(skim.__dict__))
+    @tryServerAuth
+    def insertDataSkim(self, sample):
         s = self.getAuthServerProxy()
         return DataSkim(s.insertDataSkim(sample.__dict__))
-    def editDataSample(self, id, sample):
-        return self.tryServerAuthFunction(self.doEditDataSample, id, sample)
-    def doEditDataSample(self, id, sample):
+    # edits
+    @tryServerAuth
+    def editMCSample(self, name, sample):
         s = self.getAuthServerProxy()
-        return s.editDataSample(id, sample)
-    def getMCSample(self, sampleid):
-        s = xmlrpclib.ServerProxy(self.readurl)
-        return MCSample(s.getMCSample(sampleid))
-    def getDataSample(self, sampleid):
-        s = xmlrpclib.ServerProxy(self.readurl)
-        return DataSample(s.getDataSample(sampleid))
-    def getMCSkim(self, sampleid):
-        s = xmlrpclib.ServerProxy(self.readurl)
-        return MCSkim(s.getMCSkim(sampleid))
-    def getDataSkim(self, sampleid):
-        s = xmlrpclib.ServerProxy(self.readurl)
-        return DataSkim(s.getDataSkim(sampleid))
-    #def searchMCSamples(self, searchdict):
-        #s = xmlrpclib.ServerProxy(self.readurl)
-        #return s.searchMCSamples(searchdict)
-    #def searchDataSamples(self, searchdict):
-        #s = xmlrpclib.ServerProxy(self.readurl)
-        #return s.searchDataSamples(searchdict)
-    def test(self):
+        return s.editMCSample(name, sample)
+    @tryServerAuth
+    def editDataSample(self, name, sample):
         s = self.getAuthServerProxy()
-        return s.test()
-    def checksample(self,sample):
-        msg = None
-        if None in sample: msg = "None-item in sample"
-        if "tags" in sample:
-            if not type(sample['tags']) == dict: msg = "Tags is not a dict"
-        if "files" in sample:
-            if not type(sample['files']) == list: msg = "Files is not a list"
-        if msg is not None:
-            log.error("Sample failed sanity checks: " + msg)
-            return False
-        return True
-    def tryServerAuthFunction(self, funct, *params):
-        try:
-            return funct(*params)
-        except xmlrpclib.ProtocolError:
-            self.destroyauth()
-            self.authorize()
-            return funct(*params)
+        return s.editDataSample(name, sample)
+    @tryServerAuth
+    def editMCSkim(self, skimid, skim):
+        s = self.getAuthServerProxy()
+        return s.editMCSkim(skimid, skim)
+    @tryServerAuth
+    def editDataSkim(self, skimid, skim):
+        s = self.getAuthServerProxy()
+        return s.editDataSkim(skimid, skim)
+    # gets
+    def getMCSample(self, name):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        return MCSample(s.getMCSample(name))
+    def getDataSample(self, name):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        return DataSample(s.getDataSample(name))
+    def getMCSkim(self, skimid):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        return MCSkim(s.getMCSkim(skimid))
+    def getDataSkim(self, skimid):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        return DataSkim(s.getDataSkim(skimid))
+    def getMCLatestSkimAndSampleBySample(self, name):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.getMCLatestSkimAndSampleBySample(name)
+        return MCSkim(result['skim']), MCSample(result['sample'])
+    def getDataLatestSkimAndSampleBySample(self, name):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.getDataLatestSkimAndSampleBySample(name)
+        return DataSkim(result['skim']), DataSample(result['sample'])
+    def getMCSkimAndSampleBySkim(self, skimid):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.getMCSkimAndSampleBySkim(skimid)
+        return MCSkim(result['skim']), MCSample(result['sample'])
+    def getDataSkimAndSampleBySkim(self, skimid):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.getDataSkimAndSampleBySkim(skimid)
+        return DataSkim(result['skim']), DataSample(result['sample'])
+
 
 
 class aix3adbAuth(aix3adb):
@@ -138,11 +148,6 @@ class aix3adbAuth(aix3adb):
       self.authorize(username, trykerberos)
    def __del__(self):
       self.destroyauth()
-
-def main():
-    print "This is just a library"
-
-
 
 class cookietransportrequest:
     """A Transport request method that retains cookies over its lifetime.
@@ -234,6 +239,3 @@ def transport(uri):
         return cookiesafetransport()
     else:
         return cookietransport()
-
-if __name__ == "__main__":
-    main()
