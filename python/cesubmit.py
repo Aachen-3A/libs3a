@@ -347,12 +347,12 @@ class Task:
 
     def getOutput(self, connections=1):
         jobs = [job for job in self.jobs if job.status=="DONE-OK" and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        jobids = [job.jobid for job in jobs]
-        if not jobids: return
-        jobpackages = list(chunks(jobids, 100))
-        log.info('Get output of %s jobs of task %s',str(len(jobids)), self.name)
+        if not jobs: return
+        jobpackages = list(chunks(jobs, 100))
+        log.info('Get output of %s jobs of task %s',str(len(jobs)), self.name)
         for jobpackage in jobpackages:
-            command = ["glite-ce-job-output", "-s", str(connections), "--noint", "--dir", self.directory] + jobpackage
+            jobids = [job.jobid for job in jobpackage]
+            command = ["glite-ce-job-output", "-s", str(connections), "--noint", "--dir", self.directory] + jobids
             process = subprocess.Popen(command, stdout=subprocess.PIPE)
             stdout, stderr = process.communicate()
             if process.returncode!=0:
@@ -362,7 +362,7 @@ class Task:
             else:
                 succesfulljobids = parseGetOutput(stdout)
                 log.info('Tried to retrieved %s jobs', str(len(succesfulljobids)))
-                for job in jobs:
+                for job in jobpackage:
                     if job.jobid in succesfulljobids:
                         job.purge()
                         job.frontEndStatus = "RETRIEVED"
