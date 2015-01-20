@@ -8,14 +8,14 @@ import os
 log = logging.getLogger( 'aix3adb' )
 
 def tryServerAuth(funct):
-   def func_wrapper(instance, *args, **kwargs):
+    def func_wrapper(instance, *args, **kwargs):
         try:
             return funct(instance, *args, **kwargs)
         except xmlrpclib.ProtocolError:
             instance.destroyauth()
             instance.authorize()
             return funct(instance, *args, **kwargs)
-   return func_wrapper
+    return func_wrapper
 
 class Aix3adbException(Exception):
     pass
@@ -136,10 +136,20 @@ class aix3adb:
         result = s.getMCSkimAndSampleBySkim(skimid)
         return MCSkim(result['skim']), MCSample(result['sample'])
     def getDataSkimAndSampleBySkim(self, skimid):
-        s = xmlrpclib.ServerProxy(self.readurl)
+        s = xmlrpclib.ServerProxy(self.readpurl)
         result = s.getDataSkimAndSampleBySkim(skimid)
         return DataSkim(result['skim']), DataSample(result['sample'])
-
+    def getMCSkimAndSample(self, name=None, skimid=None):
+        if not name is None:
+            skim, sample = self.getMCLatestSkimAndSampleBySample(name)
+            if not skimid is None:
+                if int(skim.id) != skimid:
+                    raise Exception("Skimid and sample name do not match.")
+        elif not skimid is None:
+            skim, sample = self.getMCSkimAndSampleBySkim(skimid)
+        else:
+            raise Exception("No arguments provided.")
+        return skim, sample
 
 
 class aix3adbAuth(aix3adb):
