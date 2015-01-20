@@ -86,13 +86,13 @@ class aix3adb:
         s = self.getAuthServerProxy()
         return DataSample(s.insertDataSample(sample.__dict__))
     @tryServerAuth
-    def insertMCSkim(self, sample):
+    def insertMCSkim(self, skim):
         s = self.getAuthServerProxy()
         return MCSkim(s.insertMCSkim(skim.__dict__))
     @tryServerAuth
-    def insertDataSkim(self, sample):
+    def insertDataSkim(self, skim):
         s = self.getAuthServerProxy()
-        return DataSkim(s.insertDataSkim(sample.__dict__))
+        return DataSkim(s.insertDataSkim(skim.__dict__))
     # edits
     @tryServerAuth
     def editMCSample(self, name, sample):
