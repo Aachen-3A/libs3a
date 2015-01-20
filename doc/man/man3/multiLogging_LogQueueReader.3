@@ -1,0 +1,84 @@
+.TH "multiLogging.LogQueueReader" 3 "Tue Jan 20 2015" "libs3a" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+multiLogging.LogQueueReader \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits Thread\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBrun\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBqueue\fP"
+.br
+.ti -1c
+.RI "\fBdaemon\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+thread to write subprocesses log records to main process log
+
+This thread reads the records written by subprocesses and writes them to
+the handlers defined in the main process's handlers.
+.fi
+.PP
+ 
+.PP
+Definition at line 31 of file multiLogging\&.py\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "def multiLogging\&.LogQueueReader\&.__init__ (self, queue)"
+
+.PP
+Definition at line 39 of file multiLogging\&.py\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "def multiLogging\&.LogQueueReader\&.run (self)"
+
+.PP
+.nf
+read from the queue and write to the log handlers
+
+The logging documentation says logging is thread safe, so there
+shouldn't be contention between normal logging (from the main
+process) and this thread.
+
+Note that we're using the name of the original logger.
+.fi
+.PP
+ 
+.PP
+Definition at line 44 of file multiLogging\&.py\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "multiLogging\&.LogQueueReader\&.daemon"
+
+.PP
+Definition at line 42 of file multiLogging\&.py\&.
+.SS "multiLogging\&.LogQueueReader\&.queue"
+
+.PP
+Definition at line 41 of file multiLogging\&.py\&.
+.PP
+Referenced by multiLogging\&.LoggingProcess\&._setupLogger()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libs3a from the source code\&.

@@ -1,0 +1,318 @@
+\section{crab\-Functions.\-Crab\-Controller Class Reference}
+\label{classcrabFunctions_1_1CrabController}\index{crab\-Functions.\-Crab\-Controller@{crab\-Functions.\-Crab\-Controller}}
+
+
+The \hyperlink{classcrabFunctions_1_1CrabController}{Crab\-Controller} class.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classcrabFunctions_1_1CrabController_ab954e7c5fcfb41ceab85bc598f06a3d4}{\-\_\-\-\_\-init\-\_\-\-\_\-}
+\begin{DoxyCompactList}\small\item\em The constructor. \end{DoxyCompactList}\item 
+def \hyperlink{classcrabFunctions_1_1CrabController_a0e58fa81e3b2972951be87809c38d539}{checkwrite}
+\begin{DoxyCompactList}\small\item\em Check if crab can write to specified site. \end{DoxyCompactList}\item 
+def \hyperlink{classcrabFunctions_1_1CrabController_a287a67fc99629f8e0d4fb94325cdf099}{submit}
+\begin{DoxyCompactList}\small\item\em Check if crab can write to specified site. \end{DoxyCompactList}\item 
+def \hyperlink{classcrabFunctions_1_1CrabController_ad38efc8e97d1b90e31b797fa6bcf47e5}{resubmit}
+\begin{DoxyCompactList}\small\item\em Resubmit all failed tasks in job or specified list of jobs in task. \end{DoxyCompactList}\item 
+def \hyperlink{classcrabFunctions_1_1CrabController_a9a400a21d825adac4edf8a6b47945cda}{checkusername}
+\begin{DoxyCompactList}\small\item\em Returns the hn name for a user with valid proxy. \end{DoxyCompactList}\item 
+def \hyperlink{classcrabFunctions_1_1CrabController_a094930ed227396b90696ca2fc2e986ed}{status}
+\begin{DoxyCompactList}\small\item\em Check crab status. \end{DoxyCompactList}\item 
+def \hyperlink{classcrabFunctions_1_1CrabController_ae7c8115bdb0a74c859404641f91cb584}{commandline\-Options}
+\begin{DoxyCompactList}\small\item\em Populates an existing optparse parser or returns a new one with options for crab functions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabController_a95c64682d53afcd3c0d6f3794f12c86a}{working\-Area}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabController_a8e6640715c27f45e9a0c66c3efe0aa4d}{dry\-\_\-run}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabController_a5aabe7cb586e56f190dc76228622d961}{vo\-Group}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabController_a9e8b5ce5d1107334feed2e4bee2ba109}{username}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabController_aeec5322c1cb1012abdde8ae71abd0f44}{logger}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{classcrabFunctions_1_1CrabController}{Crab\-Controller} class. 
+
+This class can be used to manage Analyses using crab3 
+
+Definition at line 20 of file crab\-Functions.\-py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}}
+\index{\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{\-\_\-\-\_\-init\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Controller.\-\_\-\-\_\-init\-\_\-\-\_\- (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{logger = {\ttfamily None}, }
+\item[{}]{working\-Area = {\ttfamily None}, }
+\item[{}]{vo\-Group = {\ttfamily None}, }
+\item[{}]{username = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabController_ab954e7c5fcfb41ceab85bc598f06a3d4}
+
+
+The constructor. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabController}{Crab\-Controller} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer.  self\-: A logging logger instance \\
+\hline
+{\em self,\-:} & A previously defined logger. Crab log messages will use this logger as their parent logger. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 27 of file crab\-Functions.\-py.
+
+
+
+\subsection{Member Function Documentation}
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!checkusername@{checkusername}}
+\index{checkusername@{checkusername}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{checkusername}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Controller.\-checkusername (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabController_a9a400a21d825adac4edf8a6b47945cda}
+
+
+Returns the hn name for a user with valid proxy. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabController}{Crab\-Controller} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+users hypernews name 
+\end{DoxyReturn}
+
+
+Definition at line 138 of file crab\-Functions.\-py.
+
+
+
+References crab\-Functions.\-Crab\-Controller.\-username, and crab\-Functions.\-Crab\-Controller.\-working\-Area.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Controller.\-checkwrite().
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!checkwrite@{checkwrite}}
+\index{checkwrite@{checkwrite}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{checkwrite}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Controller.\-checkwrite (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{site = {\ttfamily 'T2\-\_\-DE\-\_\-RWTH'}, }
+\item[{}]{path = {\ttfamily 'noPath'}}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabController_a0e58fa81e3b2972951be87809c38d539}
+
+
+Check if crab can write to specified site. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabController}{Crab\-Controller} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer.  site string \\
+\hline
+{\em site} & The Site symbol \mbox{[}default\-:T2\-\_\-\-D\-E\-\_\-\-R\-W\-T\-H\mbox{]}  path string \\
+\hline
+{\em path} & lfn path to check write permission in. see twiki Work\-Book\-C\-R\-A\-B3\-Tutorial \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean which is True if user can write to site and False otherwise 
+\end{DoxyReturn}
+
+
+Definition at line 75 of file crab\-Functions.\-py.
+
+
+
+References crab\-Functions.\-Crab\-Controller.\-checkusername(), crab\-Functions.\-Crab\-Controller.\-username, crab\-Functions.\-Crab\-Controller.\-vo\-Group, and crab\-Functions.\-Crab\-Controller.\-working\-Area.
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!commandline\-Options@{commandline\-Options}}
+\index{commandline\-Options@{commandline\-Options}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{commandline\-Options}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Controller.\-commandline\-Options (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{parser = {\ttfamily optparse.OptionParser(~'usage\-:~\%prog'~)}}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabController_ae7c8115bdb0a74c859404641f91cb584}
+
+
+Populates an existing optparse parser or returns a new one with options for crab functions. 
+
+This functions populates a previously created (or new) instance of a optparse parser object with options needed by crab functions. It is possible to add three kinds of options\-:
+\begin{DoxyItemize}
+\item options where a error should be raised if the option was previously defined
+\item options where previous definitions should be kept
+\item options where previous definitions should be overriden  Optparse parser instance 
+\begin{DoxyParams}{Parameters}
+{\em parser} & A previously created parser oject which should be extenden \mbox{[}default\-: new instance\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new or extenden optparse parser instance 
+\end{DoxyReturn}
+
+\end{DoxyItemize}
+
+Definition at line 213 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!resubmit@{resubmit}}
+\index{resubmit@{resubmit}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{resubmit}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Controller.\-resubmit (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{name, }
+\item[{}]{joblist = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabController_ad38efc8e97d1b90e31b797fa6bcf47e5}
+
+
+Resubmit all failed tasks in job or specified list of jobs in task. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabController}{Crab\-Controller} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer.  name string \\
+\hline
+{\em name} & The crab3 request name, a.\-k.\-a the sample name  joblist list of strings \\
+\hline
+{\em joblist} & The crab3 request name, a.\-k.\-a the sample name \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 119 of file crab\-Functions.\-py.
+
+
+
+References crab\-Functions.\-Crab\-Controller.\-dry\-\_\-run, and crab\-Functions.\-Crab\-Controller.\-working\-Area.
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!status@{status}}
+\index{status@{status}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{status}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Controller.\-status (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{name}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabController_a094930ed227396b90696ca2fc2e986ed}
+
+
+Check crab status. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabController}{Crab\-Controller} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer.  name string \\
+\hline
+{\em name} & The crab3 request name, a.\-k.\-a the sample name \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 158 of file crab\-Functions.\-py.
+
+
+
+References crab\-Functions.\-Crab\-Controller.\-dry\-\_\-run, and crab\-Functions.\-Crab\-Controller.\-working\-Area.
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!submit@{submit}}
+\index{submit@{submit}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{submit}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Controller.\-submit (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{name}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabController_a287a67fc99629f8e0d4fb94325cdf099}
+
+
+Check if crab can write to specified site. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabController}{Crab\-Controller} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer.  name string \\
+\hline
+{\em name} & The crab3 request name, a.\-k.\-a the sample name \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 100 of file crab\-Functions.\-py.
+
+
+
+References crab\-Functions.\-Crab\-Controller.\-dry\-\_\-run, crab\-Functions.\-Crab\-Controller.\-vo\-Group, and crab\-Functions.\-Crab\-Controller.\-working\-Area.
+
+
+
+\subsection{Member Data Documentation}
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!dry\-\_\-run@{dry\-\_\-run}}
+\index{dry\-\_\-run@{dry\-\_\-run}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{dry\-\_\-run}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Controller.\-dry\-\_\-run}\label{classcrabFunctions_1_1CrabController_a8e6640715c27f45e9a0c66c3efe0aa4d}
+
+
+Definition at line 32 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Controller.\-resubmit(), crab\-Functions.\-Crab\-Controller.\-status(), and crab\-Functions.\-Crab\-Controller.\-submit().
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!logger@{logger}}
+\index{logger@{logger}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{logger}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Controller.\-logger}\label{classcrabFunctions_1_1CrabController_aeec5322c1cb1012abdde8ae71abd0f44}
+
+
+Definition at line 43 of file crab\-Functions.\-py.
+
+
+
+Referenced by multi\-Logging.\-Logging\-Process.\-run().
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!username@{username}}
+\index{username@{username}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{username}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Controller.\-username}\label{classcrabFunctions_1_1CrabController_a9e8b5ce5d1107334feed2e4bee2ba109}
+
+
+Definition at line 38 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Controller.\-checkusername(), and crab\-Functions.\-Crab\-Controller.\-checkwrite().
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!vo\-Group@{vo\-Group}}
+\index{vo\-Group@{vo\-Group}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{vo\-Group}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Controller.\-vo\-Group}\label{classcrabFunctions_1_1CrabController_a5aabe7cb586e56f190dc76228622d961}
+
+
+Definition at line 34 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Controller.\-checkwrite(), and crab\-Functions.\-Crab\-Controller.\-submit().
+
+\index{crab\-Functions\-::\-Crab\-Controller@{crab\-Functions\-::\-Crab\-Controller}!working\-Area@{working\-Area}}
+\index{working\-Area@{working\-Area}!crabFunctions::CrabController@{crab\-Functions\-::\-Crab\-Controller}}
+\subsubsection[{working\-Area}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Controller.\-working\-Area}\label{classcrabFunctions_1_1CrabController_a95c64682d53afcd3c0d6f3794f12c86a}
+
+
+Definition at line 29 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Controller.\-checkusername(), crab\-Functions.\-Crab\-Controller.\-checkwrite(), crab\-Functions.\-Crab\-Controller.\-resubmit(), crab\-Functions.\-Crab\-Controller.\-status(), and crab\-Functions.\-Crab\-Controller.\-submit().
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+python/\hyperlink{crabFunctions_8py}{crab\-Functions.\-py}\end{DoxyCompactItemize}

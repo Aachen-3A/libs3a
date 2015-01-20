@@ -1,0 +1,171 @@
+\section{lheanalyzer.\-Particle Class Reference}
+\label{classlheanalyzer_1_1Particle}\index{lheanalyzer.\-Particle@{lheanalyzer.\-Particle}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classlheanalyzer_1_1Particle_a800043635ae09b06b66258c82c9aea84}{\-\_\-\-\_\-init\-\_\-\-\_\-}
+\item 
+def \hyperlink{classlheanalyzer_1_1Particle_a3b23a94b72794bb7ebcb82e037c90e99}{get\-T\-Lorentz\-Vector}
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_a371705b75ae787f9876d764427858b28}{spin}
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_a4206becef189fb59b6ef8821a2cd9ad9}{px} = property(lambda self\-: self.\-momentum\mbox{[}0\mbox{]})
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_aaebf738e9976bd94c91a0983e7c9c11e}{py} = property(lambda self\-: self.\-momentum\mbox{[}1\mbox{]})
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_a4f8bf461663f7f0e9cf264fdd0f40cbe}{pz} = property(lambda self\-: self.\-momentum\mbox{[}2\mbox{]})
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_a6dff44bd61eee7c801d20fc897ba3234}{energy} = property(lambda self\-: self.\-momentum\mbox{[}3\mbox{]})
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_a8036328b841efce9867c607010b77208}{mass} = property(lambda self\-: self.\-momentum\mbox{[}4\mbox{]})
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_adbd412eff8a9c56b420e90cbefb080e2}{pt} = property(lambda self\-: (self.\-px$\ast$$\ast$2+self.\-py$\ast$$\ast$2)$\ast$$\ast$0.\-5)
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_ac32abe22b6ec78e2158c36bcd4097ca5}{t\-Lorentz\-Vector} = property(\hyperlink{classlheanalyzer_1_1Particle_a3b23a94b72794bb7ebcb82e037c90e99}{get\-T\-Lorentz\-Vector})
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_a3b25b63ffcd271b0aaf3fc2f42a366b4}{eta} = property(lambda self\-: self.\-t\-Lorentz\-Vector.\-Eta())
+\item 
+\hyperlink{classlheanalyzer_1_1Particle_ae732c25b7618992ffbdc2dbc3621f425}{phi} = property(lambda self\-: self.\-t\-Lorentz\-Vector.\-Phi())
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Describes a single particle\end{DoxyVerb}
+ 
+
+Definition at line 16 of file lheanalyzer.\-py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}}
+\index{\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{\-\_\-\-\_\-init\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}def lheanalyzer.\-Particle.\-\_\-\-\_\-init\-\_\-\-\_\- (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{initstr}
+\end{DoxyParamCaption}
+)}\label{classlheanalyzer_1_1Particle_a800043635ae09b06b66258c82c9aea84}
+\begin{DoxyVerb}Constuctor call with line from lhe file\end{DoxyVerb}
+ 
+
+Definition at line 18 of file lheanalyzer.\-py.
+
+
+
+\subsection{Member Function Documentation}
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!get\-T\-Lorentz\-Vector@{get\-T\-Lorentz\-Vector}}
+\index{get\-T\-Lorentz\-Vector@{get\-T\-Lorentz\-Vector}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{get\-T\-Lorentz\-Vector}]{\setlength{\rightskip}{0pt plus 5cm}def lheanalyzer.\-Particle.\-get\-T\-Lorentz\-Vector (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classlheanalyzer_1_1Particle_a3b23a94b72794bb7ebcb82e037c90e99}
+\begin{DoxyVerb}Returns the ROOT TLorentzVector of the particle\end{DoxyVerb}
+ 
+
+Definition at line 22 of file lheanalyzer.\-py.
+
+
+
+\subsection{Member Data Documentation}
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!spin@{spin}}
+\index{spin@{spin}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{spin}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-spin}\label{classlheanalyzer_1_1Particle_a371705b75ae787f9876d764427858b28}
+
+
+Definition at line 21 of file lheanalyzer.\-py.
+
+
+
+\subsection{Property Documentation}
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!energy@{energy}}
+\index{energy@{energy}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{energy}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-energy = property(lambda self\-: self.\-momentum\mbox{[}3\mbox{]})\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_a6dff44bd61eee7c801d20fc897ba3234}
+
+
+Definition at line 28 of file lheanalyzer.\-py.
+
+
+
+Referenced by lheanalyzer.\-Lorentz\-Vector.\-add(), and lheanalyzer.\-Lorentz\-Vector.\-invariant\-Mass().
+
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!eta@{eta}}
+\index{eta@{eta}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{eta}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-eta = property(lambda self\-: self.\-t\-Lorentz\-Vector.\-Eta())\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_a3b25b63ffcd271b0aaf3fc2f42a366b4}
+
+
+Definition at line 32 of file lheanalyzer.\-py.
+
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!mass@{mass}}
+\index{mass@{mass}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{mass}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-mass = property(lambda self\-: self.\-momentum\mbox{[}4\mbox{]})\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_a8036328b841efce9867c607010b77208}
+
+
+Definition at line 29 of file lheanalyzer.\-py.
+
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!phi@{phi}}
+\index{phi@{phi}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{phi}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-phi = property(lambda self\-: self.\-t\-Lorentz\-Vector.\-Phi())\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_ae732c25b7618992ffbdc2dbc3621f425}
+
+
+Definition at line 33 of file lheanalyzer.\-py.
+
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!pt@{pt}}
+\index{pt@{pt}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{pt}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-pt = property(lambda self\-: (self.\-px$\ast$$\ast$2+self.\-py$\ast$$\ast$2)$\ast$$\ast$0.\-5)\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_adbd412eff8a9c56b420e90cbefb080e2}
+
+
+Definition at line 30 of file lheanalyzer.\-py.
+
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!px@{px}}
+\index{px@{px}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{px}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-px = property(lambda self\-: self.\-momentum\mbox{[}0\mbox{]})\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_a4206becef189fb59b6ef8821a2cd9ad9}
+
+
+Definition at line 25 of file lheanalyzer.\-py.
+
+
+
+Referenced by lheanalyzer.\-Lorentz\-Vector.\-add(), and lheanalyzer.\-Lorentz\-Vector.\-invariant\-Mass().
+
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!py@{py}}
+\index{py@{py}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{py}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-py = property(lambda self\-: self.\-momentum\mbox{[}1\mbox{]})\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_aaebf738e9976bd94c91a0983e7c9c11e}
+
+
+Definition at line 26 of file lheanalyzer.\-py.
+
+
+
+Referenced by lheanalyzer.\-Lorentz\-Vector.\-add(), and lheanalyzer.\-Lorentz\-Vector.\-invariant\-Mass().
+
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!pz@{pz}}
+\index{pz@{pz}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{pz}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-pz = property(lambda self\-: self.\-momentum\mbox{[}2\mbox{]})\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_a4f8bf461663f7f0e9cf264fdd0f40cbe}
+
+
+Definition at line 27 of file lheanalyzer.\-py.
+
+
+
+Referenced by lheanalyzer.\-Lorentz\-Vector.\-add(), and lheanalyzer.\-Lorentz\-Vector.\-invariant\-Mass().
+
+\index{lheanalyzer\-::\-Particle@{lheanalyzer\-::\-Particle}!t\-Lorentz\-Vector@{t\-Lorentz\-Vector}}
+\index{t\-Lorentz\-Vector@{t\-Lorentz\-Vector}!lheanalyzer::Particle@{lheanalyzer\-::\-Particle}}
+\subsubsection[{t\-Lorentz\-Vector}]{\setlength{\rightskip}{0pt plus 5cm}lheanalyzer.\-Particle.\-t\-Lorentz\-Vector = property({\bf get\-T\-Lorentz\-Vector})\hspace{0.3cm}{\ttfamily [static]}}\label{classlheanalyzer_1_1Particle_ac32abe22b6ec78e2158c36bcd4097ca5}
+
+
+Definition at line 31 of file lheanalyzer.\-py.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+python/\hyperlink{lheanalyzer_8py}{lheanalyzer.\-py}\end{DoxyCompactItemize}

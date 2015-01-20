@@ -1,0 +1,83 @@
+\section{aix3adb Namespace Reference}
+\label{namespaceaix3adb}\index{aix3adb@{aix3adb}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classaix3adb_1_1Aix3adbException}{Aix3adb\-Exception}
+\item 
+class \hyperlink{classaix3adb_1_1Aix3adbBaseElement}{Aix3adb\-Base\-Element}
+\item 
+class \hyperlink{classaix3adb_1_1MCSample}{M\-C\-Sample}
+\item 
+class \hyperlink{classaix3adb_1_1DataSample}{Data\-Sample}
+\item 
+class \hyperlink{classaix3adb_1_1MCSkim}{M\-C\-Skim}
+\item 
+class \hyperlink{classaix3adb_1_1DataSkim}{Data\-Skim}
+\item 
+class \hyperlink{classaix3adb_1_1aix3adb}{aix3adb}
+\item 
+class \hyperlink{classaix3adb_1_1aix3adbAuth}{aix3adb\-Auth}
+\item 
+class \hyperlink{classaix3adb_1_1cookietransportrequest}{cookietransportrequest}
+\item 
+class \hyperlink{classaix3adb_1_1cookietransport}{cookietransport}
+\item 
+class \hyperlink{classaix3adb_1_1cookiesafetransport}{cookiesafetransport}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespaceaix3adb_a814ec586946a29d4ad14126e56f0192f}{try\-Server\-Auth}
+\item 
+def \hyperlink{namespaceaix3adb_a015924822bed0204e3fea3fbd7eb0b81}{transport}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+tuple \hyperlink{namespaceaix3adb_a0ad187df59c9927625e9fc1484ece973}{log} = logging.\-get\-Logger( '\hyperlink{classaix3adb_1_1aix3adb}{aix3adb}' )
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{aix3adb@{aix3adb}!transport@{transport}}
+\index{transport@{transport}!aix3adb@{aix3adb}}
+\subsubsection[{transport}]{\setlength{\rightskip}{0pt plus 5cm}def aix3adb.\-transport (
+\begin{DoxyParamCaption}
+\item[{}]{uri}
+\end{DoxyParamCaption}
+)}\label{namespaceaix3adb_a015924822bed0204e3fea3fbd7eb0b81}
+\begin{DoxyVerb}Return an appropriate Transport for the URI.
+
+If the URI type is https, return a CookieSafeTransport.
+If the type is http, return a CookieTransport.
+\end{DoxyVerb}
+ 
+
+Definition at line 232 of file aix3adb.\-py.
+
+
+
+Referenced by aix3adb.\-aix3adb.\-get\-Auth\-Server\-Proxy().
+
+\index{aix3adb@{aix3adb}!try\-Server\-Auth@{try\-Server\-Auth}}
+\index{try\-Server\-Auth@{try\-Server\-Auth}!aix3adb@{aix3adb}}
+\subsubsection[{try\-Server\-Auth}]{\setlength{\rightskip}{0pt plus 5cm}def aix3adb.\-try\-Server\-Auth (
+\begin{DoxyParamCaption}
+\item[{}]{funct}
+\end{DoxyParamCaption}
+)}\label{namespaceaix3adb_a814ec586946a29d4ad14126e56f0192f}
+
+
+Definition at line 10 of file aix3adb.\-py.
+
+
+
+\subsection{Variable Documentation}
+\index{aix3adb@{aix3adb}!log@{log}}
+\index{log@{log}!aix3adb@{aix3adb}}
+\subsubsection[{log}]{\setlength{\rightskip}{0pt plus 5cm}tuple aix3adb.\-log = logging.\-get\-Logger( '{\bf aix3adb}' )}\label{namespaceaix3adb_a0ad187df59c9927625e9fc1484ece973}
+
+
+Definition at line 8 of file aix3adb.\-py.
+

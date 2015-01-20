@@ -1,0 +1,58 @@
+\section{Timed\-Call Namespace Reference}
+\label{namespaceTimedCall}\index{Timed\-Call@{Timed\-Call}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classTimedCall_1_1TimeoutExpired}{Timeout\-Expired}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespaceTimedCall_a18f2f4c97948fe958f5bcd5a9f946f41}{call}
+\item 
+def \hyperlink{namespaceTimedCall_aee21234aedcca14d0dfc97ad4e9b1764}{retry}
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{Timed\-Call@{Timed\-Call}!call@{call}}
+\index{call@{call}!TimedCall@{Timed\-Call}}
+\subsubsection[{call}]{\setlength{\rightskip}{0pt plus 5cm}def Timed\-Call.\-call (
+\begin{DoxyParamCaption}
+\item[{}]{timeout, }
+\item[{}]{args}
+\end{DoxyParamCaption}
+)}\label{namespaceTimedCall_a18f2f4c97948fe958f5bcd5a9f946f41}
+\begin{DoxyVerb}Run a command with a timeout after which it will be forcibly
+killed.
+\end{DoxyVerb}
+ 
+
+Definition at line 8 of file Timed\-Call.\-py.
+
+
+
+Referenced by retry().
+
+\index{Timed\-Call@{Timed\-Call}!retry@{retry}}
+\index{retry@{retry}!TimedCall@{Timed\-Call}}
+\subsubsection[{retry}]{\setlength{\rightskip}{0pt plus 5cm}def Timed\-Call.\-retry (
+\begin{DoxyParamCaption}
+\item[{}]{N, }
+\item[{}]{timeout, }
+\item[{}]{args}
+\end{DoxyParamCaption}
+)}\label{namespaceTimedCall_aee21234aedcca14d0dfc97ad4e9b1764}
+\begin{DoxyVerb}Try to run a call N times when it times out, then fail.\end{DoxyVerb}
+ 
+
+Definition at line 37 of file Timed\-Call.\-py.
+
+
+
+References call().
+
+
+
+Referenced by remote\-\_\-example.\-prepare\-\_\-teli().
+

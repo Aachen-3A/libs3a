@@ -1,0 +1,172 @@
+\section{grid\-Functions Namespace Reference}
+\label{namespacegridFunctions}\index{grid\-Functions@{grid\-Functions}}
+
+
+This module provides common functions for interaction with the local Tier2.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacegridFunctions_a4e79293482a3e6c550544cbb604b31a2}{getdcachelist}
+\begin{DoxyCompactList}\small\item\em Get list of files with certain file extension in d\-Cap folder recursively  dir\-: string. \end{DoxyCompactList}\item 
+def \hyperlink{namespacegridFunctions_afcaaf26f40337917700fdbba5358c40a}{time\-Left\-Voms\-Proxy}
+\begin{DoxyCompactList}\small\item\em Returns the life time left. \end{DoxyCompactList}\item 
+def \hyperlink{namespacegridFunctions_a6e867b80786f4b466ec8438cab40603c}{check\-Voms\-Proxy}
+\begin{DoxyCompactList}\small\item\em Checks if the proxy is valid longer than time. \end{DoxyCompactList}\item 
+def \hyperlink{namespacegridFunctions_a52fea718b08534d76e61a53dd43e2402}{renew\-Voms\-Proxy}
+\begin{DoxyCompactList}\small\item\em Creates a new vom proxy. \end{DoxyCompactList}\item 
+def \hyperlink{namespacegridFunctions_a62e5066cf1057859a9b43a8c88066960}{check\-And\-Renew\-Voms\-Proxy}
+\begin{DoxyCompactList}\small\item\em Checks if the proxy is valid longer than time and renew if needed. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This module provides common functions for interaction with the local Tier2. 
+
+\subsection{Function Documentation}
+\index{grid\-Functions@{grid\-Functions}!check\-And\-Renew\-Voms\-Proxy@{check\-And\-Renew\-Voms\-Proxy}}
+\index{check\-And\-Renew\-Voms\-Proxy@{check\-And\-Renew\-Voms\-Proxy}!gridFunctions@{grid\-Functions}}
+\subsubsection[{check\-And\-Renew\-Voms\-Proxy}]{\setlength{\rightskip}{0pt plus 5cm}def grid\-Functions.\-check\-And\-Renew\-Voms\-Proxy (
+\begin{DoxyParamCaption}
+\item[{}]{time = {\ttfamily 604800}, }
+\item[{}]{voms = {\ttfamily 'cms\-:/cms/dcms'}, }
+\item[{}]{passphrase = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{namespacegridFunctions_a62e5066cf1057859a9b43a8c88066960}
+
+
+Checks if the proxy is valid longer than time and renew if needed. 
+
+time\-: int 
+\begin{DoxyParams}{Parameters}
+{\em time,\-:} & reference time in seconds to check against \\
+\hline
+{\em voms,\-:} & the voms group used to set up the server \mbox{[}default\-:cms\-:/cms/dcms\mbox{]}  passphrase\-: string \\
+\hline
+{\em passphrase,\-:} & Passphrase for G\-R\-I\-D certificate \mbox{[}default\-:none\mbox{]}. The password request is send to the prompt if no passphrase given \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 100 of file grid\-Functions.\-py.
+
+
+
+References check\-Voms\-Proxy(), and renew\-Voms\-Proxy().
+
+\index{grid\-Functions@{grid\-Functions}!check\-Voms\-Proxy@{check\-Voms\-Proxy}}
+\index{check\-Voms\-Proxy@{check\-Voms\-Proxy}!gridFunctions@{grid\-Functions}}
+\subsubsection[{check\-Voms\-Proxy}]{\setlength{\rightskip}{0pt plus 5cm}def grid\-Functions.\-check\-Voms\-Proxy (
+\begin{DoxyParamCaption}
+\item[{}]{time = {\ttfamily 86400}}
+\end{DoxyParamCaption}
+)}\label{namespacegridFunctions_a6e867b80786f4b466ec8438cab40603c}
+
+
+Checks if the proxy is valid longer than time. 
+
+time\-: int 
+\begin{DoxyParams}{Parameters}
+{\em time,\-:} & reference time in seconds to check against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean returns True if the proxy is valid longer than time, False otherwise. 
+\end{DoxyReturn}
+
+
+Definition at line 69 of file grid\-Functions.\-py.
+
+
+
+References time\-Left\-Voms\-Proxy().
+
+
+
+Referenced by check\-And\-Renew\-Voms\-Proxy().
+
+\index{grid\-Functions@{grid\-Functions}!getdcachelist@{getdcachelist}}
+\index{getdcachelist@{getdcachelist}!gridFunctions@{grid\-Functions}}
+\subsubsection[{getdcachelist}]{\setlength{\rightskip}{0pt plus 5cm}def grid\-Functions.\-getdcachelist (
+\begin{DoxyParamCaption}
+\item[{}]{dir, }
+\item[{}]{Tag, }
+\item[{}]{mem\-\_\-limit = {\ttfamily 500000000}, }
+\item[{}]{file\-Xtension = {\ttfamily '.pxlio'}}
+\end{DoxyParamCaption}
+)}\label{namespacegridFunctions_a4e79293482a3e6c550544cbb604b31a2}
+
+
+Get list of files with certain file extension in d\-Cap folder recursively  dir\-: string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dir,\-:} & The d\-Cap folder without /pnfs/physik.rwth-\/aachen.\-de/cms/store/user/  mem\-\_\-limit\-: int \\
+\hline
+{\em mem\-\_\-limit,\-:} & Maximum summed filesize before files are splitted in sublists \mbox{[}default\-:500000000\mbox{]} \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 14 of file grid\-Functions.\-py.
+
+
+
+References Hist\-Class.\-split().
+
+
+
+Referenced by remote\-\_\-example.\-get\-Filesfrom\-File().
+
+\index{grid\-Functions@{grid\-Functions}!renew\-Voms\-Proxy@{renew\-Voms\-Proxy}}
+\index{renew\-Voms\-Proxy@{renew\-Voms\-Proxy}!gridFunctions@{grid\-Functions}}
+\subsubsection[{renew\-Voms\-Proxy}]{\setlength{\rightskip}{0pt plus 5cm}def grid\-Functions.\-renew\-Voms\-Proxy (
+\begin{DoxyParamCaption}
+\item[{}]{voms = {\ttfamily 'cms\-:/cms/dcms'}, }
+\item[{}]{passphrase = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{namespacegridFunctions_a52fea718b08534d76e61a53dd43e2402}
+
+
+Creates a new vom proxy. 
+
+This function creates a new  voms\-: string 
+\begin{DoxyParams}{Parameters}
+{\em voms,\-:} & the voms group used to set up the server \mbox{[}default\-:cms\-:/cms/dcms\mbox{]}  passphrase\-: string \\
+\hline
+{\em passphrase,\-:} & Passphrase for G\-R\-I\-D certificate \mbox{[}default\-:none\mbox{]}. The password request is send to the prompt if no passphrase given \begin{DoxyVerb}Make a new proxy with a lifetime of one week.\end{DoxyVerb}
+ \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 80 of file grid\-Functions.\-py.
+
+
+
+Referenced by check\-And\-Renew\-Voms\-Proxy().
+
+\index{grid\-Functions@{grid\-Functions}!time\-Left\-Voms\-Proxy@{time\-Left\-Voms\-Proxy}}
+\index{time\-Left\-Voms\-Proxy@{time\-Left\-Voms\-Proxy}!gridFunctions@{grid\-Functions}}
+\subsubsection[{time\-Left\-Voms\-Proxy}]{\setlength{\rightskip}{0pt plus 5cm}def grid\-Functions.\-time\-Left\-Voms\-Proxy (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{namespacegridFunctions_afcaaf26f40337917700fdbba5358c40a}
+
+
+Returns the life time left. 
+
+for a proxy.
+
+\begin{DoxyReturn}{Returns}
+int time left for the proxy 
+\end{DoxyReturn}
+
+
+Definition at line 56 of file grid\-Functions.\-py.
+
+
+
+Referenced by check\-Voms\-Proxy().
+

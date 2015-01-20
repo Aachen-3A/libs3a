@@ -1,0 +1,89 @@
+.TH "test_logging_App" 3 "Tue Jan 20 2015" "libs3a" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+test_logging_App \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBAppWithOwnLogger\fP = False"
+.br
+.ti -1c
+.RI "string \fBCOMMENT_CHAR\fP = '#'"
+.br
+.ti -1c
+.RI "list \fBlog_choices\fP = [ 'ERROR', 'WARNING', 'INFO', 'DEBUG' ]"
+.br
+.ti -1c
+.RI "string \fBdate\fP = '%F %H:%M:%S'"
+.br
+.ti -1c
+.RI "tuple \fBlog\fP = logging\&.getLogger( 'logging_test' )"
+.br
+.ti -1c
+.RI "string \fBformat\fP = '%(levelname)s (%(name)s) [%(asctime)s]: %(message)s'"
+.br
+.ti -1c
+.RI "tuple \fBformatter\fP = logging\&.Formatter( \fBformat\fP )"
+.br
+.ti -1c
+.RI "string \fBlog_file_name\fP = 'logging_test\&.log'"
+.br
+.ti -1c
+.RI "tuple \fBhdlr\fP = logging\&.FileHandler( \fBlog_file_name\fP, mode='w' )"
+.br
+.ti -1c
+.RI "tuple \fBmyTester\fP = \fBLoggerTester\fP(logger = \fBlog\fP)"
+.br
+.in -1c
+.SH "Variable Documentation"
+.PP 
+.SS "test_logging_App\&.AppWithOwnLogger = False"
+
+.PP
+Definition at line 5 of file test_logging_App\&.py\&.
+.SS "string test_logging_App\&.COMMENT_CHAR = '#'"
+
+.PP
+Definition at line 9 of file test_logging_App\&.py\&.
+.SS "string test_logging_App\&.date = '%F %H:%M:%S'"
+
+.PP
+Definition at line 11 of file test_logging_App\&.py\&.
+.SS "string test_logging_App\&.format = '%(levelname)s (%(name)s) [%(asctime)s]: %(message)s'"
+
+.PP
+Definition at line 17 of file test_logging_App\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&._drawColHeaders(), curseshelpers\&.SelectTable\&._drawFooters(), curseshelpers\&.MultiText\&._redraw(), curseshelpers\&.TabbedText\&._redrawHeading(), curseshelpers\&.SelectTable\&._redrawRows(), rounding\&.rounding\&.htmlValue(), rounding\&.rounding\&.htmlValueError(), rounding\&.rounding\&.htmlValueUpDownError(), rounding\&.rounding\&.latexValue(), rounding\&.rounding\&.latexValueError(), rounding\&.rounding\&.latexValueUpDownError(), rounding\&.rounding\&.sdr(), and terminalFunctions\&.update_progress()\&.
+.SS "tuple test_logging_App\&.formatter = logging\&.Formatter( \fBformat\fP )"
+
+.PP
+Definition at line 19 of file test_logging_App\&.py\&.
+.SS "tuple test_logging_App\&.hdlr = logging\&.FileHandler( \fBlog_file_name\fP, mode='w' )"
+
+.PP
+Definition at line 21 of file test_logging_App\&.py\&.
+.SS "tuple test_logging_App\&.log = logging\&.getLogger( 'logging_test' )"
+
+.PP
+Definition at line 14 of file test_logging_App\&.py\&.
+.SS "list test_logging_App\&.log_choices = [ 'ERROR', 'WARNING', 'INFO', 'DEBUG' ]"
+
+.PP
+Definition at line 10 of file test_logging_App\&.py\&.
+.SS "string test_logging_App\&.log_file_name = 'logging_test\&.log'"
+
+.PP
+Definition at line 20 of file test_logging_App\&.py\&.
+.SS "tuple test_logging_App\&.myTester = \fBLoggerTester\fP(logger = \fBlog\fP)"
+
+.PP
+Definition at line 26 of file test_logging_App\&.py\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libs3a from the source code\&.

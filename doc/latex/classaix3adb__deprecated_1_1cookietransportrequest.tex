@@ -1,0 +1,130 @@
+\section{aix3adb\-\_\-deprecated.\-cookietransportrequest Class Reference}
+\label{classaix3adb__deprecated_1_1cookietransportrequest}\index{aix3adb\-\_\-deprecated.\-cookietransportrequest@{aix3adb\-\_\-deprecated.\-cookietransportrequest}}
+
+
+Inheritance diagram for aix3adb\-\_\-deprecated.\-cookietransportrequest\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classaix3adb__deprecated_1_1cookietransportrequest__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classaix3adb__deprecated_1_1cookietransportrequest_acf43b8f249daa9082719e48a1ea44f76}{setcookies}
+\item 
+def \hyperlink{classaix3adb__deprecated_1_1cookietransportrequest_a4b9a895b37c002bdc485015d03457660}{send\-\_\-cookies}
+\item 
+def \hyperlink{classaix3adb__deprecated_1_1cookietransportrequest_a35f43ced122820fb822fa1a374e57b29}{request}
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classaix3adb__deprecated_1_1cookietransportrequest_ae36266a6aa31661800c755fe26803b03}{cookies}
+\item 
+\hyperlink{classaix3adb__deprecated_1_1cookietransportrequest_a21e8556ecdb0c551303044fe0584f296}{verbose}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+list \hyperlink{classaix3adb__deprecated_1_1cookietransportrequest_af3590dbaf2529939c8ee22788c807806}{cookies} = \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}A Transport request method that retains cookies over its lifetime.
+
+The regular xmlrpclib transports ignore cookies. Which causes
+a bit of a problem when you need a cookie-based login, as with
+the Bugzilla XMLRPC interface.
+
+So this is a helper for defining a Transport which looks for
+cookies being set in responses and saves them to add to all future
+requests.
+\end{DoxyVerb}
+ 
+
+Definition at line 120 of file aix3adb\-\_\-deprecated.\-py.
+
+
+
+\subsection{Member Function Documentation}
+\index{aix3adb\-\_\-deprecated\-::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}!request@{request}}
+\index{request@{request}!aix3adb_deprecated::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}}
+\subsubsection[{request}]{\setlength{\rightskip}{0pt plus 5cm}def aix3adb\-\_\-deprecated.\-cookietransportrequest.\-request (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{host, }
+\item[{}]{handler, }
+\item[{}]{request\-\_\-body, }
+\item[{}]{verbose = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{classaix3adb__deprecated_1_1cookietransportrequest_a35f43ced122820fb822fa1a374e57b29}
+
+
+Definition at line 153 of file aix3adb\-\_\-deprecated.\-py.
+
+\index{aix3adb\-\_\-deprecated\-::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}!send\-\_\-cookies@{send\-\_\-cookies}}
+\index{send\-\_\-cookies@{send\-\_\-cookies}!aix3adb_deprecated::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}}
+\subsubsection[{send\-\_\-cookies}]{\setlength{\rightskip}{0pt plus 5cm}def aix3adb\-\_\-deprecated.\-cookietransportrequest.\-send\-\_\-cookies (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{connection}
+\end{DoxyParamCaption}
+)}\label{classaix3adb__deprecated_1_1cookietransportrequest_a4b9a895b37c002bdc485015d03457660}
+
+
+Definition at line 148 of file aix3adb\-\_\-deprecated.\-py.
+
+
+
+References aix3adb\-\_\-deprecated.\-cookietransportrequest.\-cookies, and aix3adb.\-cookietransportrequest.\-cookies.
+
+\index{aix3adb\-\_\-deprecated\-::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}!setcookies@{setcookies}}
+\index{setcookies@{setcookies}!aix3adb_deprecated::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}}
+\subsubsection[{setcookies}]{\setlength{\rightskip}{0pt plus 5cm}def aix3adb\-\_\-deprecated.\-cookietransportrequest.\-setcookies (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{cookiefile, }
+\item[{}]{domain}
+\end{DoxyParamCaption}
+)}\label{classaix3adb__deprecated_1_1cookietransportrequest_acf43b8f249daa9082719e48a1ea44f76}
+
+
+Definition at line 141 of file aix3adb\-\_\-deprecated.\-py.
+
+
+
+\subsection{Member Data Documentation}
+\index{aix3adb\-\_\-deprecated\-::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}!cookies@{cookies}}
+\index{cookies@{cookies}!aix3adb_deprecated::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}}
+\subsubsection[{cookies}]{\setlength{\rightskip}{0pt plus 5cm}list aix3adb\-\_\-deprecated.\-cookietransportrequest.\-cookies = \mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [static]}}\label{classaix3adb__deprecated_1_1cookietransportrequest_af3590dbaf2529939c8ee22788c807806}
+
+
+Definition at line 140 of file aix3adb\-\_\-deprecated.\-py.
+
+
+
+Referenced by aix3adb\-\_\-deprecated.\-cookietransportrequest.\-send\-\_\-cookies().
+
+\index{aix3adb\-\_\-deprecated\-::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}!cookies@{cookies}}
+\index{cookies@{cookies}!aix3adb_deprecated::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}}
+\subsubsection[{cookies}]{\setlength{\rightskip}{0pt plus 5cm}aix3adb\-\_\-deprecated.\-cookietransportrequest.\-cookies}\label{classaix3adb__deprecated_1_1cookietransportrequest_ae36266a6aa31661800c755fe26803b03}
+
+
+Definition at line 142 of file aix3adb\-\_\-deprecated.\-py.
+
+\index{aix3adb\-\_\-deprecated\-::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}!verbose@{verbose}}
+\index{verbose@{verbose}!aix3adb_deprecated::cookietransportrequest@{aix3adb\-\_\-deprecated\-::cookietransportrequest}}
+\subsubsection[{verbose}]{\setlength{\rightskip}{0pt plus 5cm}aix3adb\-\_\-deprecated.\-cookietransportrequest.\-verbose}\label{classaix3adb__deprecated_1_1cookietransportrequest_a21e8556ecdb0c551303044fe0584f296}
+
+
+Definition at line 154 of file aix3adb\-\_\-deprecated.\-py.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+python/\hyperlink{aix3adb__deprecated_8py}{aix3adb\-\_\-deprecated.\-py}\end{DoxyCompactItemize}

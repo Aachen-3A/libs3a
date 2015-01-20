@@ -1,0 +1,88 @@
+.TH "lheanalyzer.LHEAnalysis" 3 "Tue Jan 20 2015" "libs3a" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+lheanalyzer.LHEAnalysis \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fB__iter__\fP"
+.br
+.ti -1c
+.RI "def \fBnext\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBlhefile\fP"
+.br
+.ti -1c
+.RI "\fBnProcesses\fP"
+.br
+.ti -1c
+.RI "\fBprocesses\fP"
+.br
+.in -1c
+.SS "Properties"
+
+.in +1c
+.ti -1c
+.RI "\fBtotalCrossSection\fP = property(lambda self: sum(p\&.crossSection for p in self\&.processes))"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 75 of file lheanalyzer\&.py\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "def lheanalyzer\&.LHEAnalysis\&.__init__ (self, filename)"
+
+.PP
+Definition at line 76 of file lheanalyzer\&.py\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "def lheanalyzer\&.LHEAnalysis\&.__iter__ (self)"
+
+.PP
+Definition at line 92 of file lheanalyzer\&.py\&.
+.SS "def lheanalyzer\&.LHEAnalysis\&.next (self)"
+
+.PP
+Definition at line 94 of file lheanalyzer\&.py\&.
+.PP
+References lheanalyzer\&.LHEAnalysis\&.lhefile\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "lheanalyzer\&.LHEAnalysis\&.lhefile"
+
+.PP
+Definition at line 77 of file lheanalyzer\&.py\&.
+.PP
+Referenced by lheanalyzer\&.LHEAnalysis\&.next()\&.
+.SS "lheanalyzer\&.LHEAnalysis\&.nProcesses"
+
+.PP
+Definition at line 81 of file lheanalyzer\&.py\&.
+.SS "lheanalyzer\&.LHEAnalysis\&.processes"
+
+.PP
+Definition at line 84 of file lheanalyzer\&.py\&.
+.SH "Property Documentation"
+.PP 
+.SS "lheanalyzer\&.LHEAnalysis\&.totalCrossSection = property(lambda self: sum(p\&.crossSection for p in self\&.processes))\fC [static]\fP"
+
+.PP
+Definition at line 116 of file lheanalyzer\&.py\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libs3a from the source code\&.

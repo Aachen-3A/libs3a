@@ -1,0 +1,186 @@
+.TH "html_to_bash_ascii_converter" 3 "Tue Jan 20 2015" "libs3a" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+html_to_bash_ascii_converter \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB_str2hex\fP"
+.br
+.ti -1c
+.RI "def \fB_strip_hash\fP"
+.br
+.ti -1c
+.RI "def \fB_create_dicts\fP"
+.br
+.ti -1c
+.RI "def \fBshort2rgb\fP"
+.br
+.ti -1c
+.RI "def \fBprint_all\fP"
+.br
+.ti -1c
+.RI "def \fBrgb2short\fP"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "string \fB__author__\fP = 'Micah Elliott http://MicahElliott\&.com'"
+.br
+.ti -1c
+.RI "string \fB__version__\fP = '0\&.1'"
+.br
+.ti -1c
+.RI "string \fB__copyright__\fP = 'Copyright (C) 2011 Micah Elliott\&. All rights reserved\&.'"
+.br
+.ti -1c
+.RI "string \fB__license__\fP = 'WTFPL http://sam\&.zoy\&.org/wtfpl/'"
+.br
+.ti -1c
+.RI "list \fBCLUT\fP"
+.br
+.ti -1c
+.RI "tuple \fBfile_name\fP = raw_input('Give me a \fBfile\fP name to convert!')"
+.br
+.ti -1c
+.RI "tuple \fBfile_out\fP = raw_input('Give me an output \fBfile\fP name!')"
+.br
+.ti -1c
+.RI "tuple \fBins\fP = open( \fBfile_name\fP, 'r' )"
+.br
+.ti -1c
+.RI "list \fBarray\fP = []"
+.br
+.ti -1c
+.RI "list \fBnew_array\fP = []"
+.br
+.ti -1c
+.RI "\fBdummy\fP = item"
+.br
+.ti -1c
+.RI "list \fBdummy2\fP = \fBdummy\fP[dummy\&.find('<span'):dummy\&.find(';'>')+3] arg = \fBdummy\fP[dummy\&.find(': #')+3:dummy\&.find(';'>')]"
+.br
+.ti -1c
+.RI "tuple \fBfile\fP = open(\fBfile_out\fP, 'w')"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "def html_to_bash_ascii_converter\&._create_dicts ()\fC [private]\fP"
+
+.PP
+Definition at line 303 of file html_to_bash_ascii_converter\&.py\&.
+.PP
+Referenced by rgb2short()\&.
+.SS "def html_to_bash_ascii_converter\&._str2hex (hexstr)\fC [private]\fP"
+
+.PP
+Definition at line 294 of file html_to_bash_ascii_converter\&.py\&.
+.SS "def html_to_bash_ascii_converter\&._strip_hash (rgb)\fC [private]\fP"
+
+.PP
+Definition at line 297 of file html_to_bash_ascii_converter\&.py\&.
+.PP
+Referenced by rgb2short()\&.
+.SS "def html_to_bash_ascii_converter\&.print_all ()"
+
+.PP
+.nf
+Print all 256 xterm color codes.
+
+.fi
+.PP
+ 
+.PP
+Definition at line 313 of file html_to_bash_ascii_converter\&.py\&.
+.SS "def html_to_bash_ascii_converter\&.rgb2short (rgb)"
+
+.PP
+.nf
+Find the closest xterm-256 approximation to the given RGB value.
+@param rgb: Hex code representing an RGB value, eg, 'abcdef'
+@returns: String between 0 and 255, compatible with xterm.
+>>> rgb2short('123456')
+('23', '005f5f')
+>>> rgb2short('ffffff')
+('231', 'ffffff')
+>>> rgb2short('0DADD6') # vimeo logo
+('38', '00afd7')
+
+.fi
+.PP
+ 
+.PP
+Definition at line 324 of file html_to_bash_ascii_converter\&.py\&.
+.PP
+References _create_dicts(), and _strip_hash()\&.
+.SS "def html_to_bash_ascii_converter\&.short2rgb (short)"
+
+.PP
+Definition at line 310 of file html_to_bash_ascii_converter\&.py\&.
+.SH "Variable Documentation"
+.PP 
+.SS "string html_to_bash_ascii_converter\&.__author__ = 'Micah Elliott http://MicahElliott\&.com'"
+
+.PP
+Definition at line 17 of file html_to_bash_ascii_converter\&.py\&.
+.SS "string html_to_bash_ascii_converter\&.__copyright__ = 'Copyright (C) 2011 Micah Elliott\&. All rights reserved\&.'"
+
+.PP
+Definition at line 19 of file html_to_bash_ascii_converter\&.py\&.
+.SS "string html_to_bash_ascii_converter\&.__license__ = 'WTFPL http://sam\&.zoy\&.org/wtfpl/'"
+
+.PP
+Definition at line 20 of file html_to_bash_ascii_converter\&.py\&.
+.SS "string html_to_bash_ascii_converter\&.__version__ = '0\&.1'"
+
+.PP
+Definition at line 18 of file html_to_bash_ascii_converter\&.py\&.
+.SS "list html_to_bash_ascii_converter\&.array = []"
+
+.PP
+Definition at line 370 of file html_to_bash_ascii_converter\&.py\&.
+.SS "list html_to_bash_ascii_converter\&.CLUT"
+
+.PP
+Definition at line 26 of file html_to_bash_ascii_converter\&.py\&.
+.SS "tuple html_to_bash_ascii_converter\&.dummy = item"
+
+.PP
+Definition at line 380 of file html_to_bash_ascii_converter\&.py\&.
+.PP
+Referenced by HistClass\&.CreateHisto(), HistClass\&.CreateNSparse(), HistClass\&.CreateTree(), HistClass\&.Fill(), HistClass\&.FillTree(), HistClass\&.NameBins(), HistClass\&.ReturnHist(), HistClass\&.SetToZero(), HistClass\&.Write(), and HistClass\&.Write2()\&.
+.SS "list html_to_bash_ascii_converter\&.dummy2 = \fBdummy\fP[dummy\&.find('<span'):dummy\&.find(';'>')+3] arg = \fBdummy\fP[dummy\&.find(': #')+3:dummy\&.find(';'>')]"
+
+.PP
+Definition at line 384 of file html_to_bash_ascii_converter\&.py\&.
+.SS "tuple html_to_bash_ascii_converter\&.file = open(\fBfile_out\fP, 'w')"
+
+.PP
+Definition at line 391 of file html_to_bash_ascii_converter\&.py\&.
+.SS "tuple html_to_bash_ascii_converter\&.file_name = raw_input('Give me a \fBfile\fP name to convert!')"
+
+.PP
+Definition at line 366 of file html_to_bash_ascii_converter\&.py\&.
+.SS "tuple html_to_bash_ascii_converter\&.file_out = raw_input('Give me an output \fBfile\fP name!')"
+
+.PP
+Definition at line 367 of file html_to_bash_ascii_converter\&.py\&.
+.SS "tuple html_to_bash_ascii_converter\&.ins = open( \fBfile_name\fP, 'r' )"
+
+.PP
+Definition at line 369 of file html_to_bash_ascii_converter\&.py\&.
+.SS "list html_to_bash_ascii_converter\&.new_array = []"
+
+.PP
+Definition at line 375 of file html_to_bash_ascii_converter\&.py\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libs3a from the source code\&.

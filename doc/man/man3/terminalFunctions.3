@@ -1,0 +1,73 @@
+.TH "terminalFunctions" 3 "Tue Jan 20 2015" "libs3a" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+terminalFunctions \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBpy\fP"
+.br
+.RI "\fIFunctions to be used for terminal output\&. \fP"
+.in -1c
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBbcolors\fP"
+.br
+.RI "\fIColor definition for terminal output\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fBgetTerminalSize\fP"
+.br
+.RI "\fIFunction to get the size of the terminal\&. \fP"
+.ti -1c
+.RI "def \fBupdate_progress\fP"
+.br
+.RI "\fIFunction to create and update a progress bar\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "def terminalFunctions\&.getTerminalSize ()"
+
+.PP
+Function to get the size of the terminal\&. Reads the width and height of the current terminal and returns this two values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIint(cr[1])\fP Width of the terminal 
+.br
+\fIint(cr[0])\fP Height of the terminal 
+.RE
+.PP
+
+.PP
+Definition at line 37 of file terminalFunctions\&.py\&.
+.PP
+Referenced by update_progress()\&.
+.SS "def terminalFunctions\&.update_progress (progress)"
+
+.PP
+Function to create and update a progress bar\&. This function displays or updates a console progress bar It accepts a float between 0 and 1\&. Any int will be converted to a float\&. A value under 0 represents a 'halt'\&. A value at 1 or bigger represents 100% 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIprogress\fP Relative progress that should be displayed 
+.RE
+.PP
+
+.PP
+Definition at line 66 of file terminalFunctions\&.py\&.
+.PP
+References test_logging_App\&.format, and getTerminalSize()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libs3a from the source code\&.

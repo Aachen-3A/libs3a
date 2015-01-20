@@ -1,0 +1,434 @@
+\section{cesubmit.\-Task Class Reference}
+\label{classcesubmit_1_1Task}\index{cesubmit.\-Task@{cesubmit.\-Task}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classcesubmit_1_1Task_aee6831424f4d7fd659c6a6b639efd238}{load}
+\item 
+def \hyperlink{classcesubmit_1_1Task_aff828e186b899e217ee4f60987576e59}{\-\_\-\-\_\-init\-\_\-\-\_\-}
+\item 
+def \hyperlink{classcesubmit_1_1Task_a01bdfde6cc1a23bcd363717fdd0cbb6e}{save}
+\item 
+def \hyperlink{classcesubmit_1_1Task_af83f9793281dcbd6e6ab011e3fd6c465}{add\-Job}
+\item 
+def \hyperlink{classcesubmit_1_1Task_a50c5a9efd1974e36b65ce326eb171e31}{submit}
+\item 
+def \hyperlink{classcesubmit_1_1Task_affb177e2f520b7ffd8ff19fa179f9f03}{resubmit}
+\item 
+def \hyperlink{classcesubmit_1_1Task_ad5c7602dc51072e015ea4b1dd97cf90b}{kill}
+\item 
+def \hyperlink{classcesubmit_1_1Task_a010c41f086e8fa7b616a8d2adfb2a72b}{make\-Prologue}
+\item 
+def \hyperlink{classcesubmit_1_1Task_a0fa513308849221894249562aa0c6be4}{createdir}
+\item 
+def \hyperlink{classcesubmit_1_1Task_abbb49773518082b0c314107191470eb2}{get\-Status}
+\item 
+def \hyperlink{classcesubmit_1_1Task_a2730e4477f76eace94644b3e54e85b14}{get\-Output}
+\item 
+def \hyperlink{classcesubmit_1_1Task_ab453b2d52e3ad6bb231e5a5bcf1f017a}{job\-Status\-Numbers}
+\item 
+def \hyperlink{classcesubmit_1_1Task_a3a7d1994bc5941930ac6981a55423ef5}{clean\-Up}
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcesubmit_1_1Task_a05a05a652fe678e897ec90fb3c9a4da6}{name}
+\item 
+\hyperlink{classcesubmit_1_1Task_a2cfde474eb274595ca1cce02f1e0b632}{directory}
+\item 
+\hyperlink{classcesubmit_1_1Task_a7163d12ce0e40c4479b05288f6d53411}{jdlfilename}
+\item 
+\hyperlink{classcesubmit_1_1Task_a5c27809386cdeaffd495829a3f346431}{executable}
+\item 
+\hyperlink{classcesubmit_1_1Task_a19285f65074058f8dcd56a7b3feb9e20}{mode}
+\item 
+\hyperlink{classcesubmit_1_1Task_a56c50586fa3366ae571fce3dd62d84a8}{scram\-Arch}
+\item 
+\hyperlink{classcesubmit_1_1Task_a0bf8a8d8c4c49df8c4f71964ce9fce68}{cmssw\-Version}
+\item 
+\hyperlink{classcesubmit_1_1Task_a9888ef44d84b3fdcd0ec8d95079eba5a}{ce\-Id}
+\item 
+\hyperlink{classcesubmit_1_1Task_acbe8ce4419b6f1b0106adc365b9b48a2}{jobs}
+\item 
+\hyperlink{classcesubmit_1_1Task_a659e4563ce34de5c1e9d5203a2e6851f}{front\-End\-Status}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classcesubmit_1_1Task_a1e06547f3c97e443e99d9e500287d46f}{\-\_\-dosubmit}
+\item 
+def \hyperlink{classcesubmit_1_1Task_a7ae331d7f15eb5bb2b43a6055d2cb7ae}{\-\_\-get\-Status\-Multiple}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 169 of file cesubmit.\-py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}}
+\index{\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{\-\_\-\-\_\-init\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-\_\-\-\_\-init\-\_\-\-\_\- (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{name, }
+\item[{}]{directory = {\ttfamily None}, }
+\item[{}]{mode = {\ttfamily \char`\"{}RECREATE\char`\"{}}, }
+\item[{}]{scram\-Arch = {\ttfamily 'slc5\-\_\-amd64\-\_\-gcc462'}, }
+\item[{}]{cmssw\-Version = {\ttfamily 'CMSSW\-\_\-5\-\_\-3\-\_\-14'}, }
+\item[{}]{ce\-Id = {\ttfamily 'grid-\/ce.physik.rwth-\/aachen.de\-:8443/cream-\/pbs-\/cms'}}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_aff828e186b899e217ee4f60987576e59}
+
+
+Definition at line 181 of file cesubmit.\-py.
+
+
+
+\subsection{Member Function Documentation}
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!\-\_\-dosubmit@{\-\_\-dosubmit}}
+\index{\-\_\-dosubmit@{\-\_\-dosubmit}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{\-\_\-dosubmit}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-\_\-dosubmit (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{nodeids, }
+\item[{}]{processes, }
+\item[{}]{worker}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classcesubmit_1_1Task_a1e06547f3c97e443e99d9e500287d46f}
+
+
+Definition at line 233 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-jobs.
+
+
+
+Referenced by cesubmit.\-Task.\-kill(), cesubmit.\-Task.\-resubmit(), and cesubmit.\-Task.\-submit().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!\-\_\-get\-Status\-Multiple@{\-\_\-get\-Status\-Multiple}}
+\index{\-\_\-get\-Status\-Multiple@{\-\_\-get\-Status\-Multiple}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{\-\_\-get\-Status\-Multiple}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-\_\-get\-Status\-Multiple (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classcesubmit_1_1Task_a7ae331d7f15eb5bb2b43a6055d2cb7ae}
+
+
+Definition at line 303 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-jobs, cesubmit.\-Task.\-name, and cesubmit.\-parse\-Status\-Multiple\-L1().
+
+
+
+Referenced by cesubmit.\-Task.\-get\-Status().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!add\-Job@{add\-Job}}
+\index{add\-Job@{add\-Job}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{add\-Job}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-add\-Job (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{job}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_af83f9793281dcbd6e6ab011e3fd6c465}
+
+
+Definition at line 207 of file cesubmit.\-py.
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!clean\-Up@{clean\-Up}}
+\index{clean\-Up@{clean\-Up}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{clean\-Up}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-clean\-Up (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_a3a7d1994bc5941930ac6981a55423ef5}
+
+
+Definition at line 396 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-directory, cesubmit.\-Task.\-jobs, and cesubmit.\-Task.\-name.
+
+
+
+Referenced by cesubmit.\-Task.\-kill(), and cesubmit.\-Task.\-resubmit().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!createdir@{createdir}}
+\index{createdir@{createdir}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{createdir}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-createdir (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_a0fa513308849221894249562aa0c6be4}
+
+
+Definition at line 297 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-directory, and cesubmit.\-Task.\-mode.
+
+
+
+Referenced by cesubmit.\-Task.\-submit().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!get\-Output@{get\-Output}}
+\index{get\-Output@{get\-Output}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{get\-Output}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-get\-Output (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{connections = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_a2730e4477f76eace94644b3e54e85b14}
+
+
+Definition at line 348 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-chunks(), cesubmit.\-Task.\-directory, cesubmit.\-Task.\-jobs, cesubmit.\-Task.\-name, cesubmit.\-parse\-Get\-Output(), and cesubmit.\-Task.\-save().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!get\-Status@{get\-Status}}
+\index{get\-Status@{get\-Status}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{get\-Status}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-get\-Status (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_abbb49773518082b0c314107191470eb2}
+
+
+Definition at line 325 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-\_\-get\-Status\-Multiple(), cesubmit.\-Job.\-front\-End\-Status, cesubmit.\-Task.\-front\-End\-Status, cesubmit.\-Task.\-jobs, cesubmit.\-Task.\-name, and cesubmit.\-Task.\-save().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!job\-Status\-Numbers@{job\-Status\-Numbers}}
+\index{job\-Status\-Numbers@{job\-Status\-Numbers}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{job\-Status\-Numbers}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-job\-Status\-Numbers (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_ab453b2d52e3ad6bb231e5a5bcf1f017a}
+
+
+Definition at line 375 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-jobs.
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!kill@{kill}}
+\index{kill@{kill}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{kill}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-kill (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{nodeids, }
+\item[{}]{processes = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_ad5c7602dc51072e015ea4b1dd97cf90b}
+
+
+Definition at line 257 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-\_\-dosubmit(), cesubmit.\-Task.\-clean\-Up(), cesubmit.\-Task.\-name, and cesubmit.\-Task.\-save().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!load@{load}}
+\index{load@{load}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{load}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-load (
+\begin{DoxyParamCaption}
+\item[{}]{cls, }
+\item[{}]{directory}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_aee6831424f4d7fd659c6a6b639efd238}
+
+
+Definition at line 171 of file cesubmit.\-py.
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!make\-Prologue@{make\-Prologue}}
+\index{make\-Prologue@{make\-Prologue}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{make\-Prologue}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-make\-Prologue (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_a010c41f086e8fa7b616a8d2adfb2a72b}
+
+
+Definition at line 263 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-cmssw\-Version, and cesubmit.\-Task.\-scram\-Arch.
+
+
+
+Referenced by cesubmit.\-Task.\-submit().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!resubmit@{resubmit}}
+\index{resubmit@{resubmit}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{resubmit}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-resubmit (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{nodeids, }
+\item[{}]{processes = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_affb177e2f520b7ffd8ff19fa179f9f03}
+
+
+Definition at line 250 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-\_\-dosubmit(), cesubmit.\-Task.\-clean\-Up(), cesubmit.\-Job.\-front\-End\-Status, cesubmit.\-Task.\-front\-End\-Status, cesubmit.\-Task.\-name, and cesubmit.\-Task.\-save().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!save@{save}}
+\index{save@{save}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{save}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-save (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_a01bdfde6cc1a23bcd363717fdd0cbb6e}
+
+
+Definition at line 195 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-directory, cesubmit.\-Task.\-jobs, and cesubmit.\-Task.\-name.
+
+
+
+Referenced by cesubmit.\-Task.\-get\-Output(), cesubmit.\-Task.\-get\-Status(), cesubmit.\-Task.\-kill(), cesubmit.\-Task.\-resubmit(), and cesubmit.\-Task.\-submit().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!submit@{submit}}
+\index{submit@{submit}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{submit}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-Task.\-submit (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{processes = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{classcesubmit_1_1Task_a50c5a9efd1974e36b65ce326eb171e31}
+
+
+Definition at line 210 of file cesubmit.\-py.
+
+
+
+References cesubmit.\-Task.\-\_\-dosubmit(), cesubmit.\-check\-And\-Renew\-Voms\-Proxy(), cesubmit.\-Task.\-createdir(), cesubmit.\-Task.\-directory, cesubmit.\-Job.\-front\-End\-Status, cesubmit.\-Task.\-front\-End\-Status, cesubmit.\-Task.\-jobs, cesubmit.\-Task.\-make\-Prologue(), cesubmit.\-Task.\-name, and cesubmit.\-Task.\-save().
+
+
+
+\subsection{Member Data Documentation}
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!ce\-Id@{ce\-Id}}
+\index{ce\-Id@{ce\-Id}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{ce\-Id}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-ce\-Id}\label{classcesubmit_1_1Task_a9888ef44d84b3fdcd0ec8d95079eba5a}
+
+
+Definition at line 192 of file cesubmit.\-py.
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!cmssw\-Version@{cmssw\-Version}}
+\index{cmssw\-Version@{cmssw\-Version}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{cmssw\-Version}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-cmssw\-Version}\label{classcesubmit_1_1Task_a0bf8a8d8c4c49df8c4f71964ce9fce68}
+
+
+Definition at line 191 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-make\-Prologue().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!directory@{directory}}
+\index{directory@{directory}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{directory}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-directory}\label{classcesubmit_1_1Task_a2cfde474eb274595ca1cce02f1e0b632}
+
+
+Definition at line 183 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-clean\-Up(), cesubmit.\-Task.\-createdir(), cesubmit.\-Task.\-get\-Output(), cesubmit.\-Task.\-save(), and cesubmit.\-Task.\-submit().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!executable@{executable}}
+\index{executable@{executable}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{executable}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-executable}\label{classcesubmit_1_1Task_a5c27809386cdeaffd495829a3f346431}
+
+
+Definition at line 188 of file cesubmit.\-py.
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!front\-End\-Status@{front\-End\-Status}}
+\index{front\-End\-Status@{front\-End\-Status}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{front\-End\-Status}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-front\-End\-Status}\label{classcesubmit_1_1Task_a659e4563ce34de5c1e9d5203a2e6851f}
+
+
+Definition at line 194 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-get\-Status(), cesubmit.\-Task.\-resubmit(), and cesubmit.\-Task.\-submit().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!jdlfilename@{jdlfilename}}
+\index{jdlfilename@{jdlfilename}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{jdlfilename}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-jdlfilename}\label{classcesubmit_1_1Task_a7163d12ce0e40c4479b05288f6d53411}
+
+
+Definition at line 187 of file cesubmit.\-py.
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!jobs@{jobs}}
+\index{jobs@{jobs}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{jobs}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-jobs}\label{classcesubmit_1_1Task_acbe8ce4419b6f1b0106adc365b9b48a2}
+
+
+Definition at line 193 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-\_\-dosubmit(), cesubmit.\-Task.\-\_\-get\-Status\-Multiple(), cesubmit.\-Task.\-clean\-Up(), cesubmit.\-Task.\-get\-Output(), cesubmit.\-Task.\-get\-Status(), cesubmit.\-Task.\-job\-Status\-Numbers(), cesubmit.\-Task.\-save(), cesubmit.\-Task.\-submit(), crab\-Functions.\-Crab\-Task.\-update(), and crab\-Functions.\-Crab\-Task.\-update\-Job\-Stats().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!mode@{mode}}
+\index{mode@{mode}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{mode}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-mode}\label{classcesubmit_1_1Task_a19285f65074058f8dcd56a7b3feb9e20}
+
+
+Definition at line 189 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-createdir().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!name@{name}}
+\index{name@{name}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{name}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-name}\label{classcesubmit_1_1Task_a05a05a652fe678e897ec90fb3c9a4da6}
+
+
+Definition at line 182 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-\_\-get\-Status\-Multiple(), cesubmit.\-Task.\-clean\-Up(), cesubmit.\-Task.\-get\-Output(), cesubmit.\-Task.\-get\-Status(), cesubmit.\-Task.\-kill(), cesubmit.\-Task.\-resubmit(), cesubmit.\-Task.\-save(), cesubmit.\-Task.\-submit(), and crab\-Functions.\-Crab\-Task.\-update().
+
+\index{cesubmit\-::\-Task@{cesubmit\-::\-Task}!scram\-Arch@{scram\-Arch}}
+\index{scram\-Arch@{scram\-Arch}!cesubmit::Task@{cesubmit\-::\-Task}}
+\subsubsection[{scram\-Arch}]{\setlength{\rightskip}{0pt plus 5cm}cesubmit.\-Task.\-scram\-Arch}\label{classcesubmit_1_1Task_a56c50586fa3366ae571fce3dd62d84a8}
+
+
+Definition at line 190 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-make\-Prologue().
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+python/\hyperlink{cesubmit_8py}{cesubmit.\-py}\end{DoxyCompactItemize}

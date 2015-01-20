@@ -1,0 +1,147 @@
+.TH "lheanalyzer.Particle" 3 "Tue Jan 20 2015" "libs3a" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+lheanalyzer.Particle \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBgetTLorentzVector\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBspin\fP"
+.br
+.in -1c
+.SS "Properties"
+
+.in +1c
+.ti -1c
+.RI "\fBpx\fP = property(lambda self: self\&.momentum[0])"
+.br
+.ti -1c
+.RI "\fBpy\fP = property(lambda self: self\&.momentum[1])"
+.br
+.ti -1c
+.RI "\fBpz\fP = property(lambda self: self\&.momentum[2])"
+.br
+.ti -1c
+.RI "\fBenergy\fP = property(lambda self: self\&.momentum[3])"
+.br
+.ti -1c
+.RI "\fBmass\fP = property(lambda self: self\&.momentum[4])"
+.br
+.ti -1c
+.RI "\fBpt\fP = property(lambda self: (self\&.px**2+self\&.py**2)**0\&.5)"
+.br
+.ti -1c
+.RI "\fBtLorentzVector\fP = property(\fBgetTLorentzVector\fP)"
+.br
+.ti -1c
+.RI "\fBeta\fP = property(lambda self: self\&.tLorentzVector\&.Eta())"
+.br
+.ti -1c
+.RI "\fBphi\fP = property(lambda self: self\&.tLorentzVector\&.Phi())"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+Describes a single particle
+.fi
+.PP
+ 
+.PP
+Definition at line 16 of file lheanalyzer\&.py\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "def lheanalyzer\&.Particle\&.__init__ (self, initstr)"
+
+.PP
+.nf
+Constuctor call with line from lhe file
+.fi
+.PP
+ 
+.PP
+Definition at line 18 of file lheanalyzer\&.py\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "def lheanalyzer\&.Particle\&.getTLorentzVector (self)"
+
+.PP
+.nf
+Returns the ROOT TLorentzVector of the particle
+.fi
+.PP
+ 
+.PP
+Definition at line 22 of file lheanalyzer\&.py\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "lheanalyzer\&.Particle\&.spin"
+
+.PP
+Definition at line 21 of file lheanalyzer\&.py\&.
+.SH "Property Documentation"
+.PP 
+.SS "lheanalyzer\&.Particle\&.energy = property(lambda self: self\&.momentum[3])\fC [static]\fP"
+
+.PP
+Definition at line 28 of file lheanalyzer\&.py\&.
+.PP
+Referenced by lheanalyzer\&.LorentzVector\&.add(), and lheanalyzer\&.LorentzVector\&.invariantMass()\&.
+.SS "lheanalyzer\&.Particle\&.eta = property(lambda self: self\&.tLorentzVector\&.Eta())\fC [static]\fP"
+
+.PP
+Definition at line 32 of file lheanalyzer\&.py\&.
+.SS "lheanalyzer\&.Particle\&.mass = property(lambda self: self\&.momentum[4])\fC [static]\fP"
+
+.PP
+Definition at line 29 of file lheanalyzer\&.py\&.
+.SS "lheanalyzer\&.Particle\&.phi = property(lambda self: self\&.tLorentzVector\&.Phi())\fC [static]\fP"
+
+.PP
+Definition at line 33 of file lheanalyzer\&.py\&.
+.SS "lheanalyzer\&.Particle\&.pt = property(lambda self: (self\&.px**2+self\&.py**2)**0\&.5)\fC [static]\fP"
+
+.PP
+Definition at line 30 of file lheanalyzer\&.py\&.
+.SS "lheanalyzer\&.Particle\&.px = property(lambda self: self\&.momentum[0])\fC [static]\fP"
+
+.PP
+Definition at line 25 of file lheanalyzer\&.py\&.
+.PP
+Referenced by lheanalyzer\&.LorentzVector\&.add(), and lheanalyzer\&.LorentzVector\&.invariantMass()\&.
+.SS "lheanalyzer\&.Particle\&.py = property(lambda self: self\&.momentum[1])\fC [static]\fP"
+
+.PP
+Definition at line 26 of file lheanalyzer\&.py\&.
+.PP
+Referenced by lheanalyzer\&.LorentzVector\&.add(), and lheanalyzer\&.LorentzVector\&.invariantMass()\&.
+.SS "lheanalyzer\&.Particle\&.pz = property(lambda self: self\&.momentum[2])\fC [static]\fP"
+
+.PP
+Definition at line 27 of file lheanalyzer\&.py\&.
+.PP
+Referenced by lheanalyzer\&.LorentzVector\&.add(), and lheanalyzer\&.LorentzVector\&.invariantMass()\&.
+.SS "lheanalyzer\&.Particle\&.tLorentzVector = property(\fBgetTLorentzVector\fP)\fC [static]\fP"
+
+.PP
+Definition at line 31 of file lheanalyzer\&.py\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libs3a from the source code\&.

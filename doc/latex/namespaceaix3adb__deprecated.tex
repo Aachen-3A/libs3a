@@ -1,0 +1,71 @@
+\section{aix3adb\-\_\-deprecated Namespace Reference}
+\label{namespaceaix3adb__deprecated}\index{aix3adb\-\_\-deprecated@{aix3adb\-\_\-deprecated}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classaix3adb__deprecated_1_1aix3adb}{aix3adb}
+\item 
+class \hyperlink{classaix3adb__deprecated_1_1aix3adbAuth}{aix3adb\-Auth}
+\item 
+class \hyperlink{classaix3adb__deprecated_1_1cookietransportrequest}{cookietransportrequest}
+\item 
+class \hyperlink{classaix3adb__deprecated_1_1cookietransport}{cookietransport}
+\item 
+class \hyperlink{classaix3adb__deprecated_1_1cookiesafetransport}{cookiesafetransport}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespaceaix3adb__deprecated_ae8c273eca20fd31b675a28e46f7bab3c}{main}
+\item 
+def \hyperlink{namespaceaix3adb__deprecated_a6ed3538701cfa12539c0d4a3f3693a5a}{transport}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+tuple \hyperlink{namespaceaix3adb__deprecated_a162407c59dacc7621a5caf72adc9b362}{log} = logging.\-get\-Logger( '\hyperlink{classaix3adb__deprecated_1_1aix3adb}{aix3adb}' )
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{aix3adb\-\_\-deprecated@{aix3adb\-\_\-deprecated}!main@{main}}
+\index{main@{main}!aix3adb_deprecated@{aix3adb\-\_\-deprecated}}
+\subsubsection[{main}]{\setlength{\rightskip}{0pt plus 5cm}def aix3adb\-\_\-deprecated.\-main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{namespaceaix3adb__deprecated_ae8c273eca20fd31b675a28e46f7bab3c}
+
+
+Definition at line 115 of file aix3adb\-\_\-deprecated.\-py.
+
+\index{aix3adb\-\_\-deprecated@{aix3adb\-\_\-deprecated}!transport@{transport}}
+\index{transport@{transport}!aix3adb_deprecated@{aix3adb\-\_\-deprecated}}
+\subsubsection[{transport}]{\setlength{\rightskip}{0pt plus 5cm}def aix3adb\-\_\-deprecated.\-transport (
+\begin{DoxyParamCaption}
+\item[{}]{uri}
+\end{DoxyParamCaption}
+)}\label{namespaceaix3adb__deprecated_a6ed3538701cfa12539c0d4a3f3693a5a}
+\begin{DoxyVerb}Return an appropriate Transport for the URI.
+
+If the URI type is https, return a CookieSafeTransport.
+If the type is http, return a CookieTransport.
+\end{DoxyVerb}
+ 
+
+Definition at line 200 of file aix3adb\-\_\-deprecated.\-py.
+
+
+
+Referenced by aix3adb\-\_\-deprecated.\-aix3adb.\-get\-Auth\-Server\-Proxy().
+
+
+
+\subsection{Variable Documentation}
+\index{aix3adb\-\_\-deprecated@{aix3adb\-\_\-deprecated}!log@{log}}
+\index{log@{log}!aix3adb_deprecated@{aix3adb\-\_\-deprecated}}
+\subsubsection[{log}]{\setlength{\rightskip}{0pt plus 5cm}tuple aix3adb\-\_\-deprecated.\-log = logging.\-get\-Logger( '{\bf aix3adb}' )}\label{namespaceaix3adb__deprecated_a162407c59dacc7621a5caf72adc9b362}
+
+
+Definition at line 8 of file aix3adb\-\_\-deprecated.\-py.
+

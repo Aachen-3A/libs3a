@@ -1,0 +1,116 @@
+\section{wprime Namespace Reference}
+\label{namespacewprime}\index{wprime@{wprime}}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+tuple \hyperlink{namespacewprime_a63569f7a72dfda59eb510ce76651466c}{parser} = optparse.\-Option\-Parser( description='L\-H\-E Analysis.', usage='usage\-: \%prog files')
+\item 
+tuple \hyperlink{namespacewprime_ab19f1148d5fadc7f1b06601d37f3bd98}{h\-Transverse\-Mass\-All} = R\-O\-O\-T.\-T\-H1\-F(\char`\"{}h\-Transverse\-Mass\-All\char`\"{},\char`\"{}\char`\"{},400,0,8000)
+\item 
+tuple \hyperlink{namespacewprime_ad2dfae94ced65369bf5bcd8262a32357}{h\-Invariant\-Mass\-All} = R\-O\-O\-T.\-T\-H1\-F(\char`\"{}h\-Invariant\-Mass\-All\char`\"{},\char`\"{}\char`\"{},400,0,8000)
+\item 
+tuple \hyperlink{namespacewprime_aaa589daa7007d01a1a492b22539b19c6}{analysis} = \hyperlink{classlheanalyzer_1_1LHEAnalysis}{lheanalyzer.\-L\-H\-E\-Analysis}(filename)
+\item 
+tuple \hyperlink{namespacewprime_a7b192ad124dcdea0625bb9b0c55c6477}{h\-Transverse\-Mass} = R\-O\-O\-T.\-T\-H1\-F(\char`\"{}h\-Transverse\-Mass\char`\"{},\char`\"{}\char`\"{},400,0,8000)
+\item 
+tuple \hyperlink{namespacewprime_a27c3f5d5e385cb00150833fedb9001c0}{h\-Invariant\-Mass} = R\-O\-O\-T.\-T\-H1\-F(\char`\"{}h\-Invariant\-Mass\char`\"{},\char`\"{}\char`\"{},400,0,8000)
+\item 
+tuple \hyperlink{namespacewprime_af629c79a2061f7dcdee447ba6ebe2a7d}{charged} = filter(lambda particle\-: particle.\-pdg\-Id in \mbox{[}-\/15,-\/13,-\/11,11,13,15\mbox{]}, event.\-particles)
+\item 
+tuple \hyperlink{namespacewprime_aa30022404f607643027f776a815f22e8}{neutrino} = filter(lambda particle\-: particle.\-pdg\-Id in \mbox{[}-\/16,-\/14,-\/12,12,14,16\mbox{]}, event.\-particles)
+\item 
+tuple \hyperlink{namespacewprime_ad374268a3fa087dcdcb8aa73f71685b6}{mass} = \hyperlink{namespacelheanalyzer_ac56286ded5530897c81cc13b79edfd59}{lheanalyzer.\-invariant\-Mass}(\hyperlink{namespacewprime_af629c79a2061f7dcdee447ba6ebe2a7d}{charged}\mbox{[}0\mbox{]},\hyperlink{namespacewprime_aa30022404f607643027f776a815f22e8}{neutrino}\mbox{[}0\mbox{]})
+\item 
+tuple \hyperlink{namespacewprime_ab689ae92a992d53349486936abb75b2e}{transverse\-Mass} = lheanalyzer.\-transverse\-Mass(\hyperlink{namespacewprime_af629c79a2061f7dcdee447ba6ebe2a7d}{charged}\mbox{[}0\mbox{]},\hyperlink{namespacewprime_aa30022404f607643027f776a815f22e8}{neutrino}\mbox{[}0\mbox{]})
+\item 
+\hyperlink{namespacewprime_a8b4da92d3cc1e5113fa358ebbda61083}{cross\-Section} = analysis.\-total\-Cross\-Section
+\item 
+tuple \hyperlink{namespacewprime_abc2eda51ac0db27e451c75e1841c7c68}{outfile} = R\-O\-O\-T.\-T\-File(\char`\"{}outfile\-\_\-lheanalyzer.\-root\char`\"{} ,\char`\"{}R\-E\-C\-R\-E\-A\-T\-E\char`\"{})
+\end{DoxyCompactItemize}
+
+
+\subsection{Variable Documentation}
+\index{wprime@{wprime}!analysis@{analysis}}
+\index{analysis@{analysis}!wprime@{wprime}}
+\subsubsection[{analysis}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-analysis = {\bf lheanalyzer.\-L\-H\-E\-Analysis}(filename)}\label{namespacewprime_aaa589daa7007d01a1a492b22539b19c6}
+
+
+Definition at line 22 of file wprime.\-py.
+
+\index{wprime@{wprime}!charged@{charged}}
+\index{charged@{charged}!wprime@{wprime}}
+\subsubsection[{charged}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-charged = filter(lambda particle\-: particle.\-pdg\-Id in \mbox{[}-\/15,-\/13,-\/11,11,13,15\mbox{]}, event.\-particles)}\label{namespacewprime_af629c79a2061f7dcdee447ba6ebe2a7d}
+
+
+Definition at line 36 of file wprime.\-py.
+
+\index{wprime@{wprime}!cross\-Section@{cross\-Section}}
+\index{cross\-Section@{cross\-Section}!wprime@{wprime}}
+\subsubsection[{cross\-Section}]{\setlength{\rightskip}{0pt plus 5cm}wprime.\-cross\-Section = analysis.\-total\-Cross\-Section}\label{namespacewprime_a8b4da92d3cc1e5113fa358ebbda61083}
+
+
+Definition at line 58 of file wprime.\-py.
+
+\index{wprime@{wprime}!h\-Invariant\-Mass@{h\-Invariant\-Mass}}
+\index{h\-Invariant\-Mass@{h\-Invariant\-Mass}!wprime@{wprime}}
+\subsubsection[{h\-Invariant\-Mass}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-h\-Invariant\-Mass = R\-O\-O\-T.\-T\-H1\-F(\char`\"{}h\-Invariant\-Mass\char`\"{},\char`\"{}\char`\"{},400,0,8000)}\label{namespacewprime_a27c3f5d5e385cb00150833fedb9001c0}
+
+
+Definition at line 26 of file wprime.\-py.
+
+\index{wprime@{wprime}!h\-Invariant\-Mass\-All@{h\-Invariant\-Mass\-All}}
+\index{h\-Invariant\-Mass\-All@{h\-Invariant\-Mass\-All}!wprime@{wprime}}
+\subsubsection[{h\-Invariant\-Mass\-All}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-h\-Invariant\-Mass\-All = R\-O\-O\-T.\-T\-H1\-F(\char`\"{}h\-Invariant\-Mass\-All\char`\"{},\char`\"{}\char`\"{},400,0,8000)}\label{namespacewprime_ad2dfae94ced65369bf5bcd8262a32357}
+
+
+Definition at line 20 of file wprime.\-py.
+
+\index{wprime@{wprime}!h\-Transverse\-Mass@{h\-Transverse\-Mass}}
+\index{h\-Transverse\-Mass@{h\-Transverse\-Mass}!wprime@{wprime}}
+\subsubsection[{h\-Transverse\-Mass}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-h\-Transverse\-Mass = R\-O\-O\-T.\-T\-H1\-F(\char`\"{}h\-Transverse\-Mass\char`\"{},\char`\"{}\char`\"{},400,0,8000)}\label{namespacewprime_a7b192ad124dcdea0625bb9b0c55c6477}
+
+
+Definition at line 25 of file wprime.\-py.
+
+\index{wprime@{wprime}!h\-Transverse\-Mass\-All@{h\-Transverse\-Mass\-All}}
+\index{h\-Transverse\-Mass\-All@{h\-Transverse\-Mass\-All}!wprime@{wprime}}
+\subsubsection[{h\-Transverse\-Mass\-All}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-h\-Transverse\-Mass\-All = R\-O\-O\-T.\-T\-H1\-F(\char`\"{}h\-Transverse\-Mass\-All\char`\"{},\char`\"{}\char`\"{},400,0,8000)}\label{namespacewprime_ab19f1148d5fadc7f1b06601d37f3bd98}
+
+
+Definition at line 19 of file wprime.\-py.
+
+\index{wprime@{wprime}!mass@{mass}}
+\index{mass@{mass}!wprime@{wprime}}
+\subsubsection[{mass}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-mass = {\bf lheanalyzer.\-invariant\-Mass}({\bf charged}\mbox{[}0\mbox{]},{\bf neutrino}\mbox{[}0\mbox{]})}\label{namespacewprime_ad374268a3fa087dcdcb8aa73f71685b6}
+
+
+Definition at line 46 of file wprime.\-py.
+
+\index{wprime@{wprime}!neutrino@{neutrino}}
+\index{neutrino@{neutrino}!wprime@{wprime}}
+\subsubsection[{neutrino}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-neutrino = filter(lambda particle\-: particle.\-pdg\-Id in \mbox{[}-\/16,-\/14,-\/12,12,14,16\mbox{]}, event.\-particles)}\label{namespacewprime_aa30022404f607643027f776a815f22e8}
+
+
+Definition at line 41 of file wprime.\-py.
+
+\index{wprime@{wprime}!outfile@{outfile}}
+\index{outfile@{outfile}!wprime@{wprime}}
+\subsubsection[{outfile}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-outfile = R\-O\-O\-T.\-T\-File(\char`\"{}outfile\-\_\-lheanalyzer.\-root\char`\"{} ,\char`\"{}R\-E\-C\-R\-E\-A\-T\-E\char`\"{})}\label{namespacewprime_abc2eda51ac0db27e451c75e1841c7c68}
+
+
+Definition at line 70 of file wprime.\-py.
+
+\index{wprime@{wprime}!parser@{parser}}
+\index{parser@{parser}!wprime@{wprime}}
+\subsubsection[{parser}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-parser = optparse.\-Option\-Parser( description='L\-H\-E Analysis.', usage='usage\-: \%prog files')}\label{namespacewprime_a63569f7a72dfda59eb510ce76651466c}
+
+
+Definition at line 16 of file wprime.\-py.
+
+\index{wprime@{wprime}!transverse\-Mass@{transverse\-Mass}}
+\index{transverse\-Mass@{transverse\-Mass}!wprime@{wprime}}
+\subsubsection[{transverse\-Mass}]{\setlength{\rightskip}{0pt plus 5cm}tuple wprime.\-transverse\-Mass = lheanalyzer.\-transverse\-Mass({\bf charged}\mbox{[}0\mbox{]},{\bf neutrino}\mbox{[}0\mbox{]})}\label{namespacewprime_ab689ae92a992d53349486936abb75b2e}
+
+
+Definition at line 47 of file wprime.\-py.
+

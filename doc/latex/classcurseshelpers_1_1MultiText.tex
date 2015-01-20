@@ -1,0 +1,437 @@
+\section{curseshelpers.\-Multi\-Text Class Reference}
+\label{classcurseshelpers_1_1MultiText}\index{curseshelpers.\-Multi\-Text@{curseshelpers.\-Multi\-Text}}
+
+
+Inheritance diagram for curseshelpers.\-Multi\-Text\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=168pt]{classcurseshelpers_1_1MultiText__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for curseshelpers.\-Multi\-Text\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=168pt]{classcurseshelpers_1_1MultiText__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_a092c852947c920b730db515ec8c43900}{\-\_\-\-\_\-init\-\_\-\-\_\-}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_a9a3d965e98fd46ac82254f98363c6ff1}{clear}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_afa38c3b3e8bb8a76c64ad84859c7f430}{add\-File}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_a6c024dd65942dd21afe22b109c129465}{add\-Text}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_ad1cd0ba7c7f283c27c06b32e190b772d}{refresh}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_ad29d14ccf9b9fec9e89061058e2546d4}{go\-Up}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_a083860f56c08911f4e0eb44a4d241c15}{go\-Down}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_a67e393b4ede829d61ec85d4257f6b8d0}{page\-Up}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_ab1fbe7b83c53775e513d928a8f0070d7}{page\-Down}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_af01001c6c256530bd2aadbf1bc0a9020}{home}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_a8dc0d8b9bc5e97f7a513d577b58125bb}{end}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_a960a1efde4889ee815554403c828d536}{height}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_ab0c9d9997fef6ced56114e0fa4cedc04}{width}
+\item 
+def \hyperlink{classcurseshelpers_1_1BaseElement_a8dad4b03794798c7b6de02554312859f}{go\-Left}
+\item 
+def \hyperlink{classcurseshelpers_1_1BaseElement_aac34d4e8081c795ff91dd124a997cf2a}{go\-Right}
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcurseshelpers_1_1MultiText_ad7d7583f199540d4f6b50bf4d1d37536}{parent}
+\item 
+\hyperlink{classcurseshelpers_1_1MultiText_af9ed6395122c6150e6ed32ce116766ab}{left}
+\item 
+\hyperlink{classcurseshelpers_1_1MultiText_a1834ac23773a103bcbe5479dfb10631c}{pad}
+\item 
+\hyperlink{classcurseshelpers_1_1MultiText_a7f620714a54a56fa9a6d355c38b0bfa9}{position}
+\item 
+\hyperlink{classcurseshelpers_1_1MultiText_ac0ac8cc9a8a2418f330121f268122e1d}{text}
+\item 
+\hyperlink{classcurseshelpers_1_1MultiText_a49ee3d9669d20410fc5bca6ae50bb9f4}{nrows}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classcurseshelpers_1_1MultiText_afd13ee718a0e8c6da731e55636cb1834}{\-\_\-redraw}
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcurseshelpers_1_1MultiText_a18fbe454fd99e38f4bc8280936f0c7d4}{\-\_\-height}
+\item 
+\hyperlink{classcurseshelpers_1_1MultiText_a4b35f36184bba01caa101700d83bdd3b}{\-\_\-width}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 178 of file curseshelpers.\-py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}}
+\index{\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{\-\_\-\-\_\-init\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-\_\-\-\_\-init\-\_\-\-\_\- (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{screen, }
+\item[{}]{maxrows = {\ttfamily 20000}, }
+\item[{}]{top = {\ttfamily 1}, }
+\item[{}]{left = {\ttfamily 0}, }
+\item[{}]{height = {\ttfamily None}, }
+\item[{}]{width = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_a092c852947c920b730db515ec8c43900}
+
+
+Definition at line 179 of file curseshelpers.\-py.
+
+
+
+\subsection{Member Function Documentation}
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!\-\_\-redraw@{\-\_\-redraw}}
+\index{\-\_\-redraw@{\-\_\-redraw}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{\-\_\-redraw}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-\_\-redraw (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classcurseshelpers_1_1MultiText_afd13ee718a0e8c6da731e55636cb1834}
+
+
+Definition at line 208 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-chunks(), test\-\_\-logging\-\_\-\-App.\-format, curseshelpers.\-Multi\-Text.\-nrows, curseshelpers.\-Tabbed\-Text.\-text, curseshelpers.\-Bottom\-Text.\-text, curseshelpers.\-Multi\-Text.\-text, curseshelpers.\-Tabbed\-Text.\-width(), curseshelpers.\-Bottom\-Text.\-width(), rootplotlib.\-Legend.\-width, and curseshelpers.\-Multi\-Text.\-width().
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-add\-Text(), and curseshelpers.\-Text.\-set\-Text().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!add\-File@{add\-File}}
+\index{add\-File@{add\-File}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{add\-File}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-add\-File (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{title, }
+\item[{}]{filename}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_afa38c3b3e8bb8a76c64ad84859c7f430}
+
+
+Definition at line 191 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-add\-Text(), curseshelpers.\-Bottom\-Text.\-add\-Text(), and curseshelpers.\-Multi\-Text.\-add\-Text().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!add\-Text@{add\-Text}}
+\index{add\-Text@{add\-Text}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{add\-Text}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-add\-Text (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{title, }
+\item[{}]{text}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_a6c024dd65942dd21afe22b109c129465}
+
+
+Definition at line 195 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-\_\-redraw(), curseshelpers.\-Bottom\-Text.\-\_\-redraw(), and curseshelpers.\-Multi\-Text.\-\_\-redraw().
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-add\-File().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!clear@{clear}}
+\index{clear@{clear}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{clear}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-clear (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_a9a3d965e98fd46ac82254f98363c6ff1}
+
+
+Definition at line 188 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-text, curseshelpers.\-Bottom\-Text.\-text, and curseshelpers.\-Multi\-Text.\-text.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!end@{end}}
+\index{end@{end}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{end}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-end (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_a8dc0d8b9bc5e97f7a513d577b58125bb}
+
+
+Definition at line 227 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-height(), curseshelpers.\-Bottom\-Text.\-height(), rootplotlib.\-Legend.\-height, curseshelpers.\-Multi\-Text.\-height(), curseshelpers.\-Multi\-Text.\-nrows, and curseshelpers.\-Multi\-Text.\-position.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!go\-Down@{go\-Down}}
+\index{go\-Down@{go\-Down}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{go\-Down}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-go\-Down (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_a083860f56c08911f4e0eb44a4d241c15}
+
+
+Definition at line 202 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-height(), curseshelpers.\-Bottom\-Text.\-height(), rootplotlib.\-Legend.\-height, curseshelpers.\-Multi\-Text.\-height(), curseshelpers.\-Multi\-Text.\-nrows, and curseshelpers.\-Multi\-Text.\-position.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!go\-Left@{go\-Left}}
+\index{go\-Left@{go\-Left}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{go\-Left}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Base\-Element.\-go\-Left (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\label{classcurseshelpers_1_1BaseElement_a8dad4b03794798c7b6de02554312859f}
+
+
+Definition at line 29 of file curseshelpers.\-py.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!go\-Right@{go\-Right}}
+\index{go\-Right@{go\-Right}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{go\-Right}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Base\-Element.\-go\-Right (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\label{classcurseshelpers_1_1BaseElement_aac34d4e8081c795ff91dd124a997cf2a}
+
+
+Definition at line 31 of file curseshelpers.\-py.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!go\-Up@{go\-Up}}
+\index{go\-Up@{go\-Up}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{go\-Up}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-go\-Up (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_ad29d14ccf9b9fec9e89061058e2546d4}
+
+
+Definition at line 200 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Multi\-Text.\-position.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!height@{height}}
+\index{height@{height}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{height}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-height (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_a960a1efde4889ee815554403c828d536}
+
+
+Definition at line 230 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-\_\-height, curseshelpers.\-Bottom\-Text.\-\_\-height, and curseshelpers.\-Multi\-Text.\-\_\-height.
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-end(), curseshelpers.\-Text.\-end(), curseshelpers.\-Select\-Table.\-end(), curseshelpers.\-Multi\-Text.\-go\-Down(), curseshelpers.\-Text.\-go\-Down(), curseshelpers.\-Select\-Table.\-go\-Down(), curseshelpers.\-Multi\-Text.\-page\-Down(), curseshelpers.\-Text.\-page\-Down(), curseshelpers.\-Select\-Table.\-page\-Down(), curseshelpers.\-Multi\-Text.\-page\-Up(), curseshelpers.\-Text.\-page\-Up(), curseshelpers.\-Select\-Table.\-page\-Up(), curseshelpers.\-Multi\-Text.\-refresh(), curseshelpers.\-Text.\-refresh(), and curseshelpers.\-Select\-Table.\-refresh().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!home@{home}}
+\index{home@{home}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{home}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-home (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_af01001c6c256530bd2aadbf1bc0a9020}
+
+
+Definition at line 225 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Multi\-Text.\-position.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!page\-Down@{page\-Down}}
+\index{page\-Down@{page\-Down}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{page\-Down}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-page\-Down (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_ab1fbe7b83c53775e513d928a8f0070d7}
+
+
+Definition at line 206 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-height(), curseshelpers.\-Bottom\-Text.\-height(), rootplotlib.\-Legend.\-height, curseshelpers.\-Multi\-Text.\-height(), curseshelpers.\-Multi\-Text.\-nrows, and curseshelpers.\-Multi\-Text.\-position.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!page\-Up@{page\-Up}}
+\index{page\-Up@{page\-Up}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{page\-Up}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-page\-Up (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_a67e393b4ede829d61ec85d4257f6b8d0}
+
+
+Definition at line 204 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-height(), curseshelpers.\-Bottom\-Text.\-height(), rootplotlib.\-Legend.\-height, curseshelpers.\-Multi\-Text.\-height(), and curseshelpers.\-Multi\-Text.\-position.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!refresh@{refresh}}
+\index{refresh@{refresh}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{refresh}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-refresh (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_ad1cd0ba7c7f283c27c06b32e190b772d}
+
+
+Definition at line 198 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-height(), curseshelpers.\-Bottom\-Text.\-height(), rootplotlib.\-Legend.\-height, curseshelpers.\-Multi\-Text.\-height(), curseshelpers.\-Tabbed\-Text.\-left, curseshelpers.\-Bottom\-Text.\-left, curseshelpers.\-Multi\-Text.\-left, curseshelpers.\-Multi\-Text.\-position, curseshelpers.\-Tabbed\-Text.\-width(), curseshelpers.\-Bottom\-Text.\-width(), rootplotlib.\-Legend.\-width, and curseshelpers.\-Multi\-Text.\-width().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!width@{width}}
+\index{width@{width}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{width}]{\setlength{\rightskip}{0pt plus 5cm}def curseshelpers.\-Multi\-Text.\-width (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcurseshelpers_1_1MultiText_ab0c9d9997fef6ced56114e0fa4cedc04}
+
+
+Definition at line 233 of file curseshelpers.\-py.
+
+
+
+References curseshelpers.\-Tabbed\-Text.\-\_\-width, curseshelpers.\-Bottom\-Text.\-\_\-width, and curseshelpers.\-Multi\-Text.\-\_\-width.
+
+
+
+Referenced by curseshelpers.\-Select\-Table.\-\_\-draw\-Col\-Headers(), curseshelpers.\-Multi\-Text.\-\_\-redraw(), curseshelpers.\-Text.\-\_\-redraw(), curseshelpers.\-Select\-Table.\-\_\-redraw\-Rows(), curseshelpers.\-Multi\-Text.\-refresh(), curseshelpers.\-Text.\-refresh(), and curseshelpers.\-Select\-Table.\-refresh().
+
+
+
+\subsection{Member Data Documentation}
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!\-\_\-height@{\-\_\-height}}
+\index{\-\_\-height@{\-\_\-height}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{\-\_\-height}]{\setlength{\rightskip}{0pt plus 5cm}curseshelpers.\-Multi\-Text.\-\_\-height\hspace{0.3cm}{\ttfamily [private]}}\label{classcurseshelpers_1_1MultiText_a18fbe454fd99e38f4bc8280936f0c7d4}
+
+
+Definition at line 182 of file curseshelpers.\-py.
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-height(), curseshelpers.\-Text.\-height(), and curseshelpers.\-Select\-Table.\-height().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!\-\_\-width@{\-\_\-width}}
+\index{\-\_\-width@{\-\_\-width}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{\-\_\-width}]{\setlength{\rightskip}{0pt plus 5cm}curseshelpers.\-Multi\-Text.\-\_\-width\hspace{0.3cm}{\ttfamily [private]}}\label{classcurseshelpers_1_1MultiText_a4b35f36184bba01caa101700d83bdd3b}
+
+
+Definition at line 183 of file curseshelpers.\-py.
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-width(), curseshelpers.\-Text.\-width(), and curseshelpers.\-Select\-Table.\-width().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!left@{left}}
+\index{left@{left}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{left}]{\setlength{\rightskip}{0pt plus 5cm}curseshelpers.\-Multi\-Text.\-left}\label{classcurseshelpers_1_1MultiText_af9ed6395122c6150e6ed32ce116766ab}
+
+
+Definition at line 181 of file curseshelpers.\-py.
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-refresh(), curseshelpers.\-Text.\-refresh(), and curseshelpers.\-Select\-Table.\-refresh().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!nrows@{nrows}}
+\index{nrows@{nrows}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{nrows}]{\setlength{\rightskip}{0pt plus 5cm}curseshelpers.\-Multi\-Text.\-nrows}\label{classcurseshelpers_1_1MultiText_a49ee3d9669d20410fc5bca6ae50bb9f4}
+
+
+Definition at line 187 of file curseshelpers.\-py.
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-\_\-redraw(), curseshelpers.\-Text.\-\_\-redraw(), curseshelpers.\-Select\-Table.\-add\-Row(), curseshelpers.\-Tabbed\-Text.\-end(), curseshelpers.\-Multi\-Text.\-end(), curseshelpers.\-Text.\-end(), curseshelpers.\-Select\-Table.\-end(), curseshelpers.\-Tabbed\-Text.\-go\-Down(), curseshelpers.\-Multi\-Text.\-go\-Down(), curseshelpers.\-Text.\-go\-Down(), curseshelpers.\-Select\-Table.\-go\-Down(), curseshelpers.\-Tabbed\-Text.\-page\-Down(), curseshelpers.\-Multi\-Text.\-page\-Down(), curseshelpers.\-Text.\-page\-Down(), and curseshelpers.\-Select\-Table.\-page\-Down().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!pad@{pad}}
+\index{pad@{pad}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{pad}]{\setlength{\rightskip}{0pt plus 5cm}curseshelpers.\-Multi\-Text.\-pad}\label{classcurseshelpers_1_1MultiText_a1834ac23773a103bcbe5479dfb10631c}
+
+
+Definition at line 184 of file curseshelpers.\-py.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!parent@{parent}}
+\index{parent@{parent}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{parent}]{\setlength{\rightskip}{0pt plus 5cm}curseshelpers.\-Multi\-Text.\-parent}\label{classcurseshelpers_1_1MultiText_ad7d7583f199540d4f6b50bf4d1d37536}
+
+
+Definition at line 180 of file curseshelpers.\-py.
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!position@{position}}
+\index{position@{position}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{position}]{\setlength{\rightskip}{0pt plus 5cm}curseshelpers.\-Multi\-Text.\-position}\label{classcurseshelpers_1_1MultiText_a7f620714a54a56fa9a6d355c38b0bfa9}
+
+
+Definition at line 185 of file curseshelpers.\-py.
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-end(), curseshelpers.\-Text.\-end(), curseshelpers.\-Select\-Table.\-end(), curseshelpers.\-Multi\-Text.\-go\-Down(), curseshelpers.\-Text.\-go\-Down(), curseshelpers.\-Select\-Table.\-go\-Down(), curseshelpers.\-Multi\-Text.\-go\-Up(), curseshelpers.\-Text.\-go\-Up(), curseshelpers.\-Multi\-Text.\-home(), curseshelpers.\-Text.\-home(), curseshelpers.\-Select\-Table.\-home(), curseshelpers.\-Multi\-Text.\-page\-Down(), curseshelpers.\-Text.\-page\-Down(), curseshelpers.\-Select\-Table.\-page\-Down(), curseshelpers.\-Multi\-Text.\-page\-Up(), curseshelpers.\-Text.\-page\-Up(), curseshelpers.\-Select\-Table.\-page\-Up(), curseshelpers.\-Multi\-Text.\-refresh(), curseshelpers.\-Text.\-refresh(), and curseshelpers.\-Select\-Table.\-refresh().
+
+\index{curseshelpers\-::\-Multi\-Text@{curseshelpers\-::\-Multi\-Text}!text@{text}}
+\index{text@{text}!curseshelpers::MultiText@{curseshelpers\-::\-Multi\-Text}}
+\subsubsection[{text}]{\setlength{\rightskip}{0pt plus 5cm}curseshelpers.\-Multi\-Text.\-text}\label{classcurseshelpers_1_1MultiText_ac0ac8cc9a8a2418f330121f268122e1d}
+
+
+Definition at line 186 of file curseshelpers.\-py.
+
+
+
+Referenced by curseshelpers.\-Multi\-Text.\-\_\-redraw(), curseshelpers.\-Multi\-Text.\-clear(), and curseshelpers.\-Text.\-set\-Text().
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+python/\hyperlink{curseshelpers_8py}{curseshelpers.\-py}\end{DoxyCompactItemize}

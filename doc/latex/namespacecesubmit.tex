@@ -1,0 +1,232 @@
+\section{cesubmit Namespace Reference}
+\label{namespacecesubmit}\index{cesubmit@{cesubmit}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classcesubmit_1_1Job}{Job}
+\item 
+class \hyperlink{classcesubmit_1_1Task}{Task}
+\item 
+class \hyperlink{classcesubmit_1_1ProxyError}{Proxy\-Error}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacecesubmit_abb80ff80fdc177d56f824e38a22e24e5}{submit\-Worker}
+\item 
+def \hyperlink{namespacecesubmit_a6f195d9e0170719ea641a8e4c1779ee5}{resubmit\-Worker}
+\item 
+def \hyperlink{namespacecesubmit_a3c0034bc61b8d04d824ce99d141e7561}{kill\-Worker}
+\item 
+def \hyperlink{namespacecesubmit_ac91881b33d31ee2421f420db0779e105}{parse\-Get\-Output}
+\item 
+def \hyperlink{namespacecesubmit_aef733725d5239bd53cbebad35b6f2fbb}{parse\-Status}
+\item 
+def \hyperlink{namespacecesubmit_af047bf976baeed01419a83aa2c518c17}{parse\-Status\-Multiple}
+\item 
+def \hyperlink{namespacecesubmit_a31adc55fc9847e01b60c6a5d5674c6bb}{parse\-Status\-Multiple\-L1}
+\item 
+def \hyperlink{namespacecesubmit_aeab38202bd4efdfecb032386ccd8daa0}{chunks}
+\item 
+def \hyperlink{namespacecesubmit_a56b28526cc992b27b06992c2d2e4e0fa}{time\-Left\-Voms\-Proxy}
+\item 
+def \hyperlink{namespacecesubmit_ad1499246a43768c1b7dcaa69ac63ebe9}{check\-Voms\-Proxy}
+\item 
+def \hyperlink{namespacecesubmit_a40ba814b5c5329a08c5bf5e9d3ffedf5}{renew\-Voms\-Proxy}
+\item 
+def \hyperlink{namespacecesubmit_a758ea16460878c94db900ede6f582920}{check\-And\-Renew\-Voms\-Proxy}
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+tuple \hyperlink{namespacecesubmit_a44a4f98a8c73b6ff9b6b19ea83710150}{log} = logging.\-get\-Logger(\-\_\-\-\_\-name\-\_\-\-\_\-)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{cesubmit@{cesubmit}!check\-And\-Renew\-Voms\-Proxy@{check\-And\-Renew\-Voms\-Proxy}}
+\index{check\-And\-Renew\-Voms\-Proxy@{check\-And\-Renew\-Voms\-Proxy}!cesubmit@{cesubmit}}
+\subsubsection[{check\-And\-Renew\-Voms\-Proxy}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-check\-And\-Renew\-Voms\-Proxy (
+\begin{DoxyParamCaption}
+\item[{}]{time = {\ttfamily 604800}, }
+\item[{}]{voms = {\ttfamily 'cms\-:/cms/dcms'}, }
+\item[{}]{passphrase = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_a758ea16460878c94db900ede6f582920}
+
+
+Definition at line 514 of file cesubmit.\-py.
+
+
+
+References check\-Voms\-Proxy(), and renew\-Voms\-Proxy().
+
+
+
+Referenced by cesubmit.\-Job.\-submit(), and cesubmit.\-Task.\-submit().
+
+\index{cesubmit@{cesubmit}!check\-Voms\-Proxy@{check\-Voms\-Proxy}}
+\index{check\-Voms\-Proxy@{check\-Voms\-Proxy}!cesubmit@{cesubmit}}
+\subsubsection[{check\-Voms\-Proxy}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-check\-Voms\-Proxy (
+\begin{DoxyParamCaption}
+\item[{}]{time = {\ttfamily 86400}}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_ad1499246a43768c1b7dcaa69ac63ebe9}
+\begin{DoxyVerb}Returns True if the proxy is valid longer than time, False otherwise.\end{DoxyVerb}
+ 
+
+Definition at line 496 of file cesubmit.\-py.
+
+
+
+References time\-Left\-Voms\-Proxy().
+
+
+
+Referenced by check\-And\-Renew\-Voms\-Proxy().
+
+\index{cesubmit@{cesubmit}!chunks@{chunks}}
+\index{chunks@{chunks}!cesubmit@{cesubmit}}
+\subsubsection[{chunks}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-chunks (
+\begin{DoxyParamCaption}
+\item[{}]{l, }
+\item[{}]{n}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_aeab38202bd4efdfecb032386ccd8daa0}
+\begin{DoxyVerb}Yield successive n-sized chunks from l.
+\end{DoxyVerb}
+ 
+
+Definition at line 476 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-get\-Output().
+
+\index{cesubmit@{cesubmit}!kill\-Worker@{kill\-Worker}}
+\index{kill\-Worker@{kill\-Worker}!cesubmit@{cesubmit}}
+\subsubsection[{kill\-Worker}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-kill\-Worker (
+\begin{DoxyParamCaption}
+\item[{}]{job}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_a3c0034bc61b8d04d824ce99d141e7561}
+
+
+Definition at line 25 of file cesubmit.\-py.
+
+\index{cesubmit@{cesubmit}!parse\-Get\-Output@{parse\-Get\-Output}}
+\index{parse\-Get\-Output@{parse\-Get\-Output}!cesubmit@{cesubmit}}
+\subsubsection[{parse\-Get\-Output}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-parse\-Get\-Output (
+\begin{DoxyParamCaption}
+\item[{}]{stdout}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_ac91881b33d31ee2421f420db0779e105}
+
+
+Definition at line 410 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-get\-Output().
+
+\index{cesubmit@{cesubmit}!parse\-Status@{parse\-Status}}
+\index{parse\-Status@{parse\-Status}!cesubmit@{cesubmit}}
+\subsubsection[{parse\-Status}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-parse\-Status (
+\begin{DoxyParamCaption}
+\item[{}]{stdout}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_aef733725d5239bd53cbebad35b6f2fbb}
+
+
+Definition at line 424 of file cesubmit.\-py.
+
+\index{cesubmit@{cesubmit}!parse\-Status\-Multiple@{parse\-Status\-Multiple}}
+\index{parse\-Status\-Multiple@{parse\-Status\-Multiple}!cesubmit@{cesubmit}}
+\subsubsection[{parse\-Status\-Multiple}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-parse\-Status\-Multiple (
+\begin{DoxyParamCaption}
+\item[{}]{stdout}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_af047bf976baeed01419a83aa2c518c17}
+
+
+Definition at line 436 of file cesubmit.\-py.
+
+\index{cesubmit@{cesubmit}!parse\-Status\-Multiple\-L1@{parse\-Status\-Multiple\-L1}}
+\index{parse\-Status\-Multiple\-L1@{parse\-Status\-Multiple\-L1}!cesubmit@{cesubmit}}
+\subsubsection[{parse\-Status\-Multiple\-L1}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-parse\-Status\-Multiple\-L1 (
+\begin{DoxyParamCaption}
+\item[{}]{stdout}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_a31adc55fc9847e01b60c6a5d5674c6bb}
+
+
+Definition at line 452 of file cesubmit.\-py.
+
+
+
+Referenced by cesubmit.\-Task.\-\_\-get\-Status\-Multiple().
+
+\index{cesubmit@{cesubmit}!renew\-Voms\-Proxy@{renew\-Voms\-Proxy}}
+\index{renew\-Voms\-Proxy@{renew\-Voms\-Proxy}!cesubmit@{cesubmit}}
+\subsubsection[{renew\-Voms\-Proxy}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-renew\-Voms\-Proxy (
+\begin{DoxyParamCaption}
+\item[{}]{voms = {\ttfamily 'cms\-:/cms/dcms'}, }
+\item[{}]{passphrase = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_a40ba814b5c5329a08c5bf5e9d3ffedf5}
+\begin{DoxyVerb}Make a new proxy with a lifetime of one week.\end{DoxyVerb}
+ 
+
+Definition at line 501 of file cesubmit.\-py.
+
+
+
+Referenced by check\-And\-Renew\-Voms\-Proxy().
+
+\index{cesubmit@{cesubmit}!resubmit\-Worker@{resubmit\-Worker}}
+\index{resubmit\-Worker@{resubmit\-Worker}!cesubmit@{cesubmit}}
+\subsubsection[{resubmit\-Worker}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-resubmit\-Worker (
+\begin{DoxyParamCaption}
+\item[{}]{job}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_a6f195d9e0170719ea641a8e4c1779ee5}
+
+
+Definition at line 21 of file cesubmit.\-py.
+
+\index{cesubmit@{cesubmit}!submit\-Worker@{submit\-Worker}}
+\index{submit\-Worker@{submit\-Worker}!cesubmit@{cesubmit}}
+\subsubsection[{submit\-Worker}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-submit\-Worker (
+\begin{DoxyParamCaption}
+\item[{}]{job}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_abb80ff80fdc177d56f824e38a22e24e5}
+
+
+Definition at line 17 of file cesubmit.\-py.
+
+\index{cesubmit@{cesubmit}!time\-Left\-Voms\-Proxy@{time\-Left\-Voms\-Proxy}}
+\index{time\-Left\-Voms\-Proxy@{time\-Left\-Voms\-Proxy}!cesubmit@{cesubmit}}
+\subsubsection[{time\-Left\-Voms\-Proxy}]{\setlength{\rightskip}{0pt plus 5cm}def cesubmit.\-time\-Left\-Voms\-Proxy (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{namespacecesubmit_a56b28526cc992b27b06992c2d2e4e0fa}
+
+
+Definition at line 485 of file cesubmit.\-py.
+
+
+
+Referenced by check\-Voms\-Proxy().
+
+
+
+\subsection{Variable Documentation}
+\index{cesubmit@{cesubmit}!log@{log}}
+\index{log@{log}!cesubmit@{cesubmit}}
+\subsubsection[{log}]{\setlength{\rightskip}{0pt plus 5cm}tuple cesubmit.\-log = logging.\-get\-Logger(\-\_\-\-\_\-name\-\_\-\-\_\-)}\label{namespacecesubmit_a44a4f98a8c73b6ff9b6b19ea83710150}
+
+
+Definition at line 14 of file cesubmit.\-py.
+

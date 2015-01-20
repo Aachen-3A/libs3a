@@ -1,0 +1,141 @@
+.TH "gridFunctions" 3 "Tue Jan 20 2015" "libs3a" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+gridFunctions \- 
+.PP
+This module provides common functions for interaction with the local Tier2\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fBgetdcachelist\fP"
+.br
+.RI "\fIGet list of files with certain file extension in dCap folder recursively  dir: string\&. \fP"
+.ti -1c
+.RI "def \fBtimeLeftVomsProxy\fP"
+.br
+.RI "\fIReturns the life time left\&. \fP"
+.ti -1c
+.RI "def \fBcheckVomsProxy\fP"
+.br
+.RI "\fIChecks if the proxy is valid longer than time\&. \fP"
+.ti -1c
+.RI "def \fBrenewVomsProxy\fP"
+.br
+.RI "\fICreates a new vom proxy\&. \fP"
+.ti -1c
+.RI "def \fBcheckAndRenewVomsProxy\fP"
+.br
+.RI "\fIChecks if the proxy is valid longer than time and renew if needed\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+This module provides common functions for interaction with the local Tier2\&. 
+.SH "Function Documentation"
+.PP 
+.SS "def gridFunctions\&.checkAndRenewVomsProxy (time = \fC604800\fP, voms = \fC'cms:/cms/dcms'\fP, passphrase = \fCNone\fP)"
+
+.PP
+Checks if the proxy is valid longer than time and renew if needed\&. time: int 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItime,:\fP reference time in seconds to check against 
+.br
+\fIvoms,:\fP the voms group used to set up the server [default:cms:/cms/dcms]  passphrase: string 
+.br
+\fIpassphrase,:\fP Passphrase for GRID certificate [default:none]\&. The password request is send to the prompt if no passphrase given 
+.RE
+.PP
+
+.PP
+Definition at line 100 of file gridFunctions\&.py\&.
+.PP
+References checkVomsProxy(), and renewVomsProxy()\&.
+.SS "def gridFunctions\&.checkVomsProxy (time = \fC86400\fP)"
+
+.PP
+Checks if the proxy is valid longer than time\&. time: int 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItime,:\fP reference time in seconds to check against 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+boolean returns True if the proxy is valid longer than time, False otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 69 of file gridFunctions\&.py\&.
+.PP
+References timeLeftVomsProxy()\&.
+.PP
+Referenced by checkAndRenewVomsProxy()\&.
+.SS "def gridFunctions\&.getdcachelist (dir, Tag, mem_limit = \fC500000000\fP, fileXtension = \fC'\&.pxlio'\fP)"
+
+.PP
+Get list of files with certain file extension in dCap folder recursively  dir: string\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdir,:\fP The dCap folder without /pnfs/physik\&.rwth-aachen\&.de/cms/store/user/  mem_limit: int 
+.br
+\fImem_limit,:\fP Maximum summed filesize before files are splitted in sublists [default:500000000] 
+.RE
+.PP
+
+.PP
+Definition at line 14 of file gridFunctions\&.py\&.
+.PP
+References HistClass\&.split()\&.
+.PP
+Referenced by remote_example\&.getFilesfromFile()\&.
+.SS "def gridFunctions\&.renewVomsProxy (voms = \fC'cms:/cms/dcms'\fP, passphrase = \fCNone\fP)"
+
+.PP
+Creates a new vom proxy\&. This function creates a new  voms: string 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIvoms,:\fP the voms group used to set up the server [default:cms:/cms/dcms]  passphrase: string 
+.br
+\fIpassphrase,:\fP Passphrase for GRID certificate [default:none]\&. The password request is send to the prompt if no passphrase given 
+.PP
+.nf
+Make a new proxy with a lifetime of one week.
+.fi
+.PP
+ 
+.RE
+.PP
+
+.PP
+Definition at line 80 of file gridFunctions\&.py\&.
+.PP
+Referenced by checkAndRenewVomsProxy()\&.
+.SS "def gridFunctions\&.timeLeftVomsProxy ()"
+
+.PP
+Returns the life time left\&. for a proxy\&.
+.PP
+\fBReturns:\fP
+.RS 4
+int time left for the proxy 
+.RE
+.PP
+
+.PP
+Definition at line 56 of file gridFunctions\&.py\&.
+.PP
+Referenced by checkVomsProxy()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libs3a from the source code\&.

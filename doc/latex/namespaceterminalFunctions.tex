@@ -1,0 +1,72 @@
+\section{terminal\-Functions Namespace Reference}
+\label{namespaceterminalFunctions}\index{terminal\-Functions@{terminal\-Functions}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespaceterminalFunctions_1_1py}{py}
+\begin{DoxyCompactList}\small\item\em Functions to be used for terminal output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classterminalFunctions_1_1bcolors}{bcolors}
+\begin{DoxyCompactList}\small\item\em Color definition for terminal output. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespaceterminalFunctions_ae3b93f09175ae50b228328695278decf}{get\-Terminal\-Size}
+\begin{DoxyCompactList}\small\item\em Function to get the size of the terminal. \end{DoxyCompactList}\item 
+def \hyperlink{namespaceterminalFunctions_a46633b22d7441adb4eebbe17b896a4cf}{update\-\_\-progress}
+\begin{DoxyCompactList}\small\item\em Function to create and update a progress bar. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{terminal\-Functions@{terminal\-Functions}!get\-Terminal\-Size@{get\-Terminal\-Size}}
+\index{get\-Terminal\-Size@{get\-Terminal\-Size}!terminalFunctions@{terminal\-Functions}}
+\subsubsection[{get\-Terminal\-Size}]{\setlength{\rightskip}{0pt plus 5cm}def terminal\-Functions.\-get\-Terminal\-Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{namespaceterminalFunctions_ae3b93f09175ae50b228328695278decf}
+
+
+Function to get the size of the terminal. 
+
+Reads the width and height of the current terminal and returns this two values. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em int(cr\mbox{[}1\mbox{]})} & Width of the terminal \\
+\hline
+\mbox{\tt out}  & {\em int(cr\mbox{[}0\mbox{]})} & Height of the terminal \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 37 of file terminal\-Functions.\-py.
+
+
+
+Referenced by update\-\_\-progress().
+
+\index{terminal\-Functions@{terminal\-Functions}!update\-\_\-progress@{update\-\_\-progress}}
+\index{update\-\_\-progress@{update\-\_\-progress}!terminalFunctions@{terminal\-Functions}}
+\subsubsection[{update\-\_\-progress}]{\setlength{\rightskip}{0pt plus 5cm}def terminal\-Functions.\-update\-\_\-progress (
+\begin{DoxyParamCaption}
+\item[{}]{progress}
+\end{DoxyParamCaption}
+)}\label{namespaceterminalFunctions_a46633b22d7441adb4eebbe17b896a4cf}
+
+
+Function to create and update a progress bar. 
+
+This function displays or updates a console progress bar It accepts a float between 0 and 1. Any int will be converted to a float. A value under 0 represents a 'halt'. A value at 1 or bigger represents 100\% 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em progress} & Relative progress that should be displayed \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 66 of file terminal\-Functions.\-py.
+
+
+
+References test\-\_\-logging\-\_\-\-App.\-format, and get\-Terminal\-Size().
+

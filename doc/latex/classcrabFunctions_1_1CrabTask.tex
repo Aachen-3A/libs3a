@@ -1,0 +1,331 @@
+\section{crab\-Functions.\-Crab\-Task Class Reference}
+\label{classcrabFunctions_1_1CrabTask}\index{crab\-Functions.\-Crab\-Task@{crab\-Functions.\-Crab\-Task}}
+
+
+Class for a single Crab\-Request.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classcrabFunctions_1_1CrabTask_aef5968057e988666f6614eefc2e1dd79}{\-\_\-\-\_\-init\-\_\-\-\_\-}
+\begin{DoxyCompactList}\small\item\em The object constructor. \end{DoxyCompactList}\item 
+def \hyperlink{classcrabFunctions_1_1CrabTask_a8892a90d9bfa0914ec82668386d01547}{update}
+\begin{DoxyCompactList}\small\item\em Function to update Task in associated Jobs. \end{DoxyCompactList}\item 
+def \hyperlink{classcrabFunctions_1_1CrabTask_ada8f4221987d8cb4f48843e4f46fbee6}{update\-Job\-Stats}
+\begin{DoxyCompactList}\small\item\em Function to update Job\-Statistics. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_aa80858da99b1fcffc8c57b90c8c8764d}{name}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_affbe775c3b27516558abe99c944a0b99}{uuid}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a653cc1b50b00d31ecae424bb7f301800}{controller}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a746a99ff156515200f1d0d82aa223262}{jobs}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a09e81135abf744a23819f3919a573206}{local\-Dir}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a38bd8487c57f35cdd6ae501f5b33c017}{outlfn}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a015df9b7234b765d870a734689470f4d}{Storage\-File\-List}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a67ffd96ff5dea4a166810258109f85cc}{is\-Updating}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a4624f348accb397ec35cd39b4c0a92c3}{n\-Jobs}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_abf88207404f21e51baeb63cd2696a441}{state}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a3bd1d90e824ffd4e94c2670fc788d8f3}{maxjobnumber}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_ac74ab3617a3e548308553dacc6fb716f}{n\-Unsubmitted}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_ac9500df5154af29230bf46b70c8b972e}{n\-Idle}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_ac9d85013f7112716fcba03f32537ba28}{n\-Running}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a5bf3783f609d571ad0f1d5c620ed599e}{n\-Transferring}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a91df6d635863bd407e0d368bc02c673f}{n\-Cooloff}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_ac3f25df360da05d896e74a8581b68f1e}{n\-Failed}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a07d947089d0cebe911f7b7d6b6f985de}{n\-Finished}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_a4bc6a096cbaf7d7856f849fbbafce01c}{n\-Complete}
+\item 
+\hyperlink{classcrabFunctions_1_1CrabTask_ad4158ae02f09d137a6f2725316f97d29}{last\-Update}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class for a single Crab\-Request. 
+
+This class represents one crab3 task/request 
+
+Definition at line 253 of file crab\-Functions.\-py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}}
+\index{\-\_\-\-\_\-init\-\_\-\-\_\-@{\-\_\-\-\_\-init\-\_\-\-\_\-}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{\-\_\-\-\_\-init\-\_\-\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Task.\-\_\-\-\_\-init\-\_\-\-\_\- (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{taskname, }
+\item[{}]{crab\-Controller = {\ttfamily None}, }
+\item[{}]{init\-Update = {\ttfamily True}, }
+\item[{}]{local\-Dir = {\ttfamily \char`\"{}\char`\"{}}, }
+\item[{}]{outlfn = {\ttfamily \char`\"{}\char`\"{}}, }
+\item[{}]{Storage\-File\-List = {\ttfamily \mbox{[}\mbox{]}}}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabTask_aef5968057e988666f6614eefc2e1dd79}
+
+
+The object constructor. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabTask}{Crab\-Task} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer.  taskname\-: String \\
+\hline
+{\em taskname,\-:} & The object pointer.  init\-Update\-: Boolean \\
+\hline
+{\em init\-Update,\-:} & Flag if crab status should be called when an instance is created \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 263 of file crab\-Functions.\-py.
+
+
+
+\subsection{Member Function Documentation}
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!update@{update}}
+\index{update@{update}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{update}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Task.\-update (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabTask_a8892a90d9bfa0914ec82668386d01547}
+
+
+Function to update Task in associated Jobs. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabTask}{Crab\-Task} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 298 of file crab\-Functions.\-py.
+
+
+
+References crab\-Functions.\-Crab\-Task.\-is\-Updating, cesubmit.\-Task.\-jobs, crab\-Functions.\-Crab\-Task.\-jobs, cesubmit.\-Task.\-name, crab\-Functions.\-Crab\-Task.\-name, crab\-Functions.\-Crab\-Task.\-n\-Jobs, crab\-Functions.\-Crab\-Task.\-state, and crab\-Functions.\-Crab\-Task.\-update\-Job\-Stats().
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!update\-Job\-Stats@{update\-Job\-Stats}}
+\index{update\-Job\-Stats@{update\-Job\-Stats}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{update\-Job\-Stats}]{\setlength{\rightskip}{0pt plus 5cm}def crab\-Functions.\-Crab\-Task.\-update\-Job\-Stats (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{d\-Cache\-File\-List = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\label{classcrabFunctions_1_1CrabTask_ada8f4221987d8cb4f48843e4f46fbee6}
+
+
+Function to update Job\-Statistics. 
+
+self\-: \hyperlink{classcrabFunctions_1_1CrabTask}{Crab\-Task} 
+\begin{DoxyParams}{Parameters}
+{\em self,\-:} & The object pointer.  d\-Cache\-Filelist\-: list of strings \\
+\hline
+{\em d\-Cache\-Filelist,\-:} & A list of files on the d\-Cache \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 319 of file crab\-Functions.\-py.
+
+
+
+References cesubmit.\-Task.\-jobs, crab\-Functions.\-Crab\-Task.\-jobs, and crab\-Functions.\-Crab\-Task.\-n\-Complete.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Task.\-update().
+
+
+
+\subsection{Member Data Documentation}
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!controller@{controller}}
+\index{controller@{controller}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{controller}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-controller}\label{classcrabFunctions_1_1CrabTask_a653cc1b50b00d31ecae424bb7f301800}
+
+
+Definition at line 268 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!is\-Updating@{is\-Updating}}
+\index{is\-Updating@{is\-Updating}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{is\-Updating}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-is\-Updating}\label{classcrabFunctions_1_1CrabTask_a67ffd96ff5dea4a166810258109f85cc}
+
+
+Definition at line 275 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Task.\-update().
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!jobs@{jobs}}
+\index{jobs@{jobs}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{jobs}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-jobs}\label{classcrabFunctions_1_1CrabTask_a746a99ff156515200f1d0d82aa223262}
+
+
+Definition at line 271 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Task.\-update(), and crab\-Functions.\-Crab\-Task.\-update\-Job\-Stats().
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!last\-Update@{last\-Update}}
+\index{last\-Update@{last\-Update}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{last\-Update}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-last\-Update}\label{classcrabFunctions_1_1CrabTask_ad4158ae02f09d137a6f2725316f97d29}
+
+
+Definition at line 306 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!local\-Dir@{local\-Dir}}
+\index{local\-Dir@{local\-Dir}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{local\-Dir}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-local\-Dir}\label{classcrabFunctions_1_1CrabTask_a09e81135abf744a23819f3919a573206}
+
+
+Definition at line 272 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!maxjobnumber@{maxjobnumber}}
+\index{maxjobnumber@{maxjobnumber}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{maxjobnumber}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-maxjobnumber}\label{classcrabFunctions_1_1CrabTask_a3bd1d90e824ffd4e94c2670fc788d8f3}
+
+
+Definition at line 279 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!name@{name}}
+\index{name@{name}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{name}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-name}\label{classcrabFunctions_1_1CrabTask_aa80858da99b1fcffc8c57b90c8c8764d}
+
+
+Definition at line 264 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Task.\-update().
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Complete@{n\-Complete}}
+\index{n\-Complete@{n\-Complete}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Complete}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Complete}\label{classcrabFunctions_1_1CrabTask_a4bc6a096cbaf7d7856f849fbbafce01c}
+
+
+Definition at line 287 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Task.\-update\-Job\-Stats().
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Cooloff@{n\-Cooloff}}
+\index{n\-Cooloff@{n\-Cooloff}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Cooloff}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Cooloff}\label{classcrabFunctions_1_1CrabTask_a91df6d635863bd407e0d368bc02c673f}
+
+
+Definition at line 284 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Failed@{n\-Failed}}
+\index{n\-Failed@{n\-Failed}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Failed}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Failed}\label{classcrabFunctions_1_1CrabTask_ac3f25df360da05d896e74a8581b68f1e}
+
+
+Definition at line 285 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Finished@{n\-Finished}}
+\index{n\-Finished@{n\-Finished}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Finished}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Finished}\label{classcrabFunctions_1_1CrabTask_a07d947089d0cebe911f7b7d6b6f985de}
+
+
+Definition at line 286 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Idle@{n\-Idle}}
+\index{n\-Idle@{n\-Idle}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Idle}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Idle}\label{classcrabFunctions_1_1CrabTask_ac9500df5154af29230bf46b70c8b972e}
+
+
+Definition at line 281 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Jobs@{n\-Jobs}}
+\index{n\-Jobs@{n\-Jobs}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Jobs}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Jobs}\label{classcrabFunctions_1_1CrabTask_a4624f348accb397ec35cd39b4c0a92c3}
+
+
+Definition at line 277 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Task.\-update().
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Running@{n\-Running}}
+\index{n\-Running@{n\-Running}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Running}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Running}\label{classcrabFunctions_1_1CrabTask_ac9d85013f7112716fcba03f32537ba28}
+
+
+Definition at line 282 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Transferring@{n\-Transferring}}
+\index{n\-Transferring@{n\-Transferring}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Transferring}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Transferring}\label{classcrabFunctions_1_1CrabTask_a5bf3783f609d571ad0f1d5c620ed599e}
+
+
+Definition at line 283 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!n\-Unsubmitted@{n\-Unsubmitted}}
+\index{n\-Unsubmitted@{n\-Unsubmitted}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{n\-Unsubmitted}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-n\-Unsubmitted}\label{classcrabFunctions_1_1CrabTask_ac74ab3617a3e548308553dacc6fb716f}
+
+
+Definition at line 280 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!outlfn@{outlfn}}
+\index{outlfn@{outlfn}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{outlfn}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-outlfn}\label{classcrabFunctions_1_1CrabTask_a38bd8487c57f35cdd6ae501f5b33c017}
+
+
+Definition at line 273 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!state@{state}}
+\index{state@{state}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{state}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-state}\label{classcrabFunctions_1_1CrabTask_abf88207404f21e51baeb63cd2696a441}
+
+
+Definition at line 278 of file crab\-Functions.\-py.
+
+
+
+Referenced by crab\-Functions.\-Crab\-Task.\-update().
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!Storage\-File\-List@{Storage\-File\-List}}
+\index{Storage\-File\-List@{Storage\-File\-List}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{Storage\-File\-List}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-Storage\-File\-List}\label{classcrabFunctions_1_1CrabTask_a015df9b7234b765d870a734689470f4d}
+
+
+Definition at line 274 of file crab\-Functions.\-py.
+
+\index{crab\-Functions\-::\-Crab\-Task@{crab\-Functions\-::\-Crab\-Task}!uuid@{uuid}}
+\index{uuid@{uuid}!crabFunctions::CrabTask@{crab\-Functions\-::\-Crab\-Task}}
+\subsubsection[{uuid}]{\setlength{\rightskip}{0pt plus 5cm}crab\-Functions.\-Crab\-Task.\-uuid}\label{classcrabFunctions_1_1CrabTask_affbe775c3b27516558abe99c944a0b99}
+
+
+Definition at line 265 of file crab\-Functions.\-py.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+python/\hyperlink{crabFunctions_8py}{crab\-Functions.\-py}\end{DoxyCompactItemize}
