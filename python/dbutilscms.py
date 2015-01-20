@@ -8,9 +8,11 @@
 # mcm utilities imports
 import urllib2
 import json
-
+import logging
 # dbs imports
 from dbs.apis.dbsClient import DbsApi
+
+log = logging.getLogger( 'dbutilscms' )
 
 class McMUtilities():
     def __init__(self):
@@ -61,7 +63,12 @@ class McMUtilities():
         self.gen_json = tmp_json
         
         # return value
-        value = tmp_json["results"]["generator_parameters"][0].get(key, None)
+        # find position of dict in list
+        for dictcand in tmp_json["results"]["generator_parameters"]:
+            try:
+                value = dictcand.get(key, None)
+            except:
+                value = None
         if value is None:
             log.error("Could not retrieve " + key + ".")
         return value
