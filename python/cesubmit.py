@@ -119,6 +119,8 @@ class Job:
             log.info(stderr)
         self.infos = parseStatus(stdout)
     def getOutput(self):
+        if self.jobid is None:
+            return
         log.debug("Getting output "+self.jobid)
         command = ["glite-ce-job-output", "--noint", "--dir", self.task.directory, self.jobid]
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
@@ -129,6 +131,8 @@ class Job:
             self.purge()
             self.frontEndStatus = "RETRIEVED"
     def cancel(self):
+        if self.jobid is None:
+            return
         log.debug("Canceling "+self.jobid)
         command = ["glite-ce-job-cancel", "--noint", self.jobid]
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
@@ -138,9 +142,7 @@ class Job:
         else:
             self.frontEndStatus = "CANCELLED"
     def purge(self):
-        try:
-            jobid=self.jobid
-        except AttributeError:
+        if self.jobid is None:
             return
         log.debug("Purging "+self.jobid)
         command = ["glite-ce-job-purge", "--noint", jobid]
@@ -200,7 +202,7 @@ class Task:
         f = open(os.path.join(self.directory, "jobids.txt"), 'w')
         for job in self.jobs:
             try:
-                f.write(job.jobid+"\n")
+                f.write(str(job.jobid)+"\n")
             except (AttributeError, TypeError):
                 f.write("None\n")
         f.close()
@@ -302,7 +304,7 @@ class Task:
         os.makedirs(self.directory)
     def _getStatusMultiple(self):
         jobs = [job for job in self.jobs if job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        jobids = [job.jobid for job in jobs]
+        jobids = [job.jobid for job in jobs if job.jobid is not None]
         if not jobids: return 0
         command = ["glite-ce-job-status", "-L1"] + jobids
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
@@ -351,7 +353,7 @@ class Task:
         jobpackages = list(chunks(jobs, 100))
         log.info('Get output of %s jobs of task %s',str(len(jobs)), self.name)
         for jobpackage in jobpackages:
-            jobids = [job.jobid for job in jobpackage]
+            jobids = [job.jobid for job in jobpackage if job.jobid is not None]
             command = ["glite-ce-job-output", "-s", str(connections), "--noint", "--dir", self.directory] + jobids
             process = subprocess.Popen(command, stdout=subprocess.PIPE)
             stdout, stderr = process.communicate()
