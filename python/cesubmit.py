@@ -145,11 +145,11 @@ class Job:
         if self.jobid is None:
             return
         log.debug("Purging "+self.jobid)
-        command = ["glite-ce-job-purge", "--noint", jobid]
+        command = ["glite-ce-job-purge", "--noint", self.jobid]
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
         if process.returncode!=0:
-            log.warning('Purging failed for job id '+jobid)
+            log.warning('Purging failed for job id '+self.jobid)
         else:
             self.frontEndStatus = "PURGED"
     def kill(self):
