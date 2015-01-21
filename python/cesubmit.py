@@ -138,12 +138,16 @@ class Job:
         else:
             self.frontEndStatus = "CANCELLED"
     def purge(self):
+        try:
+            jobid=self.jobid
+        except AttributeError:
+            return
         log.debug("Purging "+self.jobid)
-        command = ["glite-ce-job-purge", "--noint", self.jobid]
+        command = ["glite-ce-job-purge", "--noint", jobid]
         process = subprocess.Popen(command, stdout=subprocess.PIPE)
         stdout, stderr = process.communicate()
         if process.returncode!=0:
-            log.warning('Purging failed for job id '+self.jobid)
+            log.warning('Purging failed for job id '+jobid)
         else:
             self.frontEndStatus = "PURGED"
     def kill(self):
@@ -343,28 +347,30 @@ class Task:
 
     def getOutput(self, connections=1):
         jobs = [job for job in self.jobs if job.status=="DONE-OK" and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        jobids = [job.jobid for job in jobs]
-        if not jobids: return
-        log.info('Get output of %s jobs of task %s',str(len(jobids)), self.name)
-        command = ["glite-ce-job-output", "-s", str(connections), "--noint", "--dir", self.directory] + jobids
-        process = subprocess.Popen(command, stdout=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        if process.returncode!=0:
-            log.warning('Output retrieval failed for task '+self.name)
-            log.info(stdout)
-            log.info(stderr)
-        else:
-            succesfulljobids = parseGetOutput(stdout)
-            log.info('Tried to retrieved %s jobs', str(len(succesfulljobids)))
-            for job in jobs:
-                if job.jobid in succesfulljobids:
-                    job.purge()
-                    job.frontEndStatus = "RETRIEVED"
-                    log.debug('Successfully retrieved job %s', job.jobid)
-                else:
-                    job.frontEndStatus = "FAILED2RETRIEVE"
-                    log.warning('Failed to retrieve job %s', job.jobid)
-            self.save()
+        if not jobs: return
+        jobpackages = list(chunks(jobs, 100))
+        log.info('Get output of %s jobs of task %s',str(len(jobs)), self.name)
+        for jobpackage in jobpackages:
+            jobids = [job.jobid for job in jobpackage]
+            command = ["glite-ce-job-output", "-s", str(connections), "--noint", "--dir", self.directory] + jobids
+            process = subprocess.Popen(command, stdout=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            if process.returncode!=0:
+                log.warning('Output retrieval failed for task '+self.name)
+                log.info(stdout)
+                log.info(stderr)
+            else:
+                succesfulljobids = parseGetOutput(stdout)
+                log.info('Tried to retrieved %s jobs', str(len(succesfulljobids)))
+                for job in jobpackage:
+                    if job.jobid in succesfulljobids:
+                        job.purge()
+                        job.frontEndStatus = "RETRIEVED"
+                        log.debug('Successfully retrieved job %s', job.jobid)
+                    else:
+                        job.frontEndStatus = "FAILED2RETRIEVE"
+                        log.warning('Failed to retrieve job %s', job.jobid)
+        self.save()
 
     def jobStatusNumbers(self):
         jobStatusNumbers=defaultdict(int)
@@ -466,6 +472,12 @@ def parseStatusMultipleL1(stdout):
         else:
             result[jobid][key] = value
     return result
+
+def chunks(l, n):
+    """ Yield successive n-sized chunks from l.
+    """
+    for i in xrange(0, len(l), n):
+        yield l[i:i+n]
 
 class ProxyError( Exception ):
     pass

@@ -42,7 +42,7 @@ class CrabController():
         if logger is not None:
             self.logger = logger.getChild("CrabController")
         else:
-            raise(Exception)
+            #~ raise(Exception)
             # add instance logger as logger to root
             self.logger = logging.getLogger("CrabController")
             # check if handlers are present for root logger
@@ -105,6 +105,7 @@ class CrabController():
             p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
             (stringlist,string_err) = p.communicate()
             self.logger.info("crab sumbit called for task %s"%name)
+
 
     ## Resubmit all failed tasks in job or specified list of jobs in task
     #

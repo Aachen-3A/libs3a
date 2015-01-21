@@ -7,47 +7,12 @@ import os
 
 log = logging.getLogger( 'aix3adb' )
 
-def tryServerAuth(funct):
-    def func_wrapper(instance, *args, **kwargs):
-        try:
-            return funct(instance, *args, **kwargs)
-        except xmlrpclib.ProtocolError:
-            instance.destroyauth()
-            instance.authorize()
-            return funct(instance, *args, **kwargs)
-    return func_wrapper
-
-class Aix3adbException(Exception):
-    pass
-
-class Aix3adbBaseElement:
-    def __init__(self, dictionary=dict() ):
-        for key in dictionary:
-            if key=="error":
-                raise Aix3adbException(dictionary[key])
-            setattr(self, key, dictionary[key])
-
-class MCSample(Aix3adbBaseElement):
-    pass
-
-class DataSample(Aix3adbBaseElement):
-    pass
-
-class MCSkim(Aix3adbBaseElement):
-    pass
-
-class DataSkim(Aix3adbBaseElement):
-    pass
-
 class aix3adb:
     def __init__(self, cookiefilepath='aix3adb-ssocookie.txt'):
         self.cookiefile = os.path.abspath(cookiefilepath)
-        self.authurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php'
-        self.readurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc/x3adb_read.php'
-        self.domain  = 'olschew.web.cern.ch'
-        #self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc_auth/x3adb_write.php'
-        #self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc/x3adb_read.php'
-        #self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
+        self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc_auth/x3adb_write.php'
+        self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc/x3adb_read.php'
+        self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
     def authorize(self, username=None, trykerberos=3):
         print "Calling kinit, please enter your CERN password"
         call = ['kinit']
@@ -74,82 +39,70 @@ class aix3adb:
         customtransport.setcookies(self.cookiefile, self.domain)
         s = xmlrpclib.ServerProxy(self.authurl, customtransport)
         return s
-    # inserts
-    @tryServerAuth
-    def insertMCSample(self, sample):
+    def registerMCSample(self, sample):
+        check = self.checksample(sample)
+        if check:
+            return self.tryServerAuthFunction(self.doRegisterMCSample, sample)
+    def doRegisterMCSample(self, sample):
         s = self.getAuthServerProxy()
-        f = s.insertMCSample(sample.__dict__)
-        print f
-        return MCSample(f)
-    @tryServerAuth
-    def insertDataSample(self, sample):
+        return s.registerMCSample(sample)
+    def editMCSample(self, id, sample):
+        check = self.checksample(sample)
+        if check:
+            return self.tryServerAuthFunction(self.doEditMCSample, id, sample)
+    def doEditMCSample(self, id, sample):
         s = self.getAuthServerProxy()
-        return DataSample(s.insertDataSample(sample.__dict__))
-    @tryServerAuth
-    def insertMCSkim(self, skim):
+        return s.editMCSample(id, sample)
+    def insertOrReplaceMCTags(self, id, tags):
         s = self.getAuthServerProxy()
-        return MCSkim(s.insertMCSkim(skim.__dict__))
-    @tryServerAuth
-    def insertDataSkim(self, skim):
+        return s.insertOrReplaceMCTags(id, tags)
+    def registerDataSample(self, sample):
+        check = self.checksample(sample)
+        if check:
+            return self.tryServerAuthFunction(self.doRegisterDataSample, sample)
+    def doRegisterDataSample(self, sample):
         s = self.getAuthServerProxy()
-        return DataSkim(s.insertDataSkim(skim.__dict__))
-    # edits
-    @tryServerAuth
-    def editMCSample(self, name, sample):
+        return s.registerDataSample(sample)
+    def editDataSample(self, id, sample):
+        check = self.checksample(sample)
+        if check:
+            return self.tryServerAuthFunction(self.doEditDataSample, id, sample)
+    def doEditDataSample(self, id, sample):
         s = self.getAuthServerProxy()
-        return s.editMCSample(name, sample)
-    @tryServerAuth
-    def editDataSample(self, name, sample):
-        s = self.getAuthServerProxy()
-        return s.editDataSample(name, sample)
-    @tryServerAuth
-    def editMCSkim(self, skimid, skim):
-        s = self.getAuthServerProxy()
-        return s.editMCSkim(skimid, skim)
-    @tryServerAuth
-    def editDataSkim(self, skimid, skim):
-        s = self.getAuthServerProxy()
-        return s.editDataSkim(skimid, skim)
-    # gets
-    def getMCSample(self, name):
+        return s.editDataSample(id, sample)
+    def getMCSample(self, sampleid):
         s = xmlrpclib.ServerProxy(self.readurl)
-        return MCSample(s.getMCSample(name))
-    def getDataSample(self, name):
+        return s.getMCSample(sampleid)
+    def getDataSample(self, sampleid):
         s = xmlrpclib.ServerProxy(self.readurl)
-        return DataSample(s.getDataSample(name))
-    def getMCSkim(self, skimid):
+        return s.getDataSample(sampleid)
+    def searchMCSamples(self, searchdict):
         s = xmlrpclib.ServerProxy(self.readurl)
-        return MCSkim(s.getMCSkim(skimid))
-    def getDataSkim(self, skimid):
+        return s.searchMCSamples(searchdict)
+    def searchDataSamples(self, searchdict):
         s = xmlrpclib.ServerProxy(self.readurl)
-        return DataSkim(s.getDataSkim(skimid))
-    def getMCLatestSkimAndSampleBySample(self, name):
-        s = xmlrpclib.ServerProxy(self.readurl)
-        result = s.getMCLatestSkimAndSampleBySample(name)
-        return MCSkim(result['skim']), MCSample(result['sample'])
-    def getDataLatestSkimAndSampleBySample(self, name):
-        s = xmlrpclib.ServerProxy(self.readurl)
-        result = s.getDataLatestSkimAndSampleBySample(name)
-        return DataSkim(result['skim']), DataSample(result['sample'])
-    def getMCSkimAndSampleBySkim(self, skimid):
-        s = xmlrpclib.ServerProxy(self.readurl)
-        result = s.getMCSkimAndSampleBySkim(skimid)
-        return MCSkim(result['skim']), MCSample(result['sample'])
-    def getDataSkimAndSampleBySkim(self, skimid):
-        s = xmlrpclib.ServerProxy(self.readpurl)
-        result = s.getDataSkimAndSampleBySkim(skimid)
-        return DataSkim(result['skim']), DataSample(result['sample'])
-    def getMCSkimAndSample(self, name=None, skimid=None):
-        if not name is None:
-            skim, sample = self.getMCLatestSkimAndSampleBySample(name)
-            if not skimid is None:
-                if int(skim.id) != skimid:
-                    raise Exception("Skimid and sample name do not match.")
-        elif not skimid is None:
-            skim, sample = self.getMCSkimAndSampleBySkim(skimid)
-        else:
-            raise Exception("No arguments provided.")
-        return skim, sample
+        return s.searchDataSamples(searchdict)
+    def test(self):
+        s = self.getAuthServerProxy()
+        return s.test()
+    def checksample(self,sample):
+        msg = None
+        if None in sample: msg = "None-item in sample"
+        if "tags" in sample:
+            if not type(sample['tags']) == dict: msg = "Tags is not a dict"
+        if "files" in sample:
+            if not type(sample['files']) == list: msg = "Files is not a list"
+        if msg is not None:
+            log.error("Sample failed sanity checks: " + msg)
+            return False
+        return True
+    def tryServerAuthFunction(self, funct, *params):
+        try:
+            return funct(*params)
+        except xmlrpclib.ProtocolError:
+            self.destroyauth()
+            self.authorize()
+            return funct(*params)
 
 
 class aix3adbAuth(aix3adb):
@@ -158,6 +111,11 @@ class aix3adbAuth(aix3adb):
       self.authorize(username, trykerberos)
    def __del__(self):
       self.destroyauth()
+
+def main():
+    print "This is just a library"
+
+
 
 class cookietransportrequest:
     """A Transport request method that retains cookies over its lifetime.
@@ -249,3 +207,6 @@ def transport(uri):
         return cookiesafetransport()
     else:
         return cookietransport()
+
+if __name__ == "__main__":
+    main()

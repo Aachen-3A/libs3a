@@ -198,7 +198,7 @@ namespace HistClass {
     {
         trees[name] = new TTree(name,name);
         for( std::map< std::string , float >::iterator it=m.begin(); it!=m.end();it++){
-                trees[name]->Branch(it->first.c_str(),&(it->second),Form("%s/D",it->first.c_str()));
+                trees[name]->Branch(it->first.c_str(),&(it->second),Form("%s/F",it->first.c_str()));
         }
     }
 
