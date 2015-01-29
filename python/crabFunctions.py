@@ -128,7 +128,7 @@ class CrabController():
         else:
             p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
             (stringlist,string_err) = p.communicate()
-            self.logger.info(crablog,"crab sumbit called for task %s"%name)
+            self.logger.info("crab resumbit called for task %s"%name)
     
     ## Returns the hn name for a user with valid proxy
     #
