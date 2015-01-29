@@ -158,6 +158,30 @@ namespace HistClass {
         histo2[dummy] -> GetYaxis() -> SetTitle(ytitle);
     }
 
+    /*! \brief Function to create a number of 2D histograms in the histo map
+     *
+     * \param[in] n_histos Number of histograms that should be created with different numbers
+     * \param[in] name Name of the histogram that should be created
+     * \param[in] nbinsx Number of bins on the x-axis
+     * \param[in] xlow Lower edge of the x-axis
+     * \param[in] xup Upper edge of the x-axis
+     * \param[in] nbinsy Number of bins on the y-axis
+     * \param[in] ylow Lower edge of the y-axis
+     * \param[in] yup Upper edge of the y-axis
+     * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
+     * \param[in] ytitle Optinal title of the y-axis (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(Int_t n_histos, const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle = "", TString ytitle = "")
+    {
+        for(int i = 0; i < n_histos; i++){
+            TH2D * tmphist = new TH2D(Form("h2_%d_%s", i, name), Form("h2_%d_%s", i, name), nbinsx, xlow, xup, nbinsy, ylow, yup);
+            tmphist->SetXTitle(xtitle);
+            tmphist->SetYTitle(ytitle);
+            tmphist->Sumw2();
+            histo2[Form("h2_%d_%s", i, name)] = tmphist;
+        }
+    }
+
     /*! \brief Function to create one NSparse in the nSparse map
      *
      * \param[in] name Name of the NSparse that should be created
