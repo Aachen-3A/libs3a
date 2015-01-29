@@ -1,0 +1,324 @@
+.TH "dbconfigmanager.DBConfigManager" 3 "Thu Jan 29 2015" "Aachen-3A" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dbconfigmanager.DBConfigManager \- 
+.PP
+Database config manager class\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.RI "\fIInitialization method\&. \fP"
+.ti -1c
+.RI "def \fBset_directory\fP"
+.br
+.RI "\fISet the working directory of the \fBDBConfigManager\fP\&. \fP"
+.ti -1c
+.RI "def \fBlatest_revision\fP"
+.br
+.RI "\fIReturns the latest revision of the config files named 'xsv123\&.cfg'\&. \fP"
+.ti -1c
+.RI "def \fBlatest_file\fP"
+.br
+.RI "\fIReturns the file name of the latest revision of config files named 'xsv123\&.cfg'\&. \fP"
+.ti -1c
+.RI "def \fBlatest_abs_file\fP"
+.br
+.RI "\fIReturns the path to the file corresponding to \fBlatest_revision()\fP \fP"
+.ti -1c
+.RI "def \fBcompare_sample\fP"
+.br
+.RI "\fICompares sample values with database entry\&. \fP"
+.ti -1c
+.RI "def \fBread_config\fP"
+.br
+.RI "\fIReads the given config_file into the class variable self\&.config\&. \fP"
+.ti -1c
+.RI "def \fBget_config\fP"
+.br
+.RI "\fIReturns the python config object from the class variable self\&.config\&. \fP"
+.ti -1c
+.RI "def \fBupdate_config\fP"
+.br
+.RI "\fIUpdates config_file for a given sample_list\&. \fP"
+.ti -1c
+.RI "def \fBauto_update\fP"
+.br
+.RI "\fIUpdate the latest revision of config files if older than age_in_hours\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBdirectory\fP"
+.br
+.RI "\fIWorking directory of the config manager\&. \fP"
+.ti -1c
+.RI "\fBconfig\fP"
+.br
+.RI "\fIConfig object that is being worked on after reading\&. \fP"
+.ti -1c
+.RI "\fBaix3adb\fP"
+.br
+.RI "\fIAix3adb database object\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Database config manager class\&. 
+
+The database config manager is a tool to compare sample entries in a database with a local config file\&. It can update the contents of said file and write them to a new revision, meaning that no information is lost\&. 
+.PP
+Definition at line 55 of file dbconfigmanager\&.py\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "def dbconfigmanager\&.DBConfigManager\&.__init__ (self, directory_path = \fC'\&.\&./cfg/xs/'\fP)"
+
+.PP
+Initialization method\&. Can be used to set up the working directory by passing it as an argument\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer\&. 
+.br
+\fIdirectory_path\fP The path to the working directory\&. 
+.RE
+.PP
+
+.PP
+Definition at line 62 of file dbconfigmanager\&.py\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "def dbconfigmanager\&.DBConfigManager\&.auto_update (self, sample_list, age_in_hours = \fC24\fP)"
+
+.PP
+Update the latest revision of config files if older than age_in_hours\&. Calls update_config(sample_list) if the timestamp is older than age_in_hours\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.br
+\fIsample_list\fP List of samples to update in the config file 
+.br
+\fIage_in_hours\fP Age of the latest revision in hours after which it should be updated 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+True if the update is succesful or unnecessary, else False\&. 
+.RE
+.PP
+
+.PP
+Definition at line 276 of file dbconfigmanager\&.py\&.
+.PP
+References dbconfigmanager\&.DBConfigManager\&.read_config(), and dbconfigmanager\&.DBConfigManager\&.update_config()\&.
+.SS "def dbconfigmanager\&.DBConfigManager\&.compare_sample (self, sample)"
+
+.PP
+Compares sample values with database entry\&. Returns true if sample values are up to date, else false Returns the absolut path to the latest revision of config files
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.br
+\fIsample\fP Sample which is being compared 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+True if sample is up to date, else False 
+.RE
+.PP
+
+.PP
+Definition at line 132 of file dbconfigmanager\&.py\&.
+.PP
+Referenced by dbconfigmanager\&.DBConfigManager\&.update_config()\&.
+.SS "def dbconfigmanager\&.DBConfigManager\&.get_config (self)"
+
+.PP
+Returns the python config object from the class variable self\&.config\&. Useful when you want to compare config values in the plotting tool to the ones in the database
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Python config object 
+.RE
+.PP
+
+.PP
+Definition at line 218 of file dbconfigmanager\&.py\&.
+.PP
+References dbconfigmanager\&.DBConfigManager\&.config\&.
+.SS "def dbconfigmanager\&.DBConfigManager\&.latest_abs_file (self)"
+
+.PP
+Returns the path to the file corresponding to \fBlatest_revision()\fP 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Absolute path to latest revision of config file 
+.RE
+.PP
+
+.PP
+Definition at line 120 of file dbconfigmanager\&.py\&.
+.PP
+References dbconfigmanager\&.DBConfigManager\&.directory, cesubmit\&.Task\&.directory, and dbconfigmanager\&.DBConfigManager\&.latest_file()\&.
+.SS "def dbconfigmanager\&.DBConfigManager\&.latest_file (self)"
+
+.PP
+Returns the file name of the latest revision of config files named 'xsv123\&.cfg'\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+File name of the latest revision of config files 
+.RE
+.PP
+
+.PP
+Definition at line 112 of file dbconfigmanager\&.py\&.
+.PP
+References dbconfigmanager\&.DBConfigManager\&.latest_revision()\&.
+.PP
+Referenced by dbconfigmanager\&.DBConfigManager\&.latest_abs_file()\&.
+.SS "def dbconfigmanager\&.DBConfigManager\&.latest_revision (self)"
+
+.PP
+Returns the latest revision of the config files named 'xsv123\&.cfg'\&. Checks the working directory for the xsv123\&.cfg file with the highest number and returns that number
+.PP
+\fBReturns:\fP
+.RS 4
+Latest config file revision number 
+.PP
+.nf
+Returns the latest revision of the config files named 'xsv123.cfg'.
+.fi
+.PP
+ 
+.RE
+.PP
+
+.PP
+Definition at line 89 of file dbconfigmanager\&.py\&.
+.PP
+References dbconfigmanager\&.DBConfigManager\&.directory, and cesubmit\&.Task\&.directory\&.
+.PP
+Referenced by dbconfigmanager\&.DBConfigManager\&.latest_file(), dbconfigmanager\&.DBConfigManager\&.read_config(), and dbconfigmanager\&.DBConfigManager\&.update_config()\&.
+.SS "def dbconfigmanager\&.DBConfigManager\&.read_config (self, config_file = \fCNone\fP)"
+
+.PP
+Reads the given config_file into the class variable self\&.config\&. If no config_file is given, the latest revision of config files is being read\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.br
+\fIconfig_file\fP Path to a config file to be read\&. Optional\&. 
+.RE
+.PP
+
+.PP
+Definition at line 193 of file dbconfigmanager\&.py\&.
+.PP
+References dbconfigmanager\&.DBConfigManager\&.directory, cesubmit\&.Task\&.directory, and dbconfigmanager\&.DBConfigManager\&.latest_revision()\&.
+.PP
+Referenced by dbconfigmanager\&.DBConfigManager\&.auto_update(), and dbconfigmanager\&.DBConfigManager\&.update_config()\&.
+.SS "def dbconfigmanager\&.DBConfigManager\&.set_directory (self, directory_path)"
+
+.PP
+Set the working directory of the \fBDBConfigManager\fP\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer\&. 
+.br
+\fIdirectory_path\fP The path to the working directory\&. 
+.PP
+.nf
+Set the working directory of the config manager.
+.fi
+.PP
+ 
+.RE
+.PP
+
+.PP
+Definition at line 78 of file dbconfigmanager\&.py\&.
+.PP
+References dbconfigmanager\&.DBConfigManager\&.directory, and cesubmit\&.Task\&.directory\&.
+.SS "def dbconfigmanager\&.DBConfigManager\&.update_config (self, sample_list, config_file = \fCNone\fP)"
+
+.PP
+Updates config_file for a given sample_list\&. Searches for entries from sample_list in self\&.config and compares with potential database entries\&. If differences are found, a new config file revision with updated entires is created\&. Default value for config_file is the latest revision in the working directory\&. Return value indicates if the update was succesful\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.br
+\fIsample_list\fP List of samples to update in the config file 
+.br
+\fIconfig_file\fP Config file to update\&. Default is the latest revision of config files 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+True if the update is succesful or unnecessary, else False\&. 
+.RE
+.PP
+
+.PP
+Definition at line 235 of file dbconfigmanager\&.py\&.
+.PP
+References dbconfigmanager\&.DBConfigManager\&.compare_sample(), dbconfigmanager\&.DBConfigManager\&.directory, cesubmit\&.Task\&.directory, dbconfigmanager\&.DBConfigManager\&.latest_revision(), and dbconfigmanager\&.DBConfigManager\&.read_config()\&.
+.PP
+Referenced by dbconfigmanager\&.DBConfigManager\&.auto_update()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "dbconfigmanager\&.DBConfigManager\&.aix3adb"
+
+.PP
+Aix3adb database object\&. 
+.PP
+Definition at line 72 of file dbconfigmanager\&.py\&.
+.SS "dbconfigmanager\&.DBConfigManager\&.config"
+
+.PP
+Config object that is being worked on after reading\&. 
+.PP
+Definition at line 69 of file dbconfigmanager\&.py\&.
+.PP
+Referenced by dbconfigmanager\&.DBConfigManager\&.get_config()\&.
+.SS "dbconfigmanager\&.DBConfigManager\&.directory"
+
+.PP
+Working directory of the config manager\&. 
+.PP
+Definition at line 66 of file dbconfigmanager\&.py\&.
+.PP
+Referenced by dbconfigmanager\&.DBConfigManager\&.latest_abs_file(), dbconfigmanager\&.DBConfigManager\&.latest_revision(), dbconfigmanager\&.DBConfigManager\&.read_config(), dbconfigmanager\&.DBConfigManager\&.set_directory(), and dbconfigmanager\&.DBConfigManager\&.update_config()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Aachen-3A from the source code\&.
