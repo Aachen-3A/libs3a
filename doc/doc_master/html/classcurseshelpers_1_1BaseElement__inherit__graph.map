@@ -1,0 +1,7 @@
+<map id="curseshelpers.BaseElement" name="curseshelpers.BaseElement">
+<area shape="rect" href="$classcurseshelpers_1_1BottomText.html" title="curseshelpers.BottomText" alt="" coords="241,5,417,32"/>
+<area shape="rect" href="$classcurseshelpers_1_1MultiText.html" title="curseshelpers.MultiText" alt="" coords="248,56,411,83"/>
+<area shape="rect" href="$classcurseshelpers_1_1SelectTable.html" title="curseshelpers.SelectTable" alt="" coords="240,107,419,133"/>
+<area shape="rect" href="$classcurseshelpers_1_1TabbedText.html" title="curseshelpers.TabbedText" alt="" coords="240,157,419,184"/>
+<area shape="rect" href="$classcurseshelpers_1_1Text.html" title="curseshelpers.Text" alt="" coords="263,208,396,235"/>
+</map>

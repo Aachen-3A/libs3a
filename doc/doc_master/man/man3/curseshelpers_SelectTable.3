@@ -1,0 +1,348 @@
+.TH "curseshelpers.SelectTable" 3 "Thu Jan 29 2015" "Aachen-3A" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+curseshelpers.SelectTable \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits \fBcurseshelpers\&.BaseElement\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBsetColHeaders\fP"
+.br
+.ti -1c
+.RI "def \fBsetFooters\fP"
+.br
+.ti -1c
+.RI "def \fBaddRow\fP"
+.br
+.ti -1c
+.RI "def \fBclear\fP"
+.br
+.ti -1c
+.RI "def \fBrefresh\fP"
+.br
+.ti -1c
+.RI "def \fBgoUp\fP"
+.br
+.ti -1c
+.RI "def \fBgoDown\fP"
+.br
+.ti -1c
+.RI "def \fBnrows\fP"
+.br
+.ti -1c
+.RI "def \fBpageUp\fP"
+.br
+.ti -1c
+.RI "def \fBpageDown\fP"
+.br
+.ti -1c
+.RI "def \fBhome\fP"
+.br
+.ti -1c
+.RI "def \fBend\fP"
+.br
+.ti -1c
+.RI "def \fBselectedRow\fP"
+.br
+.ti -1c
+.RI "def \fBheight\fP"
+.br
+.ti -1c
+.RI "def \fBwidth\fP"
+.br
+.ti -1c
+.RI "def \fBgoLeft\fP"
+.br
+.ti -1c
+.RI "def \fBgoRight\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBparent\fP"
+.br
+.ti -1c
+.RI "\fBleft\fP"
+.br
+.ti -1c
+.RI "\fBpad\fP"
+.br
+.ti -1c
+.RI "\fBheader\fP"
+.br
+.ti -1c
+.RI "\fBposition\fP"
+.br
+.ti -1c
+.RI "\fBkeys\fP"
+.br
+.ti -1c
+.RI "\fBcolFooters\fP"
+.br
+.ti -1c
+.RI "\fBcolHeaders\fP"
+.br
+.ti -1c
+.RI "\fBcolWidths\fP"
+.br
+.ti -1c
+.RI "\fBfooter\fP"
+.br
+.ti -1c
+.RI "\fBcursor\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB_drawFooters\fP"
+.br
+.ti -1c
+.RI "def \fB_drawColHeaders\fP"
+.br
+.ti -1c
+.RI "def \fB_redrawRows\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fB_height\fP"
+.br
+.ti -1c
+.RI "\fB_width\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+A Table where a single row can be selected
+
+.fi
+.PP
+ 
+.PP
+Definition at line 290 of file curseshelpers\&.py\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "def curseshelpers\&.SelectTable\&.__init__ (self, screen, maxrows = \fC1000\fP, top = \fC1\fP, left = \fC0\fP, height = \fCNone\fP, width = \fCNone\fP, footer = \fCFalse\fP)"
+
+.PP
+Definition at line 293 of file curseshelpers\&.py\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "def curseshelpers\&.SelectTable\&._drawColHeaders (self)\fC [private]\fP"
+
+.PP
+Definition at line 328 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&.colHeaders, curseshelpers\&.SelectTable\&.colWidths, curseshelpers\&.TabbedText\&.width(), curseshelpers\&.BottomText\&.width(), rootplotlib\&.Legend\&.width, curseshelpers\&.MultiText\&.width(), curseshelpers\&.Text\&.width(), and curseshelpers\&.SelectTable\&.width()\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.refresh()\&.
+.SS "def curseshelpers\&.SelectTable\&._drawFooters (self)\fC [private]\fP"
+
+.PP
+Definition at line 319 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&.colFooters, and curseshelpers\&.SelectTable\&.colWidths\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.refresh()\&.
+.SS "def curseshelpers\&.SelectTable\&._redrawRows (self, rowids)\fC [private]\fP"
+
+.PP
+Definition at line 361 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&.colWidths, curseshelpers\&.SelectTable\&.cursor, curseshelpers\&.TabbedText\&.width(), curseshelpers\&.BottomText\&.width(), rootplotlib\&.Legend\&.width, curseshelpers\&.MultiText\&.width(), curseshelpers\&.Text\&.width(), and curseshelpers\&.SelectTable\&.width()\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.addRow(), curseshelpers\&.SelectTable\&.end(), curseshelpers\&.SelectTable\&.goDown(), curseshelpers\&.SelectTable\&.home(), curseshelpers\&.SelectTable\&.pageDown(), and curseshelpers\&.SelectTable\&.pageUp()\&.
+.SS "def curseshelpers\&.SelectTable\&.addRow (self, row, formatting = \fCNone\fP, key = \fCNone\fP)"
+
+.PP
+Definition at line 334 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.default(), curseshelpers\&.TabbedText\&.nrows(), curseshelpers\&.MultiText\&.nrows, curseshelpers\&.Text\&.nrows, and curseshelpers\&.SelectTable\&.nrows()\&.
+.SS "def curseshelpers\&.SelectTable\&.clear (self)"
+
+.PP
+Definition at line 339 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&.keys\&.
+.SS "def curseshelpers\&.SelectTable\&.end (self)"
+
+.PP
+Definition at line 392 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.SelectTable\&.cursor, curseshelpers\&.TabbedText\&.height(), curseshelpers\&.BottomText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.MultiText\&.height(), curseshelpers\&.Text\&.height(), curseshelpers\&.SelectTable\&.height(), curseshelpers\&.TabbedText\&.nrows(), curseshelpers\&.MultiText\&.nrows, curseshelpers\&.Text\&.nrows, curseshelpers\&.SelectTable\&.nrows(), curseshelpers\&.MultiText\&.position, curseshelpers\&.Text\&.position, and curseshelpers\&.SelectTable\&.position\&.
+.SS "def curseshelpers\&.SelectTable\&.goDown (self)"
+
+.PP
+Definition at line 354 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.SelectTable\&.cursor, curseshelpers\&.TabbedText\&.height(), curseshelpers\&.BottomText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.MultiText\&.height(), curseshelpers\&.Text\&.height(), curseshelpers\&.SelectTable\&.height(), curseshelpers\&.TabbedText\&.nrows(), curseshelpers\&.MultiText\&.nrows, curseshelpers\&.Text\&.nrows, curseshelpers\&.SelectTable\&.nrows(), curseshelpers\&.MultiText\&.position, curseshelpers\&.Text\&.position, and curseshelpers\&.SelectTable\&.position\&.
+.SS "def curseshelpers\&.BaseElement\&.goLeft (self)\fC [inherited]\fP"
+
+.PP
+Definition at line 29 of file curseshelpers\&.py\&.
+.SS "def curseshelpers\&.BaseElement\&.goRight (self)\fC [inherited]\fP"
+
+.PP
+Definition at line 31 of file curseshelpers\&.py\&.
+.SS "def curseshelpers\&.SelectTable\&.goUp (self)"
+
+.PP
+Definition at line 348 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&.cursor\&.
+.SS "def curseshelpers\&.SelectTable\&.height (self)"
+
+.PP
+Definition at line 400 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.TabbedText\&._height, curseshelpers\&.BottomText\&._height, curseshelpers\&.MultiText\&._height, curseshelpers\&.Text\&._height, and curseshelpers\&.SelectTable\&._height\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.end(), curseshelpers\&.SelectTable\&.goDown(), curseshelpers\&.SelectTable\&.pageDown(), curseshelpers\&.SelectTable\&.pageUp(), and curseshelpers\&.SelectTable\&.refresh()\&.
+.SS "def curseshelpers\&.SelectTable\&.home (self)"
+
+.PP
+Definition at line 388 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.SelectTable\&.cursor, curseshelpers\&.MultiText\&.position, curseshelpers\&.Text\&.position, and curseshelpers\&.SelectTable\&.position\&.
+.SS "def curseshelpers\&.SelectTable\&.nrows (self)"
+
+.PP
+Definition at line 376 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.addRow(), curseshelpers\&.SelectTable\&.end(), curseshelpers\&.SelectTable\&.goDown(), and curseshelpers\&.SelectTable\&.pageDown()\&.
+.SS "def curseshelpers\&.SelectTable\&.pageDown (self)"
+
+.PP
+Definition at line 383 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.SelectTable\&.cursor, curseshelpers\&.TabbedText\&.height(), curseshelpers\&.BottomText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.MultiText\&.height(), curseshelpers\&.Text\&.height(), curseshelpers\&.SelectTable\&.height(), curseshelpers\&.TabbedText\&.nrows(), curseshelpers\&.MultiText\&.nrows, curseshelpers\&.Text\&.nrows, curseshelpers\&.SelectTable\&.nrows(), curseshelpers\&.MultiText\&.position, curseshelpers\&.Text\&.position, and curseshelpers\&.SelectTable\&.position\&.
+.SS "def curseshelpers\&.SelectTable\&.pageUp (self)"
+
+.PP
+Definition at line 378 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.SelectTable\&.cursor, curseshelpers\&.TabbedText\&.height(), curseshelpers\&.BottomText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.MultiText\&.height(), curseshelpers\&.Text\&.height(), curseshelpers\&.SelectTable\&.height(), curseshelpers\&.MultiText\&.position, curseshelpers\&.Text\&.position, and curseshelpers\&.SelectTable\&.position\&.
+.SS "def curseshelpers\&.SelectTable\&.refresh (self)"
+
+.PP
+Definition at line 341 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&._drawColHeaders(), curseshelpers\&.SelectTable\&._drawFooters(), curseshelpers\&.SelectTable\&.colFooters, curseshelpers\&.TabbedText\&.height(), curseshelpers\&.BottomText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.MultiText\&.height(), curseshelpers\&.Text\&.height(), curseshelpers\&.SelectTable\&.height(), curseshelpers\&.TabbedText\&.left, curseshelpers\&.BottomText\&.left, curseshelpers\&.MultiText\&.left, curseshelpers\&.Text\&.left, curseshelpers\&.SelectTable\&.left, curseshelpers\&.MultiText\&.position, curseshelpers\&.Text\&.position, curseshelpers\&.SelectTable\&.position, curseshelpers\&.TabbedText\&.width(), curseshelpers\&.BottomText\&.width(), rootplotlib\&.Legend\&.width, curseshelpers\&.MultiText\&.width(), curseshelpers\&.Text\&.width(), and curseshelpers\&.SelectTable\&.width()\&.
+.SS "def curseshelpers\&.SelectTable\&.selectedRow (self)"
+
+.PP
+Definition at line 397 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&.cursor, and curseshelpers\&.SelectTable\&.keys\&.
+.SS "def curseshelpers\&.SelectTable\&.setColHeaders (self, headers, colwidths = \fCNone\fP)"
+
+.PP
+Definition at line 307 of file curseshelpers\&.py\&.
+.SS "def curseshelpers\&.SelectTable\&.setFooters (self, footers)"
+
+.PP
+Definition at line 315 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.SelectTable\&.colFooters\&.
+.SS "def curseshelpers\&.SelectTable\&.width (self)"
+
+.PP
+Definition at line 403 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.TabbedText\&._width, curseshelpers\&.BottomText\&._width, curseshelpers\&.MultiText\&._width, curseshelpers\&.Text\&._width, and curseshelpers\&.SelectTable\&._width\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&._drawColHeaders(), curseshelpers\&.SelectTable\&._redrawRows(), and curseshelpers\&.SelectTable\&.refresh()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "curseshelpers\&.SelectTable\&._height\fC [private]\fP"
+
+.PP
+Definition at line 300 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.height()\&.
+.SS "curseshelpers\&.SelectTable\&._width\fC [private]\fP"
+
+.PP
+Definition at line 301 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.width()\&.
+.SS "curseshelpers\&.SelectTable\&.colFooters"
+
+.PP
+Definition at line 306 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&._drawFooters(), curseshelpers\&.SelectTable\&.refresh(), and curseshelpers\&.SelectTable\&.setFooters()\&.
+.SS "curseshelpers\&.SelectTable\&.colHeaders"
+
+.PP
+Definition at line 308 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&._drawColHeaders()\&.
+.SS "curseshelpers\&.SelectTable\&.colWidths"
+
+.PP
+Definition at line 311 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&._drawColHeaders(), curseshelpers\&.SelectTable\&._drawFooters(), and curseshelpers\&.SelectTable\&._redrawRows()\&.
+.SS "curseshelpers\&.SelectTable\&.cursor"
+
+.PP
+Definition at line 350 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.SelectTable\&.end(), curseshelpers\&.SelectTable\&.goDown(), curseshelpers\&.SelectTable\&.goUp(), curseshelpers\&.SelectTable\&.home(), curseshelpers\&.SelectTable\&.pageDown(), curseshelpers\&.SelectTable\&.pageUp(), and curseshelpers\&.SelectTable\&.selectedRow()\&.
+.SS "curseshelpers\&.SelectTable\&.footer"
+
+.PP
+Definition at line 317 of file curseshelpers\&.py\&.
+.SS "curseshelpers\&.SelectTable\&.header"
+
+.PP
+Definition at line 303 of file curseshelpers\&.py\&.
+.SS "curseshelpers\&.SelectTable\&.keys"
+
+.PP
+Definition at line 305 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.clear(), and curseshelpers\&.SelectTable\&.selectedRow()\&.
+.SS "curseshelpers\&.SelectTable\&.left"
+
+.PP
+Definition at line 299 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.refresh()\&.
+.SS "curseshelpers\&.SelectTable\&.pad"
+
+.PP
+Definition at line 302 of file curseshelpers\&.py\&.
+.SS "curseshelpers\&.SelectTable\&.parent"
+
+.PP
+Definition at line 298 of file curseshelpers\&.py\&.
+.SS "curseshelpers\&.SelectTable\&.position"
+
+.PP
+Definition at line 304 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.SelectTable\&.end(), curseshelpers\&.SelectTable\&.goDown(), curseshelpers\&.SelectTable\&.home(), curseshelpers\&.SelectTable\&.pageDown(), curseshelpers\&.SelectTable\&.pageUp(), and curseshelpers\&.SelectTable\&.refresh()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Aachen-3A from the source code\&.

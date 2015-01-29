@@ -1,0 +1,80 @@
+.TH "curseshelpers.StdOutWrapper" 3 "Thu Jan 29 2015" "Aachen-3A" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+curseshelpers.StdOutWrapper \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBwrite\fP"
+.br
+.ti -1c
+.RI "def \fBflush\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBbottomText\fP"
+.br
+.ti -1c
+.RI "\fBdoflush\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+This is a Stream object to redirect stdout and stderr to a BottomText element, which
+can be dispayed in curses
+
+.fi
+.PP
+ 
+.PP
+Definition at line 408 of file curseshelpers\&.py\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "def curseshelpers\&.StdOutWrapper\&.__init__ (self, screen, nlines = \fC10\fP)"
+
+.PP
+Definition at line 412 of file curseshelpers\&.py\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "def curseshelpers\&.StdOutWrapper\&.flush (self)"
+
+.PP
+Definition at line 419 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.StdOutWrapper\&.doflush\&.
+.SS "def curseshelpers\&.StdOutWrapper\&.write (self, txt)"
+
+.PP
+Definition at line 416 of file curseshelpers\&.py\&.
+.PP
+References curseshelpers\&.StdOutWrapper\&.doflush\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "curseshelpers\&.StdOutWrapper\&.bottomText"
+
+.PP
+Definition at line 414 of file curseshelpers\&.py\&.
+.SS "curseshelpers\&.StdOutWrapper\&.doflush"
+
+.PP
+Definition at line 415 of file curseshelpers\&.py\&.
+.PP
+Referenced by curseshelpers\&.StdOutWrapper\&.flush(), and curseshelpers\&.StdOutWrapper\&.write()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Aachen-3A from the source code\&.
