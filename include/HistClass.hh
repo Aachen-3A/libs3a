@@ -297,6 +297,27 @@ namespace HistClass {
         histo2[dummy]->Fill(valuex,valuey,weight);
     }
 
+    /*! \brief Function to fill an event in a 2D histogram of the map
+     *
+     * This function fills one value with one weight for one event in one
+     * specific histogram. The function also checks if the histogram exists
+     * in the map, otherwise it will print an error message.
+     * \param[in] n_histo Number of the histogram that should be filled
+     * \param[in] name Name of the histogram which should be filled
+     * \param[in] valuex x-value that should be filled
+     * \param[in] valuey y-value that should be filled
+     * \param[in] weight Weight of the event that should be filled
+     */
+    static void Fill(Int_t n_histo, const char * name, double valuex, double valuey, double weight)
+    {
+        std::map<string, TH2D * >::iterator it =histo2.find(Form("h2_%d_%s", n_histo, name));
+        if(it!=histo2.end()){
+            it->second->Fill(valuex,valuey,weight);
+        }else{
+            std::cerr << "(Fill) No hist: " << Form("h2_%d_%s", n_histo, name) << " in map " << n_histo << std::endl;
+        }
+    }
+
     /*! \brief Function to fill an event in a nSparse of the nSparse map
      *
      * This function fills one value with one event in one specific
