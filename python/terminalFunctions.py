@@ -32,8 +32,6 @@ class bcolors:
 #
 # Reads the width and height of the current terminal and returns
 # this two values.
-# @param[out] int(cr[1]) Width of the terminal
-# @param[out] int(cr[0]) Height of the terminal
 def getTerminalSize():
     env = os.environ
     def ioctl_GWINSZ(fd):

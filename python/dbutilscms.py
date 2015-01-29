@@ -116,7 +116,6 @@ class McMUtilities():
 class DBSUtilities():
     
     ## The constructor.
-    # @type self: DBSUtilities
     # @param self: The object pointer.
     def __init__(self):
         self.dbsUrl = 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader'
@@ -126,18 +125,14 @@ class DBSUtilities():
         self.totalFileSize = 0
     
     ## Function to get all detail blocks for a dataset
-    # @type self: DBSUtilities
     # @param self: The object pointer.        
-    # @type dataset: string
-    # @param dataset: the dataset name    
+    # @param dataset String - The dataset name
     def getDatasetBlocks(self, dataset):
         return  self.dbsApi.listBlockSummaries( dataset = dataset )
 
     ## Function to get a summary for a dataset
-    # @type self: DBSUtilities
     # @param self: The object pointer.        
-    # @type dataset: string
-    # @param dataset: the dataset name        
+    # @param dataset String - The dataset name        
     def getDatasetSummary(self, dataset):
         datasetBlocks = self.getDatasetBlocks(dataset)
         datasetSummary = {}

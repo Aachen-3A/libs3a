@@ -7,10 +7,10 @@ import subprocess
 import time
 
 ## Get list of files with certain file extension in dCap folder recursively
-# @type dir: string
-# @param dir: The dCap folder without /pnfs/physik.rwth-aachen.de/cms/store/user/
-# @type mem_limit: int
-# @param mem_limit: Maximum summed filesize before files are splitted in sublists [default:500000000] 
+# @param dir String containing the dCap folder without /pnfs/physik.rwth-aachen.de/cms/store/user/
+# @param Tag Tag parameter is depreceated and kept for compability with old versions of television
+# @param mem_limit Integer maximum summed filesize before files are splitted in sublists [default:500000000] 
+# @param fileXtension file extension for which files should be listed 
 def getdcachelist(dir , Tag , mem_limit = 500000000, fileXtension= '.pxlio'):
     # try to run ls -r query with uberftp in specified folder
     cmd_readdcache = ["uberftp","grid-ftp.physik.rwth-aachen.de",r"ls -r /pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (dir)]
@@ -52,7 +52,7 @@ def getdcachelist(dir , Tag , mem_limit = 500000000, fileXtension= '.pxlio'):
 
 ## Returns the life time left. for a proxy.
 #
-#@return int time left for the proxy 
+#@returns int time left for the proxy 
 def timeLeftVomsProxy():
     proc = subprocess.Popen( ['voms-proxy-info', '-timeleft' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
     output = proc.communicate()[0]
@@ -63,9 +63,8 @@ def timeLeftVomsProxy():
         
 ## Checks if the proxy is valid longer than time
 #
-#@type time: int
-#@param time: reference time in seconds to check against
-#@return boolean returns True if the proxy is valid longer than time, False otherwise.
+#@param time: integer reference time in seconds to check against
+#@returns boolean returns True if the proxy is valid longer than time, False otherwise.
 def checkVomsProxy( time=86400 ):
     timeleft = timeLeftVomsProxy()
     return timeleft > time
@@ -73,9 +72,7 @@ def checkVomsProxy( time=86400 ):
 ## Creates a new vom proxy
 #
 # This function creates a new 
-#@type voms: string
 #@param voms: the voms group used to set up the server [default:cms:/cms/dcms]
-#@type passphrase: string
 #@param passphrase: Passphrase for GRID certificate [default:none]. The password request is send to the prompt if no passphrase given
 def renewVomsProxy( voms='cms:/cms/dcms', passphrase=None ):
     """Make a new proxy with a lifetime of one week."""
@@ -92,10 +89,8 @@ def renewVomsProxy( voms='cms:/cms/dcms', passphrase=None ):
 
 ## Checks if the proxy is valid longer than time and renew if needed.
 #
-#@type time: int
 #@param time: reference time in seconds to check against
 #@param voms: the voms group used to set up the server [default:cms:/cms/dcms]
-#@type passphrase: string
 #@param passphrase: Passphrase for GRID certificate [default:none]. The password request is send to the prompt if no passphrase given
 def checkAndRenewVomsProxy( time=604800, voms='cms:/cms/dcms', passphrase=None ):
     if not checkVomsProxy( time ):

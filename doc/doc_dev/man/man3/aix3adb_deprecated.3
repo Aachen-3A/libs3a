@@ -1,0 +1,75 @@
+.TH "aix3adb_deprecated" 3 "Thu Jan 29 2015" "Aachen-3A" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+aix3adb_deprecated \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBaix3adb\fP"
+.br
+.ti -1c
+.RI "class \fBaix3adbAuth\fP"
+.br
+.ti -1c
+.RI "class \fBcookietransportrequest\fP"
+.br
+.ti -1c
+.RI "class \fBcookietransport\fP"
+.br
+.ti -1c
+.RI "class \fBcookiesafetransport\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fBmain\fP"
+.br
+.ti -1c
+.RI "def \fBtransport\fP"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "tuple \fBlog\fP = logging\&.getLogger( '\fBaix3adb\fP' )"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "def aix3adb_deprecated\&.main ()"
+
+.PP
+Definition at line 115 of file aix3adb_deprecated\&.py\&.
+.SS "def aix3adb_deprecated\&.transport (uri)"
+
+.PP
+.nf
+Return an appropriate Transport for the URI.
+
+If the URI type is https, return a CookieSafeTransport.
+If the type is http, return a CookieTransport.
+
+.fi
+.PP
+ 
+.PP
+Definition at line 200 of file aix3adb_deprecated\&.py\&.
+.PP
+Referenced by aix3adb_deprecated\&.aix3adb\&.getAuthServerProxy()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "tuple aix3adb_deprecated\&.log = logging\&.getLogger( '\fBaix3adb\fP' )"
+
+.PP
+Definition at line 8 of file aix3adb_deprecated\&.py\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Aachen-3A from the source code\&.

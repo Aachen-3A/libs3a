@@ -20,10 +20,11 @@ import multiprocessing
 class CrabController():
     
     ## The constructor.
-    # @type self: CrabController
     # @param self: The object pointer.
-    # @type self: A logging logger instance
-    # @param self: A previously defined logger. Crab log messages will use this logger as their parent logger.
+    # @param logger: A previously defined logger instance. Crab log messages will use this logger as their parent logger.
+    # @param workingArea path to a workingArea where subprocesses should be run (e.g. crab commands)
+    # @param voGroup The virtual organisation you belong to
+    # @param username Useres Hypernews username
     def __init__(self, logger = None , workingArea = None, voGroup = None, username = None):
         if workingArea is not None:
             self.workingArea = workingArea
@@ -65,11 +66,8 @@ class CrabController():
                 
     ## Check if crab can write to specified site
     #
-    # @type self: CrabController
     # @param self: The object pointer.
-    # @type site string
     # @param site The Site symbol [default:T2_DE_RWTH]
-    # @type path string
     # @param path lfn path to check write permission in. see twiki WorkBookCRAB3Tutorial
     # @return boolean which is True if user can write to site and False otherwise
     def checkwrite(self,site='T2_DE_RWTH',path='noPath'):    
@@ -93,9 +91,7 @@ class CrabController():
     
     ## Check if crab can write to specified site
     #
-    # @type self: CrabController
     # @param self: The object pointer.
-    # @type name string
     # @param name The crab3 request name, a.k.a the sample name
     def submit(self,name):
         cmd = "crab submit --voGroup=%s %s"%( self.voGroup ,name)
@@ -109,11 +105,8 @@ class CrabController():
 
     ## Resubmit all failed tasks in job or specified list of jobs in task
     #
-    # @type self: CrabController
     # @param self: The object pointer.
-    # @type name string
     # @param name The crab3 request name, a.k.a the sample name
-    # @type joblist list of strings
     # @param joblist The crab3 request name, a.k.a the sample name
     def resubmit(self,name,joblist = None):
         if str.startswith(name, "crab_ "):
@@ -127,11 +120,10 @@ class CrabController():
         else:
             p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
             (stringlist,string_err) = p.communicate()
-            self.logger.info(crablog,"crab sumbit called for task %s"%name)
+            self.logger.info("crab resumbit called for task %s"%name)
     
     ## Returns the hn name for a user with valid proxy
     #
-    # @type self: CrabController
     # @param self: The object pointer.
     # @returns users hypernews name
     def checkusername(self):
@@ -150,10 +142,8 @@ class CrabController():
     
     ## Check crab status
     #
-    # @type self: CrabController
     # @param self: The object pointer.
-    # @type name string
-    # @param name The crab3 request name, a.k.a the sample name
+    # @param name The crab3 request name, a.k.a the sample name (string)
     def status(self,name):
         cmd = 'crab status crab_%s --long --json'%name
         if self.dry_run:
@@ -206,7 +196,7 @@ class CrabController():
     # - options where a error should be raised if the option was previously defined
     # - options where previous definitions should be kept
     # - options where previous definitions should be overriden
-    # @type Optparse parser instance
+    #
     # @param parser A previously created parser oject which should be extenden [default: new instance]
     # @return A new or extenden optparse parser instance    
     def commandlineOptions(self,parser = optparse.OptionParser( 'usage: %prog' )):
@@ -253,12 +243,13 @@ class CrabTask:
     
     ## The object constructor
     #
-    # @type self: CrabTask
-    # @param self: The object pointer.
-    # @type taskname: String
-    # @param taskname: The object pointer.
-    # @type initUpdate: Boolean
-    # @param initUpdate: Flag if crab status should be called when an instance is created
+    # @param self The object pointer.
+    # @param taskname The name of the crab Task
+    # @param crabController A crabController object if already initalized, a new one is created if None
+    # @param initUpdate Boolean flag if crab status should be called when an instance is created
+    # @param localDir The local directory for the crab task
+    # @param outlfn The destination for the crab job output on your local GRID storage element
+    # @param StorageFileList A list of files for this task on your GRID storage element
     def __init__(self, taskname , crabController = None , initUpdate = True, localDir = "", outlfn = "" , StorageFileList = [] ):
         self.name = taskname
         self.uuid = uuid.uuid4()
@@ -292,7 +283,6 @@ class CrabTask:
             
     ## Function to update Task in associated Jobs
     #
-    # @type self: CrabTask
     # @param self: The object pointer.        
     def update(self):
         #~ self.lock.acquire()
@@ -309,12 +299,11 @@ class CrabTask:
             #~ else:
                 #~ self.state = "COMPLETE"
         #~ self.lock.release()
+        
     ## Function to update JobStatistics
     #
-    # @type self: CrabTask
     # @param self: The object pointer.           
-    # @type dCacheFilelist: list of strings
-    # @param dCacheFilelist: A list of files on the dCache           
+    # @param dCacheFileList: A list of files on the dCache           
     def updateJobStats(self,dCacheFileList = None):
         jobKeys = sorted(self.jobs.keys())
         try:
@@ -352,9 +341,7 @@ class TaskStats:
        
     ## The object constructor
     #
-    # @type self: TaskStats
     # @param self: The object pointer.
-    # @type tasklist: List of CrabTask objects
     # @param tasklist: (Optional) List of CrabTasks for which statistics should be calculated
     def __init__(self, tasklist = None):
         if tasklist is not None:
@@ -364,9 +351,7 @@ class TaskStats:
             
     ## This function updates the statistics for a given tasklist
     #
-    # @type self: TaskStats
     # @param self: The object pointer.
-    # @type tasklist: List of CrabTask objects
     # @param tasklist: List of CrabTasks for which statistics should be calculated        
     def updateStats(self,tasklist):
         self.clearStats()
@@ -384,7 +369,6 @@ class TaskStats:
             
     ## This function sets all counts to zero
     #
-    # @type self: TaskStats
     # @param self: The object pointer. 
     def clearStats(self):
         self.nTasks = 0

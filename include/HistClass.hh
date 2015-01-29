@@ -158,6 +158,30 @@ namespace HistClass {
         histo2[dummy] -> GetYaxis() -> SetTitle(ytitle);
     }
 
+    /*! \brief Function to create a number of 2D histograms in the histo map
+     *
+     * \param[in] n_histos Number of histograms that should be created with different numbers
+     * \param[in] name Name of the histogram that should be created
+     * \param[in] nbinsx Number of bins on the x-axis
+     * \param[in] xlow Lower edge of the x-axis
+     * \param[in] xup Upper edge of the x-axis
+     * \param[in] nbinsy Number of bins on the y-axis
+     * \param[in] ylow Lower edge of the y-axis
+     * \param[in] yup Upper edge of the y-axis
+     * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
+     * \param[in] ytitle Optinal title of the y-axis (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(Int_t n_histos, const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle = "", TString ytitle = "")
+    {
+        for(int i = 0; i < n_histos; i++){
+            TH2D * tmphist = new TH2D(Form("h2_%d_%s", i, name), Form("h2_%d_%s", i, name), nbinsx, xlow, xup, nbinsy, ylow, yup);
+            tmphist->SetXTitle(xtitle);
+            tmphist->SetYTitle(ytitle);
+            tmphist->Sumw2();
+            histo2[Form("h2_%d_%s", i, name)] = tmphist;
+        }
+    }
+
     /*! \brief Function to create one NSparse in the nSparse map
      *
      * \param[in] name Name of the NSparse that should be created
@@ -271,6 +295,27 @@ namespace HistClass {
     {
         std::string dummy = Form("h2_%s", name);
         histo2[dummy]->Fill(valuex,valuey,weight);
+    }
+
+    /*! \brief Function to fill an event in a 2D histogram of the map
+     *
+     * This function fills one value with one weight for one event in one
+     * specific histogram. The function also checks if the histogram exists
+     * in the map, otherwise it will print an error message.
+     * \param[in] n_histo Number of the histogram that should be filled
+     * \param[in] name Name of the histogram which should be filled
+     * \param[in] valuex x-value that should be filled
+     * \param[in] valuey y-value that should be filled
+     * \param[in] weight Weight of the event that should be filled
+     */
+    static void Fill(Int_t n_histo, const char * name, double valuex, double valuey, double weight)
+    {
+        std::map<string, TH2D * >::iterator it =histo2.find(Form("h2_%d_%s", n_histo, name));
+        if(it!=histo2.end()){
+            it->second->Fill(valuex,valuey,weight);
+        }else{
+            std::cerr << "(Fill) No hist: " << Form("h2_%d_%s", n_histo, name) << " in map " << n_histo << std::endl;
+        }
     }
 
     /*! \brief Function to fill an event in a nSparse of the nSparse map
@@ -419,7 +464,7 @@ namespace HistClass {
      * and returns the resulting substrings as a vector.
      * \param[in] &s String that should be split
      * \param[in] delim Delimiter where the string should be split
-     * \param[out] elems Vector in which the substrings were pushed
+     * \return[out] elems Vector in which the substrings were pushed
     */
     SUPPRESS_NOT_USED_WARN std::vector<std::string> split(const std::string &s, char delim) {
         std::vector<std::string> elems;
@@ -649,7 +694,7 @@ namespace HistClass {
     /*! \brief Function to get one 1D histogram from the map without number
      *
      * \param[in] name Name of the histogram that should be returned
-     * \param[out] histo Returned histogram
+     * \returns histo Returned histogram
      */
     SUPPRESS_NOT_USED_WARN static TH1D* ReturnHist(const char * name)
     {
