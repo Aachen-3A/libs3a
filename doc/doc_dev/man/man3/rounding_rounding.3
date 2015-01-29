@@ -1,0 +1,149 @@
+.TH "rounding.rounding" 3 "Thu Jan 29 2015" "Aachen-3A" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+rounding.rounding \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.ti -1c
+.RI "def \fBlatex\fP"
+.br
+.ti -1c
+.RI "def \fBhtml\fP"
+.br
+.ti -1c
+.RI "def \fBlatexValue\fP"
+.br
+.ti -1c
+.RI "def \fBlatexValueError\fP"
+.br
+.ti -1c
+.RI "def \fBlatexValueUpDownError\fP"
+.br
+.ti -1c
+.RI "def \fBhtmlValue\fP"
+.br
+.ti -1c
+.RI "def \fBhtmlValueError\fP"
+.br
+.ti -1c
+.RI "def \fBhtmlValueUpDownError\fP"
+.br
+.ti -1c
+.RI "def \fBsdr\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBposdigits\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+significant digits rounder
+
+.fi
+.PP
+ 
+.PP
+Definition at line 3 of file rounding\&.py\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "def rounding\&.rounding\&.__init__ (self, sigdigits = \fC2\fP, negdigits = \fC3\fP, posdigits = \fC3\fP)"
+
+.PP
+Definition at line 7 of file rounding\&.py\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "def rounding\&.rounding\&.html (self, n, err1 = \fCNone\fP, err2 = \fCNone\fP)"
+
+.PP
+Definition at line 18 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.htmlValue(), rounding\&.rounding\&.htmlValueError(), and rounding\&.rounding\&.htmlValueUpDownError()\&.
+.SS "def rounding\&.rounding\&.htmlValue (self, n)"
+
+.PP
+Definition at line 47 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.sdr()\&.
+.PP
+Referenced by rounding\&.rounding\&.html()\&.
+.SS "def rounding\&.rounding\&.htmlValueError (self, n, error)"
+
+.PP
+Definition at line 54 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.sdr()\&.
+.PP
+Referenced by rounding\&.rounding\&.html()\&.
+.SS "def rounding\&.rounding\&.htmlValueUpDownError (self, n, up, down)"
+
+.PP
+Definition at line 61 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.sdr()\&.
+.PP
+Referenced by rounding\&.rounding\&.html()\&.
+.SS "def rounding\&.rounding\&.latex (self, n, err1 = \fCNone\fP, err2 = \fCNone\fP)"
+
+.PP
+Definition at line 10 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.latexValue(), rounding\&.rounding\&.latexValueError(), and rounding\&.rounding\&.latexValueUpDownError()\&.
+.SS "def rounding\&.rounding\&.latexValue (self, n)"
+
+.PP
+Definition at line 26 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.sdr()\&.
+.PP
+Referenced by rounding\&.rounding\&.latex()\&.
+.SS "def rounding\&.rounding\&.latexValueError (self, n, error)"
+
+.PP
+Definition at line 33 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.sdr()\&.
+.PP
+Referenced by rounding\&.rounding\&.latex()\&.
+.SS "def rounding\&.rounding\&.latexValueUpDownError (self, n, up, down)"
+
+.PP
+Definition at line 40 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.sdr()\&.
+.PP
+Referenced by rounding\&.rounding\&.latex()\&.
+.SS "def rounding\&.rounding\&.sdr (self, numbers)"
+
+.PP
+Definition at line 68 of file rounding\&.py\&.
+.PP
+References rounding\&.rounding\&.posdigits\&.
+.PP
+Referenced by rounding\&.rounding\&.htmlValue(), rounding\&.rounding\&.htmlValueError(), rounding\&.rounding\&.htmlValueUpDownError(), rounding\&.rounding\&.latexValue(), rounding\&.rounding\&.latexValueError(), and rounding\&.rounding\&.latexValueUpDownError()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "rounding\&.rounding\&.posdigits"
+
+.PP
+Definition at line 8 of file rounding\&.py\&.
+.PP
+Referenced by rounding\&.rounding\&.sdr()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Aachen-3A from the source code\&.

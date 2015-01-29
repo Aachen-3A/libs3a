@@ -1,0 +1,96 @@
+.TH "aix3adb_deprecated.cookietransportrequest" 3 "Thu Jan 29 2015" "Aachen-3A" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+aix3adb_deprecated.cookietransportrequest \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherited by \fBaix3adb_deprecated\&.cookiesafetransport\fP, and \fBaix3adb_deprecated\&.cookietransport\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "def \fBsetcookies\fP"
+.br
+.ti -1c
+.RI "def \fBsend_cookies\fP"
+.br
+.ti -1c
+.RI "def \fBrequest\fP"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBcookies\fP"
+.br
+.ti -1c
+.RI "\fBverbose\fP"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "list \fBcookies\fP = []"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+.nf
+A Transport request method that retains cookies over its lifetime.
+
+The regular xmlrpclib transports ignore cookies. Which causes
+a bit of a problem when you need a cookie-based login, as with
+the Bugzilla XMLRPC interface.
+
+So this is a helper for defining a Transport which looks for
+cookies being set in responses and saves them to add to all future
+requests.
+
+.fi
+.PP
+ 
+.PP
+Definition at line 120 of file aix3adb_deprecated\&.py\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "def aix3adb_deprecated\&.cookietransportrequest\&.request (self, host, handler, request_body, verbose = \fC0\fP)"
+
+.PP
+Definition at line 153 of file aix3adb_deprecated\&.py\&.
+.SS "def aix3adb_deprecated\&.cookietransportrequest\&.send_cookies (self, connection)"
+
+.PP
+Definition at line 148 of file aix3adb_deprecated\&.py\&.
+.PP
+References aix3adb_deprecated\&.cookietransportrequest\&.cookies, and aix3adb\&.cookietransportrequest\&.cookies\&.
+.SS "def aix3adb_deprecated\&.cookietransportrequest\&.setcookies (self, cookiefile, domain)"
+
+.PP
+Definition at line 141 of file aix3adb_deprecated\&.py\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "list aix3adb_deprecated\&.cookietransportrequest\&.cookies = []\fC [static]\fP"
+
+.PP
+Definition at line 140 of file aix3adb_deprecated\&.py\&.
+.PP
+Referenced by aix3adb_deprecated\&.cookietransportrequest\&.send_cookies()\&.
+.SS "aix3adb_deprecated\&.cookietransportrequest\&.cookies"
+
+.PP
+Definition at line 142 of file aix3adb_deprecated\&.py\&.
+.SS "aix3adb_deprecated\&.cookietransportrequest\&.verbose"
+
+.PP
+Definition at line 154 of file aix3adb_deprecated\&.py\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Aachen-3A from the source code\&.
