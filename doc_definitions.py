@@ -7,5 +7,8 @@
 # The libs should contain only functions to use in other
 # scripts and applications
 #
+#
+# Checkout the repos on <a href=https://github.com/Aachen-3A/libs3a> GitHub  </a>
+#
 # Further documentation can be found in 
 # <a href=https://twiki.cern.ch/twiki/bin/viewauth/CMS/Aachen3APortal> Aachen 3A Twiki Portal </a>
