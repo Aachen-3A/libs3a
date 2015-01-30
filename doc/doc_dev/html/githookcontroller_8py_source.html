@@ -36,7 +36,6 @@
         <option value="">Change branch</option>
         <option value="http://aachen-3a.github.io/libs3a/doc/doc_master/html/index.html">master</option>
 <option value="http://aachen-3a.github.io/libs3a/doc/doc_dev/html/index.html">dev</option>
-<option value="http://aachen-3a.github.io/libs3a/doc/doc_master/html/index.html">master</option>
         </select>
      </div>   
     <script>
@@ -395,7 +394,7 @@ $(document).ready(function(){initNavTree('githookcontroller_8py_source.html','')
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;            </div>
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="comment"># prepare linklines and replacements</span></div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        linklines = []</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keywordflow">for</span> branchname <span class="keywordflow">in</span> self.<a class="code" href="classgithookcontroller_1_1GitHookController.html#a39661900fa09468fa6f1cb97ba859e80">remote_branches</a>:</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keywordflow">for</span> branchname <span class="keywordflow">in</span> list( set(self.<a class="code" href="classgithookcontroller_1_1GitHookController.html#a39661900fa09468fa6f1cb97ba859e80">remote_branches</a>) ):</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            <span class="keywordflow">if</span> branchname <span class="keywordflow">in</span> self.<a class="code" href="classgithookcontroller_1_1GitHookController.html#aef6dc3b539aa239e80317038abe866aa">vetobranches</a>:</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;               <span class="keywordflow">continue</span> </div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            <span class="keywordflow">print</span> ( self.<a class="code" href="classgithookcontroller_1_1GitHookController.html#a0600f5f58184170fa103c486691cde5e">organisation</a>, self.<a class="code" href="classgithookcontroller_1_1GitHookController.html#a3324d38801396b1269a97890798103d5">remote_root_name</a>, branchname , branchname)</div>
