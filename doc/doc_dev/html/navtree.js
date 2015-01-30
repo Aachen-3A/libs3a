@@ -1,6 +1,6 @@
 var NAVTREE =
 [
-  [ "Aachen-3A", "index.html", [
+  [ "libs3a", "index.html", [
     [ "Index for 3A common libs", "index.html", null ],
     [ "githookcontroller", "md_hooks_README.html", null ],
     [ "Todo List", "todo.html", null ],
