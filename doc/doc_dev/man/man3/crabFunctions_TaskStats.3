@@ -1,10 +1,10 @@
-.TH "crabFunctions.TaskStats" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "crabFunctions::TaskStats" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-crabFunctions.TaskStats \- 
+crabFunctions::TaskStats \- 
 .PP
-Class holds job statistics for several Crab tasks\&.  
+Class holds job statistics for several Crab tasks.  
 
 .SH SYNOPSIS
 .br
@@ -15,15 +15,15 @@ Class holds job statistics for several Crab tasks\&.
 .ti -1c
 .RI "def \fB__init__\fP"
 .br
-.RI "\fIThe object constructor\&. \fP"
+.RI "\fIThe object constructor. \fP"
 .ti -1c
 .RI "def \fBupdateStats\fP"
 .br
-.RI "\fIThis function updates the statistics for a given tasklist\&. \fP"
+.RI "\fIThis function updates the statistics for a given tasklist. \fP"
 .ti -1c
 .RI "def \fBclearStats\fP"
 .br
-.RI "\fIThis function sets all counts to zero\&. \fP"
+.RI "\fIThis function sets all counts to zero. \fP"
 .in -1c
 .SS "Public Attributes"
 
@@ -58,109 +58,77 @@ Class holds job statistics for several Crab tasks\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-Class holds job statistics for several Crab tasks\&. 
+Class holds job statistics for several Crab tasks. 
 
-This class saves and updates statistics from a given list of \fBCrabTask\fP objects\&. 
+This class saves and updates statistics from a given list of \fBCrabTask\fP objects. 
 .PP
-Definition at line 341 of file crabFunctions\&.py\&.
-.SH "Constructor & Destructor Documentation"
+Definition at line 341 of file crabFunctions.py.
+.SH "Member Function Documentation"
 .PP 
-.SS "def crabFunctions\&.TaskStats\&.__init__ (self, tasklist = \fCNone\fP)"
-
+.SS "def crabFunctions::TaskStats::__init__ ( self,  tasklist = \fCNone\fP)"
 .PP
-The object constructor\&. 
-.PP
-\fBParameters:\fP
+The object constructor. \fBParameters:\fP
 .RS 4
-\fIself,:\fP The object pointer\&. 
+\fIself,:\fP The object pointer. 
 .br
 \fItasklist,:\fP (Optional) List of CrabTasks for which statistics should be calculated 
 .RE
 .PP
 
 .PP
-Definition at line 347 of file crabFunctions\&.py\&.
+Definition at line 347 of file crabFunctions.py.
+.SS "def crabFunctions::TaskStats::clearStats ( self)"
 .PP
-References crabFunctions\&.TaskStats\&.clearStats(), and crabFunctions\&.TaskStats\&.updateStats()\&.
-.SH "Member Function Documentation"
-.PP 
-.SS "def crabFunctions\&.TaskStats\&.clearStats (self)"
-
-.PP
-This function sets all counts to zero\&. 
-.PP
-\fBParameters:\fP
+This function sets all counts to zero. \fBParameters:\fP
 .RS 4
-\fIself,:\fP The object pointer\&. 
+\fIself,:\fP The object pointer. 
 .RE
 .PP
 
 .PP
-Definition at line 374 of file crabFunctions\&.py\&.
+Definition at line 374 of file crabFunctions.py.
+.SS "def crabFunctions::TaskStats::updateStats ( self,  tasklist)"
 .PP
-References crabFunctions\&.TaskStats\&.nTasks\&.
-.PP
-Referenced by crabFunctions\&.TaskStats\&.__init__(), and crabFunctions\&.TaskStats\&.updateStats()\&.
-.SS "def crabFunctions\&.TaskStats\&.updateStats (self, tasklist)"
-
-.PP
-This function updates the statistics for a given tasklist\&. 
-.PP
-\fBParameters:\fP
+This function updates the statistics for a given tasklist. \fBParameters:\fP
 .RS 4
-\fIself,:\fP The object pointer\&. 
+\fIself,:\fP The object pointer. 
 .br
 \fItasklist,:\fP List of CrabTasks for which statistics should be calculated 
 .RE
 .PP
 
 .PP
-Definition at line 357 of file crabFunctions\&.py\&.
-.PP
-References crabFunctions\&.TaskStats\&.clearStats()\&.
-.PP
-Referenced by crabFunctions\&.TaskStats\&.__init__()\&.
+Definition at line 357 of file crabFunctions.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "crabFunctions\&.TaskStats\&.nComplete"
-
+.SS "\fBcrabFunctions::TaskStats::nComplete\fP"
 .PP
-Definition at line 383 of file crabFunctions\&.py\&.
-.SS "crabFunctions\&.TaskStats\&.nCooloff"
-
+Definition at line 383 of file crabFunctions.py.
+.SS "\fBcrabFunctions::TaskStats::nCooloff\fP"
 .PP
-Definition at line 380 of file crabFunctions\&.py\&.
-.SS "crabFunctions\&.TaskStats\&.nFailed"
-
+Definition at line 380 of file crabFunctions.py.
+.SS "\fBcrabFunctions::TaskStats::nFailed\fP"
 .PP
-Definition at line 381 of file crabFunctions\&.py\&.
-.SS "crabFunctions\&.TaskStats\&.nFinished"
-
+Definition at line 381 of file crabFunctions.py.
+.SS "\fBcrabFunctions::TaskStats::nFinished\fP"
 .PP
-Definition at line 382 of file crabFunctions\&.py\&.
-.SS "crabFunctions\&.TaskStats\&.nIdle"
-
+Definition at line 382 of file crabFunctions.py.
+.SS "\fBcrabFunctions::TaskStats::nIdle\fP"
 .PP
-Definition at line 377 of file crabFunctions\&.py\&.
-.SS "crabFunctions\&.TaskStats\&.nRunning"
-
+Definition at line 377 of file crabFunctions.py.
+.SS "\fBcrabFunctions::TaskStats::nRunning\fP"
 .PP
-Definition at line 378 of file crabFunctions\&.py\&.
-.SS "crabFunctions\&.TaskStats\&.nTasks"
-
+Definition at line 378 of file crabFunctions.py.
+.SS "\fBcrabFunctions::TaskStats::nTasks\fP"
 .PP
-Definition at line 359 of file crabFunctions\&.py\&.
+Definition at line 359 of file crabFunctions.py.
+.SS "\fBcrabFunctions::TaskStats::nTransferring\fP"
 .PP
-Referenced by crabFunctions\&.TaskStats\&.clearStats()\&.
-.SS "crabFunctions\&.TaskStats\&.nTransferring"
-
+Definition at line 379 of file crabFunctions.py.
+.SS "\fBcrabFunctions::TaskStats::nUnsubmitted\fP"
 .PP
-Definition at line 379 of file crabFunctions\&.py\&.
-.SS "crabFunctions\&.TaskStats\&.nUnsubmitted"
-
-.PP
-Definition at line 376 of file crabFunctions\&.py\&.
+Definition at line 376 of file crabFunctions.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

@@ -1,10 +1,10 @@
-.TH "dbutilscms.DBSUtilities" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "dbutilscms::DBSUtilities" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-dbutilscms.DBSUtilities \- 
+dbutilscms::DBSUtilities \- 
 .PP
-The \fBDBSUtilities\fP Class\&.  
+The \fBDBSUtilities\fP Class.  
 
 .SH SYNOPSIS
 .br
@@ -15,15 +15,15 @@ The \fBDBSUtilities\fP Class\&.
 .ti -1c
 .RI "def \fB__init__\fP"
 .br
-.RI "\fIThe constructor\&. \fP"
+.RI "\fIThe constructor. \fP"
 .ti -1c
 .RI "def \fBgetDatasetBlocks\fP"
 .br
-.RI "\fIFunction to get all detail blocks for a dataset\&. \fP"
+.RI "\fIFunction to get all detail blocks for a dataset. \fP"
 .ti -1c
 .RI "def \fBgetDatasetSummary\fP"
 .br
-.RI "\fIFunction to get a summary for a dataset\&. \fP"
+.RI "\fIFunction to get a summary for a dataset. \fP"
 .in -1c
 .SS "Public Attributes"
 
@@ -46,85 +46,65 @@ The \fBDBSUtilities\fP Class\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-The \fBDBSUtilities\fP Class\&. 
+The \fBDBSUtilities\fP Class. 
 
 This is a helper class for the dbs database 
 .PP
-Definition at line 116 of file dbutilscms\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def dbutilscms\&.DBSUtilities\&.__init__ (self)"
-
-.PP
-The constructor\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIself,:\fP The object pointer\&. 
-.RE
-.PP
-
-.PP
-Definition at line 120 of file dbutilscms\&.py\&.
+Definition at line 116 of file dbutilscms.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def dbutilscms\&.DBSUtilities\&.getDatasetBlocks (self, dataset)"
+.SS "def dbutilscms::DBSUtilities::__init__ ( self)"
+.PP
+The constructor. \fBParameters:\fP
+.RS 4
+\fIself,:\fP The object pointer. 
+.RE
+.PP
 
 .PP
-Function to get all detail blocks for a dataset\&. 
+Definition at line 120 of file dbutilscms.py.
+.SS "def dbutilscms::DBSUtilities::getDatasetBlocks ( self,  dataset)"
 .PP
-\fBParameters:\fP
+Function to get all detail blocks for a dataset. \fBParameters:\fP
 .RS 4
-\fIself,:\fP The object pointer\&. 
+\fIself,:\fP The object pointer. 
 .br
 \fIdataset\fP String - The dataset name 
 .RE
 .PP
 
 .PP
-Definition at line 130 of file dbutilscms\&.py\&.
+Definition at line 130 of file dbutilscms.py.
+.SS "def dbutilscms::DBSUtilities::getDatasetSummary ( self,  dataset)"
 .PP
-Referenced by dbutilscms\&.DBSUtilities\&.getDatasetSummary()\&.
-.SS "def dbutilscms\&.DBSUtilities\&.getDatasetSummary (self, dataset)"
-
-.PP
-Function to get a summary for a dataset\&. 
-.PP
-\fBParameters:\fP
+Function to get a summary for a dataset. \fBParameters:\fP
 .RS 4
-\fIself,:\fP The object pointer\&. 
+\fIself,:\fP The object pointer. 
 .br
 \fIdataset\fP String - The dataset name 
 .RE
 .PP
 
 .PP
-Definition at line 136 of file dbutilscms\&.py\&.
-.PP
-References dbutilscms\&.DBSUtilities\&.getDatasetBlocks()\&.
+Definition at line 136 of file dbutilscms.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "dbutilscms\&.DBSUtilities\&.dbsApi"
-
+.SS "\fBdbutilscms::DBSUtilities::dbsApi\fP"
 .PP
-Definition at line 122 of file dbutilscms\&.py\&.
-.SS "dbutilscms\&.DBSUtilities\&.dbsUrl"
-
+Definition at line 122 of file dbutilscms.py.
+.SS "\fBdbutilscms::DBSUtilities::dbsUrl\fP"
 .PP
-Definition at line 121 of file dbutilscms\&.py\&.
-.SS "dbutilscms\&.DBSUtilities\&.numEvents"
-
+Definition at line 121 of file dbutilscms.py.
+.SS "\fBdbutilscms::DBSUtilities::numEvents\fP"
 .PP
-Definition at line 123 of file dbutilscms\&.py\&.
-.SS "dbutilscms\&.DBSUtilities\&.numFiles"
-
+Definition at line 123 of file dbutilscms.py.
+.SS "\fBdbutilscms::DBSUtilities::numFiles\fP"
 .PP
-Definition at line 124 of file dbutilscms\&.py\&.
-.SS "dbutilscms\&.DBSUtilities\&.totalFileSize"
-
+Definition at line 124 of file dbutilscms.py.
+.SS "\fBdbutilscms::DBSUtilities::totalFileSize\fP"
 .PP
-Definition at line 125 of file dbutilscms\&.py\&.
+Definition at line 125 of file dbutilscms.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

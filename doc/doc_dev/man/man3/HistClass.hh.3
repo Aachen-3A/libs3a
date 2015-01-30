@@ -1,4 +1,4 @@
-.TH "include/HistClass.hh" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "include/HistClass.hh" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,30 +10,32 @@ include/HistClass.hh \-
 .br
 \fC#include <map>\fP
 .br
-\fC#include 'TH1F\&.h'\fP
+\fC#include 'TH1F.h'\fP
 .br
-\fC#include 'TH2F\&.h'\fP
+\fC#include 'TH2F.h'\fP
 .br
-\fC#include 'THnSparse\&.h'\fP
+\fC#include 'THnSparse.h'\fP
 .br
-\fC#include 'TString\&.h'\fP
+\fC#include 'TString.h'\fP
 .br
-\fC#include 'TNtupleD\&.h'\fP
+\fC#include 'TNtupleD.h'\fP
 .br
-\fC#include 'boost/format\&.hpp'\fP
+\fC#include 'boost/format.hpp'\fP
 .br
-\fC#include <stdarg\&.h>\fP
+\fC#include <stdarg.h>\fP
 .br
 
 .SS "Namespaces"
 
 .in +1c
 .ti -1c
-.RI "\fBHistClass\fP"
+.RI "namespace \fBHistClass\fP"
 .br
-.RI "\fIFunctions to have easy histogram handling\&. \fP"
+.PP
+
+.RI "\fIFunctions to have easy histogram handling. \fP"
 .in -1c
-.SS "Macros"
+.SS "Defines"
 
 .in +1c
 .ti -1c
@@ -44,195 +46,174 @@ include/HistClass.hh \-
 
 .in +1c
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::CreateHisto\fP (Int_t n_histos, const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::CreateHisto\fP (Int_t n_histos, const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
 .br
-.RI "\fIFunction to create a number of 1D histograms in the histo map\&. \fP"
+.RI "\fIFunction to create a number of 1D histograms in the histo map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::CreateHisto\fP (Int_t n_histos, const char *name, const char *particle, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::CreateHisto\fP (Int_t n_histos, const char *name, const char *particle, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
 .br
-.RI "\fIFunction to create a number of 1D histograms in the histo map for a specific particle\&. \fP"
+.RI "\fIFunction to create a number of 1D histograms in the histo map for a specific particle. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::CreateHistoUnchangedName\fP (const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::CreateHistoUnchangedName\fP (const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
 .br
-.RI "\fIFunction to create a 1D histogram in the histo map without the standard histogram naming convention (h1_\&.\&.\&.) \fP"
+.RI "\fIFunction to create a 1D histogram in the histo map without the standard histogram naming convention (h1_...). \fP"
 .ti -1c
-.RI "\fBSUPPRESS_NOT_USED_WARN\fP static 
+.RI "SUPPRESS_NOT_USED_WARN static const void \fBHistClass::CreateHisto\fP (const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
 .br
-const void \fBHistClass::CreateHisto\fP (const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
-.br
-.RI "\fIFunction to create one 1D histograms in the histo map\&. \fP"
+.RI "\fIFunction to create one 1D histograms in the histo map. \fP"
 .ti -1c
-.RI "\fBSUPPRESS_NOT_USED_WARN\fP static 
+.RI "SUPPRESS_NOT_USED_WARN static const void \fBHistClass::CreateHisto\fP (const char *name, const char *particle, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
 .br
-const void \fBHistClass::CreateHisto\fP (const char *name, const char *particle, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
-.br
-.RI "\fIFunction to create one 1D histogram in the histo map for a specific particle\&. \fP"
+.RI "\fIFunction to create one 1D histogram in the histo map for a specific particle. \fP"
 .ti -1c
-.RI "\fBSUPPRESS_NOT_USED_WARN\fP static 
+.RI "SUPPRESS_NOT_USED_WARN static const void \fBHistClass::CreateHisto\fP (boost::basic_format< char > name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
 .br
-const void \fBHistClass::CreateHisto\fP (boost::basic_format< char > name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle='')"
-.br
-.RI "\fIFunction to create one 1D histograms in the histo map with a boost name as input\&. \fP"
+.RI "\fIFunction to create one 1D histograms in the histo map with a boost name as input. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::CreateHisto\fP (const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle='', TString ytitle='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::CreateHisto\fP (const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle='', TString ytitle='')"
 .br
-.RI "\fIFunction to create one 2D histograms in the histo map\&. \fP"
+.RI "\fIFunction to create one 2D histograms in the histo map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::CreateHisto\fP (Int_t n_histos, const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle='', TString ytitle='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::CreateHisto\fP (Int_t n_histos, const char *name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle='', TString ytitle='')"
 .br
-.RI "\fIFunction to create a number of 2D histograms in the histo map\&. \fP"
+.RI "\fIFunction to create a number of 2D histograms in the histo map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::CreateNSparse\fP (const char *name, int dimension, int *bins, double *xmin, double *xmax, string axisTitle[])"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::CreateNSparse\fP (const char *name, int dimension, int *bins, double *xmin, double *xmax, string axisTitle[])"
 .br
-.RI "\fIFunction to create one NSparse in the nSparse map\&. \fP"
+.RI "\fIFunction to create one NSparse in the nSparse map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::CreateTree\fP (const char *name, const char *varlist, int bufsize)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::CreateTree\fP (const char *name, const char *varlist, int bufsize)"
 .br
-.RI "\fIFunction to create one NtupleD in the NtupleD map\&. \fP"
+.RI "\fIFunction to create one NtupleD in the NtupleD map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::CreateTree\fP (std::map< std::string, float > &m, const char *name)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::CreateTree\fP (std::map< std::string, float > &m, const char *name)"
 .br
-.RI "\fIFunction to create one Tree in the TTree map\&. \fP"
+.RI "\fIFunction to create one Tree in the TTree map. \fP"
 .ti -1c
 .RI "static void \fBHistClass::Fill\fP (Int_t n_histo, const char *name, double value, double weight)"
 .br
-.RI "\fIFunction to fill an event in a 1D histogram of the map\&. \fP"
+.RI "\fIFunction to fill an event in a 1D histogram of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::Fill\fP (Int_t n_histo, std::string name, double value, double weight)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::Fill\fP (Int_t n_histo, std::string name, double value, double weight)"
 .br
-.RI "\fIFunction to fill an event in a 1D histogram of the map with a string as histo name\&. \fP"
+.RI "\fIFunction to fill an event in a 1D histogram of the map with a string as histo name. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::Fill\fP (const char *name, double value, double weight)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::Fill\fP (const char *name, double value, double weight)"
 .br
-.RI "\fIFunction to fill an event in a 1D histogram of the map without histo number\&. \fP"
+.RI "\fIFunction to fill an event in a 1D histogram of the map without histo number. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::Fill\fP (const char *name, double valuex, double valuey, double weight)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::Fill\fP (const char *name, double valuex, double valuey, double weight)"
 .br
-.RI "\fIFunction to fill an event in a 2D histogram of the map\&. \fP"
+.RI "\fIFunction to fill an event in a 2D histogram of the map. \fP"
 .ti -1c
 .RI "static void \fBHistClass::Fill\fP (Int_t n_histo, const char *name, double valuex, double valuey, double weight)"
 .br
-.RI "\fIFunction to fill an event in a 2D histogram of the map\&. \fP"
+.RI "\fIFunction to fill an event in a 2D histogram of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::FillSparse\fP (const char *name, int n,\&.\&.\&.)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::FillSparse\fP (const char *name, int n,...)"
 .br
-.RI "\fIFunction to fill an event in a nSparse of the nSparse map\&. \fP"
+.RI "\fIFunction to fill an event in a nSparse of the nSparse map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::FillTree\fP (const char *name, double *values)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::FillTree\fP (const char *name, double *values)"
 .br
-.RI "\fIFunction to fill an event in a NTupleD of the map\&. \fP"
+.RI "\fIFunction to fill an event in a NTupleD of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::FillTree\fP (const char *name)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::FillTree\fP (const char *name)"
 .br
-.RI "\fIFunction to fill an event in a TTree of the map\&. \fP"
+.RI "\fIFunction to fill an event in a TTree of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::Write\fP (Int_t n_histo, const char *name)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::Write\fP (Int_t n_histo, const char *name)"
 .br
-.RI "\fIFunction to write one 1D histogram of the map\&. \fP"
+.RI "\fIFunction to write one 1D histogram of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::Write\fP (const char *name)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::Write\fP (const char *name)"
 .br
-.RI "\fIFunction to write one 1D histogram of the map without number\&. \fP"
+.RI "\fIFunction to write one 1D histogram of the map without number. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::WriteAll\fP (const char *name='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::WriteAll\fP (const char *name='')"
 .br
-.RI "\fIFunction to write many 1D histograms of the map\&. \fP"
+.RI "\fIFunction to write many 1D histograms of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::WriteAll2\fP (const char *name='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::WriteAll2\fP (const char *name='')"
 .br
-.RI "\fIFunction to write many 2D histograms of the map\&. \fP"
+.RI "\fIFunction to write many 2D histograms of the map. \fP"
 .ti -1c
-.RI "\fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::split\fP (const std::string &s, char delim, std::vector< std::string > &elems)"
+.RI "SUPPRESS_NOT_USED_WARN void \fBHistClass::split\fP (const std::string &s, char delim, std::vector< std::string > &elems)"
 .br
-.RI "\fIFunction split a string at a delimiter\&. \fP"
+.RI "\fIFunction split a string at a delimiter. \fP"
 .ti -1c
-.RI "\fBSUPPRESS_NOT_USED_WARN\fP 
+.RI "SUPPRESS_NOT_USED_WARN std::vector< std::string > \fBHistClass::split\fP (const std::string &s, char delim)"
 .br
-std::vector< std::string > \fBHistClass::split\fP (const std::string &s, char delim)"
-.br
-.RI "\fIFunction split a string at a delimiter and return the results\&. \fP"
+.RI "\fIFunction split a string at a delimiter and return the results. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::WriteAll\fP (const char *name, const char *contains_i)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::WriteAll\fP (const char *name, const char *contains_i)"
 .br
-.RI "\fIFunction to write many 1D histograms which contain specific strings of the map\&. \fP"
+.RI "\fIFunction to write many 1D histograms which contain specific strings of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::WriteAll2\fP (const char *name, const char *contains_i)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::WriteAll2\fP (const char *name, const char *contains_i)"
 .br
-.RI "\fIFunction to write many 2D histograms which contain specific strings of the map\&. \fP"
+.RI "\fIFunction to write many 2D histograms which contain specific strings of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::WriteAll\fP (const char *name, const char *contains_i, const char *vetos_i)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::WriteAll\fP (const char *name, const char *contains_i, const char *vetos_i)"
 .br
-.RI "\fIFunction to write many 1D histograms which (not) contain specific strings of the map\&. \fP"
+.RI "\fIFunction to write many 1D histograms which (not) contain specific strings of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::WriteAll2\fP (const char *name, const char *contains_i, const char *vetos_i)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::WriteAll2\fP (const char *name, const char *contains_i, const char *vetos_i)"
 .br
-.RI "\fIFunction to write many 2D histograms which (not) contain specific strings of the map\&. \fP"
+.RI "\fIFunction to write many 2D histograms which (not) contain specific strings of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::WriteAllTrees\fP (const char *name='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::WriteAllTrees\fP (const char *name='')"
 .br
-.RI "\fIFunction to write many TTrees and TNtupleDs of the maps\&. \fP"
+.RI "\fIFunction to write many TTrees and TNtupleDs of the maps. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::WriteN\fP (const char *name='')"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::WriteN\fP (const char *name='')"
 .br
-.RI "\fIFunction to write many TNsparses of the map\&. \fP"
+.RI "\fIFunction to write many TNsparses of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::Write2\fP (const char *name)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::Write2\fP (const char *name)"
 .br
-.RI "\fIFunction to write one 2D histogram of the map\&. \fP"
+.RI "\fIFunction to write one 2D histogram of the map. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::SetToZero\fP (Int_t n_histo, const char *name)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::SetToZero\fP (Int_t n_histo, const char *name)"
 .br
-.RI "\fIFunction to set all negative bin contents to zero for a 1D histogram\&. \fP"
+.RI "\fIFunction to set all negative bin contents to zero for a 1D histogram. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP 
+.RI "static SUPPRESS_NOT_USED_WARN TH1D * \fBHistClass::ReturnHist\fP (const char *name)"
 .br
-TH1D * \fBHistClass::ReturnHist\fP (const char *name)"
-.br
-.RI "\fIFunction to get one 1D histogram from the map without number\&. \fP"
+.RI "\fIFunction to get one 1D histogram from the map without number. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::NameBins\fP (const char *name, const uint n_bins, TString *d_mydisc)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::NameBins\fP (const char *name, const uint n_bins, TString *d_mydisc)"
 .br
-.RI "\fIFunction to give one 1D histogram from the map alphanumeric bin labels without number\&. \fP"
+.RI "\fIFunction to give one 1D histogram from the map alphanumeric bin labels without number. \fP"
 .ti -1c
-.RI "static \fBSUPPRESS_NOT_USED_WARN\fP void \fBHistClass::NameBins\fP (Int_t n_histo, const char *name, const uint n_bins, TString *d_mydisc)"
+.RI "static SUPPRESS_NOT_USED_WARN void \fBHistClass::NameBins\fP (Int_t n_histo, const char *name, const uint n_bins, TString *d_mydisc)"
 .br
-.RI "\fIFunction to give one 1D histogram from the map alphanumeric bin labels\&. \fP"
+.RI "\fIFunction to give one 1D histogram from the map alphanumeric bin labels. \fP"
 .in -1c
 .SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "static std::map< std::string, 
-.br
-TH1D * > \fBHistClass::histo\fP"
+.RI "static std::map< std::string, TH1D * > \fBHistClass::histo\fP"
 .br
 .ti -1c
-.RI "static std::map< std::string, 
-.br
-TH2D * > \fBHistClass::histo2\fP"
+.RI "static std::map< std::string, TH2D * > \fBHistClass::histo2\fP"
 .br
 .ti -1c
-.RI "static std::map< std::string, 
-.br
-THnSparseD * > \fBHistClass::histon\fP"
+.RI "static std::map< std::string, THnSparseD * > \fBHistClass::histon\fP"
 .br
 .ti -1c
-.RI "static std::map< std::string, 
-.br
-TNtupleD * > \fBHistClass::ttupple\fP"
+.RI "static std::map< std::string, TNtupleD * > \fBHistClass::ttupple\fP"
 .br
 .ti -1c
-.RI "static std::map< std::string, 
-.br
-TTree * > \fBHistClass::trees\fP"
+.RI "static std::map< std::string, TTree * > \fBHistClass::trees\fP"
 .br
 .in -1c
-.SH "Macro Definition Documentation"
+.SH "Define Documentation"
 .PP 
-.SS "#define SUPPRESS_NOT_USED_WARN"
-To avoid compiler problems, we tell gcc to ignore any unused function error 
+.SS "#define SUPPRESS_NOT_USED_WARN"To avoid compiler problems, we tell gcc to ignore any unused function error 
 .PP
-Definition at line 29 of file HistClass\&.hh\&.
+Definition at line 29 of file HistClass.hh.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

@@ -1,6 +1,6 @@
-<map id="aix3adb.Aix3adbBaseElement" name="aix3adb.Aix3adbBaseElement">
-<area shape="rect" href="$classaix3adb_1_1DataSample.html" title="aix3adb.DataSample" alt="" coords="5,80,149,107"/>
-<area shape="rect" href="$classaix3adb_1_1DataSkim.html" title="aix3adb.DataSkim" alt="" coords="173,80,301,107"/>
-<area shape="rect" href="$classaix3adb_1_1MCSample.html" title="aix3adb.MCSample" alt="" coords="325,80,461,107"/>
-<area shape="rect" href="$classaix3adb_1_1MCSkim.html" title="aix3adb.MCSkim" alt="" coords="485,80,608,107"/>
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$classaix3adb_1_1DataSample.html" title="aix3adb::DataSample" alt="" coords="5,83,171,112"/>
+<area shape="rect" id="node5" href="$classaix3adb_1_1DataSkim.html" title="aix3adb::DataSkim" alt="" coords="195,83,341,112"/>
+<area shape="rect" id="node7" href="$classaix3adb_1_1MCSample.html" title="aix3adb::MCSample" alt="" coords="365,83,520,112"/>
+<area shape="rect" id="node9" href="$classaix3adb_1_1MCSkim.html" title="aix3adb::MCSkim" alt="" coords="544,83,680,112"/>
 </map>

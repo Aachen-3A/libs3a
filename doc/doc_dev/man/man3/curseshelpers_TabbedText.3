@@ -1,13 +1,13 @@
-.TH "curseshelpers.TabbedText" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "curseshelpers::TabbedText" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-curseshelpers.TabbedText \- 
+curseshelpers::TabbedText \- 
 .SH SYNOPSIS
 .br
 .PP
 .PP
-Inherits \fBcurseshelpers\&.BaseElement\fP\&.
+Inherits \fBcurseshelpers::BaseElement\fP.
 .SS "Public Member Functions"
 
 .in +1c
@@ -116,202 +116,120 @@ Inherits \fBcurseshelpers\&.BaseElement\fP\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 46 of file curseshelpers\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def curseshelpers\&.TabbedText\&.__init__ (self, screen, maxrows = \fC20000\fP, top = \fC0\fP, left = \fC0\fP, height = \fCNone\fP, width = \fCNone\fP)"
-
-.PP
-Definition at line 47 of file curseshelpers\&.py\&.
+Definition at line 46 of file curseshelpers.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def curseshelpers\&.TabbedText\&._countLines (self, text)\fC [private]\fP"
-
+.SS "def curseshelpers::TabbedText::__init__ ( self,  screen,  maxrows = \fC20000\fP,  top = \fC0\fP,  left = \fC0\fP,  height = \fCNone\fP,  width = \fCNone\fP)"
 .PP
-Definition at line 67 of file curseshelpers\&.py\&.
+Definition at line 47 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::_countLines ( self,  text)\fC [private]\fP"
 .PP
-References curseshelpers\&.TabbedText\&.width(), and rootplotlib\&.Legend\&.width\&.
+Definition at line 67 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::_redraw ( self)\fC [private]\fP"
 .PP
-Referenced by curseshelpers\&.TabbedText\&.addText()\&.
-.SS "def curseshelpers\&.TabbedText\&._redraw (self)\fC [private]\fP"
-
+Definition at line 111 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::_redrawHeading ( self)\fC [private]\fP"
 .PP
-Definition at line 111 of file curseshelpers\&.py\&.
+Definition at line 98 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::addFile ( self,  title,  filename)"
 .PP
-References curseshelpers\&.TabbedText\&._nrows, curseshelpers\&.TabbedText\&._redrawHeading(), curseshelpers\&.chunks(), curseshelpers\&.TabbedText\&.pads, curseshelpers\&.TabbedText\&.text, curseshelpers\&.TabbedText\&.width(), and rootplotlib\&.Legend\&.width\&.
+Definition at line 63 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::addText ( self,  title,  text)"
 .PP
-Referenced by curseshelpers\&.TabbedText\&.addText(), curseshelpers\&.BottomText\&.addText(), curseshelpers\&.MultiText\&.addText(), curseshelpers\&.TabbedText\&.clear(), and curseshelpers\&.Text\&.setText()\&.
-.SS "def curseshelpers\&.TabbedText\&._redrawHeading (self)\fC [private]\fP"
-
+Definition at line 72 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::clear ( self)"
 .PP
-Definition at line 98 of file curseshelpers\&.py\&.
+Definition at line 59 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::end ( self)"
 .PP
-References curseshelpers\&.TabbedText\&.activeCard, curseshelpers\&.TabbedText\&.text, curseshelpers\&.TabbedText\&.width(), and rootplotlib\&.Legend\&.width\&.
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-Referenced by curseshelpers\&.TabbedText\&._redraw(), and curseshelpers\&.TabbedText\&.refresh()\&.
-.SS "def curseshelpers\&.TabbedText\&.addFile (self, title, filename)"
-
+Definition at line 96 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::goDown ( self)"
 .PP
-Definition at line 63 of file curseshelpers\&.py\&.
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-References curseshelpers\&.TabbedText\&.addText()\&.
-.SS "def curseshelpers\&.TabbedText\&.addText (self, title, text)"
-
+Definition at line 88 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::goLeft ( self)"
 .PP
-Definition at line 72 of file curseshelpers\&.py\&.
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-References curseshelpers\&.TabbedText\&._countLines(), curseshelpers\&.TabbedText\&._redraw(), curseshelpers\&.TabbedText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.TabbedText\&.maxrows, curseshelpers\&.TabbedText\&.width(), and rootplotlib\&.Legend\&.width\&.
+Definition at line 82 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::goRight ( self)"
 .PP
-Referenced by curseshelpers\&.TabbedText\&.addFile(), and curseshelpers\&.MultiText\&.addFile()\&.
-.SS "def curseshelpers\&.TabbedText\&.clear (self)"
-
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-Definition at line 59 of file curseshelpers\&.py\&.
+Definition at line 84 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::goUp ( self)"
 .PP
-References curseshelpers\&.TabbedText\&._redraw(), curseshelpers\&.TabbedText\&.pads, and curseshelpers\&.TabbedText\&.text\&.
-.SS "def curseshelpers\&.TabbedText\&.end (self)"
-
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-Definition at line 96 of file curseshelpers\&.py\&.
+Definition at line 86 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::height ( self)"
 .PP
-References curseshelpers\&.TabbedText\&.activeCard, curseshelpers\&.TabbedText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.TabbedText\&.nrows(), curseshelpers\&.MultiText\&.nrows, curseshelpers\&.Text\&.nrows, and curseshelpers\&.TabbedText\&.positions\&.
-.SS "def curseshelpers\&.TabbedText\&.goDown (self)"
-
+Definition at line 129 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::home ( self)"
 .PP
-Definition at line 88 of file curseshelpers\&.py\&.
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-References curseshelpers\&.TabbedText\&.activeCard, curseshelpers\&.TabbedText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.TabbedText\&.nrows(), curseshelpers\&.MultiText\&.nrows, curseshelpers\&.Text\&.nrows, and curseshelpers\&.TabbedText\&.positions\&.
-.SS "def curseshelpers\&.TabbedText\&.goLeft (self)"
-
+Definition at line 94 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::nrows ( self)"
 .PP
-Definition at line 82 of file curseshelpers\&.py\&.
+Definition at line 135 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::pageDown ( self)"
 .PP
-References curseshelpers\&.TabbedText\&.activeCard, and curseshelpers\&.TabbedText\&.text\&.
-.SS "def curseshelpers\&.TabbedText\&.goRight (self)"
-
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-Definition at line 84 of file curseshelpers\&.py\&.
+Definition at line 92 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::pageUp ( self)"
 .PP
-References curseshelpers\&.TabbedText\&.activeCard, and curseshelpers\&.TabbedText\&.text\&.
-.SS "def curseshelpers\&.TabbedText\&.goUp (self)"
-
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-Definition at line 86 of file curseshelpers\&.py\&.
+Definition at line 90 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::refresh ( self)"
 .PP
-References curseshelpers\&.TabbedText\&.activeCard, and curseshelpers\&.TabbedText\&.positions\&.
-.SS "def curseshelpers\&.TabbedText\&.height (self)"
-
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-Definition at line 129 of file curseshelpers\&.py\&.
+Definition at line 78 of file curseshelpers.py.
+.SS "def curseshelpers::TabbedText::width ( self)"
 .PP
-References curseshelpers\&.TabbedText\&._height\&.
-.PP
-Referenced by curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.TabbedText\&.addText(), curseshelpers\&.TabbedText\&.end(), curseshelpers\&.MultiText\&.end(), curseshelpers\&.Text\&.end(), curseshelpers\&.SelectTable\&.end(), curseshelpers\&.TabbedText\&.goDown(), curseshelpers\&.MultiText\&.goDown(), curseshelpers\&.Text\&.goDown(), curseshelpers\&.SelectTable\&.goDown(), curseshelpers\&.TabbedText\&.pageDown(), curseshelpers\&.MultiText\&.pageDown(), curseshelpers\&.Text\&.pageDown(), curseshelpers\&.SelectTable\&.pageDown(), curseshelpers\&.TabbedText\&.pageUp(), curseshelpers\&.MultiText\&.pageUp(), curseshelpers\&.Text\&.pageUp(), curseshelpers\&.SelectTable\&.pageUp(), curseshelpers\&.TabbedText\&.refresh(), curseshelpers\&.MultiText\&.refresh(), curseshelpers\&.Text\&.refresh(), and curseshelpers\&.SelectTable\&.refresh()\&.
-.SS "def curseshelpers\&.TabbedText\&.home (self)"
-
-.PP
-Definition at line 94 of file curseshelpers\&.py\&.
-.PP
-References curseshelpers\&.TabbedText\&.activeCard, and curseshelpers\&.TabbedText\&.positions\&.
-.SS "def curseshelpers\&.TabbedText\&.nrows (self)"
-
-.PP
-Definition at line 135 of file curseshelpers\&.py\&.
-.PP
-References curseshelpers\&.TabbedText\&._nrows, and curseshelpers\&.TabbedText\&.activeCard\&.
-.PP
-Referenced by curseshelpers\&.SelectTable\&.addRow(), curseshelpers\&.TabbedText\&.end(), curseshelpers\&.SelectTable\&.end(), curseshelpers\&.TabbedText\&.goDown(), curseshelpers\&.SelectTable\&.goDown(), curseshelpers\&.TabbedText\&.pageDown(), and curseshelpers\&.SelectTable\&.pageDown()\&.
-.SS "def curseshelpers\&.TabbedText\&.pageDown (self)"
-
-.PP
-Definition at line 92 of file curseshelpers\&.py\&.
-.PP
-References curseshelpers\&.TabbedText\&.activeCard, curseshelpers\&.TabbedText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.TabbedText\&.nrows(), curseshelpers\&.MultiText\&.nrows, curseshelpers\&.Text\&.nrows, and curseshelpers\&.TabbedText\&.positions\&.
-.SS "def curseshelpers\&.TabbedText\&.pageUp (self)"
-
-.PP
-Definition at line 90 of file curseshelpers\&.py\&.
-.PP
-References curseshelpers\&.TabbedText\&.activeCard, curseshelpers\&.TabbedText\&.height(), rootplotlib\&.Legend\&.height, and curseshelpers\&.TabbedText\&.positions\&.
-.SS "def curseshelpers\&.TabbedText\&.refresh (self)"
-
-.PP
-Definition at line 78 of file curseshelpers\&.py\&.
-.PP
-References curseshelpers\&.TabbedText\&._redrawHeading(), curseshelpers\&.TabbedText\&.activeCard, curseshelpers\&.TabbedText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.TabbedText\&.left, curseshelpers\&.TabbedText\&.pads, curseshelpers\&.TabbedText\&.positions, curseshelpers\&.TabbedText\&.width(), and rootplotlib\&.Legend\&.width\&.
-.SS "def curseshelpers\&.TabbedText\&.width (self)"
-
-.PP
-Definition at line 132 of file curseshelpers\&.py\&.
-.PP
-References curseshelpers\&.TabbedText\&._width\&.
-.PP
-Referenced by curseshelpers\&.TabbedText\&._countLines(), curseshelpers\&.SelectTable\&._drawColHeaders(), curseshelpers\&.TabbedText\&._redraw(), curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.MultiText\&._redraw(), curseshelpers\&.Text\&._redraw(), curseshelpers\&.TabbedText\&._redrawHeading(), curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.TabbedText\&.addText(), curseshelpers\&.TabbedText\&.refresh(), curseshelpers\&.MultiText\&.refresh(), curseshelpers\&.Text\&.refresh(), and curseshelpers\&.SelectTable\&.refresh()\&.
+Definition at line 132 of file curseshelpers.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "curseshelpers\&.TabbedText\&._height\fC [private]\fP"
-
+.SS "\fBcurseshelpers::TabbedText::_height\fP\fC [private]\fP"
 .PP
-Definition at line 50 of file curseshelpers\&.py\&.
+Definition at line 50 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::_nrows\fP\fC [private]\fP"
 .PP
-Referenced by curseshelpers\&.TabbedText\&.height(), curseshelpers\&.BottomText\&.height(), curseshelpers\&.MultiText\&.height(), curseshelpers\&.Text\&.height(), and curseshelpers\&.SelectTable\&.height()\&.
-.SS "curseshelpers\&.TabbedText\&._nrows\fC [private]\fP"
-
+Definition at line 57 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::_width\fP\fC [private]\fP"
 .PP
-Definition at line 57 of file curseshelpers\&.py\&.
+Definition at line 51 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::activeCard\fP"
 .PP
-Referenced by curseshelpers\&.TabbedText\&._redraw(), and curseshelpers\&.TabbedText\&.nrows()\&.
-.SS "curseshelpers\&.TabbedText\&._width\fC [private]\fP"
-
+Definition at line 56 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::heading\fP"
 .PP
-Definition at line 51 of file curseshelpers\&.py\&.
+Definition at line 52 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::left\fP"
 .PP
-Referenced by curseshelpers\&.TabbedText\&.width(), curseshelpers\&.BottomText\&.width(), curseshelpers\&.MultiText\&.width(), curseshelpers\&.Text\&.width(), and curseshelpers\&.SelectTable\&.width()\&.
-.SS "curseshelpers\&.TabbedText\&.activeCard"
-
+Definition at line 49 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::maxrows\fP"
 .PP
-Definition at line 56 of file curseshelpers\&.py\&.
+Definition at line 58 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::pads\fP"
 .PP
-Referenced by curseshelpers\&.TabbedText\&._redrawHeading(), curseshelpers\&.TabbedText\&.end(), curseshelpers\&.TabbedText\&.goDown(), curseshelpers\&.TabbedText\&.goLeft(), curseshelpers\&.TabbedText\&.goRight(), curseshelpers\&.TabbedText\&.goUp(), curseshelpers\&.TabbedText\&.home(), curseshelpers\&.TabbedText\&.nrows(), curseshelpers\&.TabbedText\&.pageDown(), curseshelpers\&.TabbedText\&.pageUp(), and curseshelpers\&.TabbedText\&.refresh()\&.
-.SS "curseshelpers\&.TabbedText\&.heading"
-
+Definition at line 53 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::parent\fP"
 .PP
-Definition at line 52 of file curseshelpers\&.py\&.
-.SS "curseshelpers\&.TabbedText\&.left"
-
+Definition at line 48 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::positions\fP"
 .PP
-Definition at line 49 of file curseshelpers\&.py\&.
+Definition at line 54 of file curseshelpers.py.
+.SS "\fBcurseshelpers::TabbedText::text\fP"
 .PP
-Referenced by curseshelpers\&.TabbedText\&.refresh(), curseshelpers\&.MultiText\&.refresh(), curseshelpers\&.Text\&.refresh(), and curseshelpers\&.SelectTable\&.refresh()\&.
-.SS "curseshelpers\&.TabbedText\&.maxrows"
-
-.PP
-Definition at line 58 of file curseshelpers\&.py\&.
-.PP
-Referenced by curseshelpers\&.TabbedText\&.addText()\&.
-.SS "curseshelpers\&.TabbedText\&.pads"
-
-.PP
-Definition at line 53 of file curseshelpers\&.py\&.
-.PP
-Referenced by curseshelpers\&.TabbedText\&._redraw(), curseshelpers\&.TabbedText\&.clear(), and curseshelpers\&.TabbedText\&.refresh()\&.
-.SS "curseshelpers\&.TabbedText\&.parent"
-
-.PP
-Definition at line 48 of file curseshelpers\&.py\&.
-.SS "curseshelpers\&.TabbedText\&.positions"
-
-.PP
-Definition at line 54 of file curseshelpers\&.py\&.
-.PP
-Referenced by curseshelpers\&.TabbedText\&.end(), curseshelpers\&.TabbedText\&.goDown(), curseshelpers\&.TabbedText\&.goUp(), curseshelpers\&.TabbedText\&.home(), curseshelpers\&.TabbedText\&.pageDown(), curseshelpers\&.TabbedText\&.pageUp(), and curseshelpers\&.TabbedText\&.refresh()\&.
-.SS "curseshelpers\&.TabbedText\&.text"
-
-.PP
-Definition at line 55 of file curseshelpers\&.py\&.
-.PP
-Referenced by curseshelpers\&.TabbedText\&._redraw(), curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.MultiText\&._redraw(), curseshelpers\&.TabbedText\&._redrawHeading(), curseshelpers\&.BottomText\&.addText(), curseshelpers\&.TabbedText\&.clear(), curseshelpers\&.BottomText\&.clear(), curseshelpers\&.MultiText\&.clear(), curseshelpers\&.TabbedText\&.goLeft(), curseshelpers\&.TabbedText\&.goRight(), and curseshelpers\&.Text\&.setText()\&.
+Definition at line 55 of file curseshelpers.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

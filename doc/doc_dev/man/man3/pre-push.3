@@ -1,4 +1,4 @@
-.TH "pre-push" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "pre-push" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,26 +13,23 @@ pre-push \-
 .RI "tuple \fBgitController\fP = \fBGitHookController\fP()"
 .br
 .ti -1c
-.RI "tuple \fBpush\fP = gitController\&.parse_pre_push()"
+.RI "tuple \fBpush\fP = gitController.parse_pre_push()"
 .br
 .ti -1c
-.RI "list \fBbranchnames\fP = [commit\&.local_branch for commit in push\&.commits]"
+.RI "list \fBbranchnames\fP = [commit.local_branch for commit in push.commits]"
 .br
 .in -1c
 .SH "Variable Documentation"
 .PP 
-.SS "list pre-push\&.branchnames = [commit\&.local_branch for commit in push\&.commits]"
-
+.SS "list pre-push::branchnames = [commit.local_branch for commit in push.commits]"
 .PP
-Definition at line 34 of file pre-push\&.py\&.
-.SS "tuple pre-push\&.gitController = \fBGitHookController\fP()"
-
+Definition at line 34 of file pre-push.py.
+.SS "tuple pre-push::gitController = \fBGitHookController\fP()"
 .PP
-Definition at line 30 of file pre-push\&.py\&.
-.SS "tuple pre-push\&.push = gitController\&.parse_pre_push()"
-
+Definition at line 30 of file pre-push.py.
+.SS "tuple pre-push::push = gitController.parse_pre_push()"
 .PP
-Definition at line 33 of file pre-push\&.py\&.
+Definition at line 33 of file pre-push.py.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

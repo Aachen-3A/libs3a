@@ -1,13 +1,13 @@
-.TH "aix3adb.aix3adbAuth" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "aix3adb::aix3adbAuth" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-aix3adb.aix3adbAuth \- 
+aix3adb::aix3adbAuth \- 
 .SH SYNOPSIS
 .br
 .PP
 .PP
-Inherits \fBaix3adb\&.aix3adb\fP\&.
+Inherits \fBaix3adb::aix3adb\fP.
 .SS "Public Member Functions"
 
 .in +1c
@@ -16,6 +16,9 @@ Inherits \fBaix3adb\&.aix3adb\fP\&.
 .br
 .ti -1c
 .RI "def \fB__del__\fP"
+.br
+.ti -1c
+.RI "def \fB__init__\fP"
 .br
 .ti -1c
 .RI "def \fBauthorize\fP"
@@ -99,186 +102,96 @@ Inherits \fBaix3adb\&.aix3adb\fP\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 155 of file aix3adb\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def aix3adb\&.aix3adbAuth\&.__init__ (self, username = \fCNone\fP, trykerberos = \fC3\fP)"
-
-.PP
-Definition at line 156 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.authorize()\&.
-.SS "def aix3adb\&.aix3adbAuth\&.__del__ (self)"
-
-.PP
-Definition at line 159 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.destroyauth()\&.
+Definition at line 155 of file aix3adb.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def aix3adb\&.aix3adb\&.authorize (self, username = \fCNone\fP, trykerberos = \fC3\fP)\fC [inherited]\fP"
-
+.SS "def aix3adb::aix3adbAuth::__del__ ( self)"
 .PP
-Definition at line 51 of file aix3adb\&.py\&.
+Definition at line 159 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::__init__ ( self,  cookiefilepath = \fC'\fBaix3adb\fP-ssocookie.txt'\fP)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.obtainSSOCookies()\&.
+Definition at line 43 of file aix3adb.py.
+.SS "def aix3adb::aix3adbAuth::__init__ ( self,  username = \fCNone\fP,  trykerberos = \fC3\fP)"
 .PP
-Referenced by aix3adb_deprecated\&.aix3adbAuth\&.__init__(), aix3adb\&.aix3adbAuth\&.__init__(), and aix3adb_deprecated\&.aix3adb\&.tryServerAuthFunction()\&.
-.SS "def aix3adb\&.aix3adb\&.destroyauth (self)\fC [inherited]\fP"
-
+Definition at line 156 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::authorize ( self,  username = \fCNone\fP,  trykerberos = \fC3\fP)\fC [inherited]\fP"
 .PP
-Definition at line 67 of file aix3adb\&.py\&.
+Definition at line 51 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::destroyauth ( self)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.cookiefile\&.
+Definition at line 67 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::editDataSample ( self,  name,  sample)\fC [inherited]\fP"
 .PP
-Referenced by aix3adb_deprecated\&.aix3adbAuth\&.__del__(), aix3adb\&.aix3adbAuth\&.__del__(), and aix3adb_deprecated\&.aix3adb\&.tryServerAuthFunction()\&.
-.SS "def aix3adb\&.aix3adb\&.editDataSample (self, name, sample)\fC [inherited]\fP"
-
+Definition at line 102 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::editDataSkim ( self,  skimid,  skim)\fC [inherited]\fP"
 .PP
-Definition at line 102 of file aix3adb\&.py\&.
+Definition at line 110 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::editMCSample ( self,  name,  sample)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.aix3adb\&.editDataSkim (self, skimid, skim)\fC [inherited]\fP"
-
+Definition at line 98 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::editMCSkim ( self,  skimid,  skim)\fC [inherited]\fP"
 .PP
-Definition at line 110 of file aix3adb\&.py\&.
+Definition at line 106 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getAuthServerProxy ( self)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.aix3adb\&.editMCSample (self, name, sample)\fC [inherited]\fP"
-
+Definition at line 72 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getDataLatestSkimAndSampleBySample ( self,  name)\fC [inherited]\fP"
 .PP
-Definition at line 98 of file aix3adb\&.py\&.
+Definition at line 130 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getDataSample ( self,  name)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.aix3adb\&.editMCSkim (self, skimid, skim)\fC [inherited]\fP"
-
+Definition at line 117 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getDataSkim ( self,  skimid)\fC [inherited]\fP"
 .PP
-Definition at line 106 of file aix3adb\&.py\&.
+Definition at line 123 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getDataSkimAndSampleBySkim ( self,  skimid)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.aix3adb\&.getAuthServerProxy (self)\fC [inherited]\fP"
-
+Definition at line 138 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getMCLatestSkimAndSampleBySample ( self,  name)\fC [inherited]\fP"
 .PP
-Definition at line 72 of file aix3adb\&.py\&.
+Definition at line 126 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getMCSample ( self,  name)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.authurl, aix3adb\&.aix3adb\&.cookiefile, aix3adb\&.aix3adb\&.domain, and aix3adb\&.transport()\&.
+Definition at line 114 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getMCSkim ( self,  skimid)\fC [inherited]\fP"
 .PP
-Referenced by aix3adb_deprecated\&.aix3adb\&.doEditDataSample(), aix3adb_deprecated\&.aix3adb\&.doEditMCSample(), aix3adb_deprecated\&.aix3adb\&.doRegisterDataSample(), aix3adb_deprecated\&.aix3adb\&.doRegisterMCSample(), aix3adb\&.aix3adb\&.editDataSample(), aix3adb\&.aix3adb\&.editDataSkim(), aix3adb\&.aix3adb\&.editMCSample(), aix3adb\&.aix3adb\&.editMCSkim(), aix3adb\&.aix3adb\&.insertDataSample(), aix3adb\&.aix3adb\&.insertDataSkim(), aix3adb\&.aix3adb\&.insertMCSample(), aix3adb\&.aix3adb\&.insertMCSkim(), aix3adb_deprecated\&.aix3adb\&.insertOrReplaceMCTags(), and aix3adb_deprecated\&.aix3adb\&.test()\&.
-.SS "def aix3adb\&.aix3adb\&.getDataLatestSkimAndSampleBySample (self, name)\fC [inherited]\fP"
-
+Definition at line 120 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getMCSkimAndSample ( self,  name = \fCNone\fP,  skimid = \fCNone\fP)\fC [inherited]\fP"
 .PP
-Definition at line 130 of file aix3adb\&.py\&.
+Definition at line 142 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::getMCSkimAndSampleBySkim ( self,  skimid)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.readurl\&.
-.SS "def aix3adb\&.aix3adb\&.getDataSample (self, name)\fC [inherited]\fP"
-
+Definition at line 134 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::insertDataSample ( self,  sample)\fC [inherited]\fP"
 .PP
-Definition at line 117 of file aix3adb\&.py\&.
+Definition at line 85 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::insertDataSkim ( self,  skim)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.readurl\&.
-.SS "def aix3adb\&.aix3adb\&.getDataSkim (self, skimid)\fC [inherited]\fP"
-
+Definition at line 93 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::insertMCSample ( self,  sample)\fC [inherited]\fP"
 .PP
-Definition at line 123 of file aix3adb\&.py\&.
+Definition at line 79 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::insertMCSkim ( self,  skim)\fC [inherited]\fP"
 .PP
-References aix3adb\&.aix3adb\&.readurl\&.
-.SS "def aix3adb\&.aix3adb\&.getDataSkimAndSampleBySkim (self, skimid)\fC [inherited]\fP"
-
+Definition at line 89 of file aix3adb.py.
+.SS "def aix3adb::aix3adb::obtainSSOCookies ( self)\fC [inherited]\fP"
 .PP
-Definition at line 138 of file aix3adb\&.py\&.
-.SS "def aix3adb\&.aix3adb\&.getMCLatestSkimAndSampleBySample (self, name)\fC [inherited]\fP"
-
-.PP
-Definition at line 126 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.readurl\&.
-.PP
-Referenced by aix3adb\&.aix3adb\&.getMCSkimAndSample()\&.
-.SS "def aix3adb\&.aix3adb\&.getMCSample (self, name)\fC [inherited]\fP"
-
-.PP
-Definition at line 114 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.readurl\&.
-.SS "def aix3adb\&.aix3adb\&.getMCSkim (self, skimid)\fC [inherited]\fP"
-
-.PP
-Definition at line 120 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.readurl\&.
-.SS "def aix3adb\&.aix3adb\&.getMCSkimAndSample (self, name = \fCNone\fP, skimid = \fCNone\fP)\fC [inherited]\fP"
-
-.PP
-Definition at line 142 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.getMCLatestSkimAndSampleBySample(), and aix3adb\&.aix3adb\&.getMCSkimAndSampleBySkim()\&.
-.SS "def aix3adb\&.aix3adb\&.getMCSkimAndSampleBySkim (self, skimid)\fC [inherited]\fP"
-
-.PP
-Definition at line 134 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.readurl\&.
-.PP
-Referenced by aix3adb\&.aix3adb\&.getMCSkimAndSample()\&.
-.SS "def aix3adb\&.aix3adb\&.insertDataSample (self, sample)\fC [inherited]\fP"
-
-.PP
-Definition at line 85 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.aix3adb\&.insertDataSkim (self, skim)\fC [inherited]\fP"
-
-.PP
-Definition at line 93 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.aix3adb\&.insertMCSample (self, sample)\fC [inherited]\fP"
-
-.PP
-Definition at line 79 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.aix3adb\&.insertMCSkim (self, skim)\fC [inherited]\fP"
-
-.PP
-Definition at line 89 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.aix3adb\&.obtainSSOCookies (self)\fC [inherited]\fP"
-
-.PP
-Definition at line 62 of file aix3adb\&.py\&.
-.PP
-References aix3adb\&.aix3adb\&.authurl, and aix3adb\&.aix3adb\&.cookiefile\&.
-.PP
-Referenced by aix3adb_deprecated\&.aix3adb\&.authorize(), and aix3adb\&.aix3adb\&.authorize()\&.
+Definition at line 62 of file aix3adb.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "aix3adb\&.aix3adb\&.authurl\fC [inherited]\fP"
-
+.SS "\fBaix3adb::aix3adb::authurl\fP\fC [inherited]\fP"
 .PP
-Definition at line 45 of file aix3adb\&.py\&.
+Definition at line 45 of file aix3adb.py.
+.SS "\fBaix3adb::aix3adb::cookiefile\fP\fC [inherited]\fP"
 .PP
-Referenced by aix3adb_deprecated\&.aix3adb\&.getAuthServerProxy(), aix3adb\&.aix3adb\&.getAuthServerProxy(), aix3adb_deprecated\&.aix3adb\&.obtainSSOCookies(), and aix3adb\&.aix3adb\&.obtainSSOCookies()\&.
-.SS "aix3adb\&.aix3adb\&.cookiefile\fC [inherited]\fP"
-
+Definition at line 44 of file aix3adb.py.
+.SS "\fBaix3adb::aix3adb::domain\fP\fC [inherited]\fP"
 .PP
-Definition at line 44 of file aix3adb\&.py\&.
+Definition at line 47 of file aix3adb.py.
+.SS "\fBaix3adb::aix3adb::readurl\fP\fC [inherited]\fP"
 .PP
-Referenced by aix3adb_deprecated\&.aix3adb\&.destroyauth(), aix3adb\&.aix3adb\&.destroyauth(), aix3adb_deprecated\&.aix3adb\&.getAuthServerProxy(), aix3adb\&.aix3adb\&.getAuthServerProxy(), aix3adb_deprecated\&.aix3adb\&.obtainSSOCookies(), and aix3adb\&.aix3adb\&.obtainSSOCookies()\&.
-.SS "aix3adb\&.aix3adb\&.domain\fC [inherited]\fP"
-
-.PP
-Definition at line 47 of file aix3adb\&.py\&.
-.PP
-Referenced by aix3adb_deprecated\&.aix3adb\&.getAuthServerProxy(), and aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "aix3adb\&.aix3adb\&.readurl\fC [inherited]\fP"
-
-.PP
-Definition at line 46 of file aix3adb\&.py\&.
-.PP
-Referenced by aix3adb\&.aix3adb\&.getDataLatestSkimAndSampleBySample(), aix3adb_deprecated\&.aix3adb\&.getDataSample(), aix3adb\&.aix3adb\&.getDataSample(), aix3adb\&.aix3adb\&.getDataSkim(), aix3adb\&.aix3adb\&.getMCLatestSkimAndSampleBySample(), aix3adb_deprecated\&.aix3adb\&.getMCSample(), aix3adb\&.aix3adb\&.getMCSample(), aix3adb\&.aix3adb\&.getMCSkim(), aix3adb\&.aix3adb\&.getMCSkimAndSampleBySkim(), aix3adb_deprecated\&.aix3adb\&.searchDataSamples(), and aix3adb_deprecated\&.aix3adb\&.searchMCSamples()\&.
+Definition at line 46 of file aix3adb.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

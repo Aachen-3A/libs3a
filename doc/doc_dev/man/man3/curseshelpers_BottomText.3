@@ -1,13 +1,13 @@
-.TH "curseshelpers.BottomText" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "curseshelpers::BottomText" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-curseshelpers.BottomText \- 
+curseshelpers::BottomText \- 
 .SH SYNOPSIS
 .br
 .PP
 .PP
-Inherits \fBcurseshelpers\&.BaseElement\fP\&.
+Inherits \fBcurseshelpers::BaseElement\fP.
 .SS "Public Member Functions"
 
 .in +1c
@@ -89,124 +89,93 @@ Inherits \fBcurseshelpers\&.BaseElement\fP\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 139 of file curseshelpers\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def curseshelpers\&.BottomText\&.__init__ (self, screen, top = \fC1\fP, left = \fC0\fP, height = \fCNone\fP, width = \fCNone\fP)"
-
-.PP
-Definition at line 140 of file curseshelpers\&.py\&.
+Definition at line 139 of file curseshelpers.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def curseshelpers\&.BottomText\&._redraw (self)\fC [private]\fP"
-
+.SS "def curseshelpers::BottomText::__init__ ( self,  screen,  top = \fC1\fP,  left = \fC0\fP,  height = \fCNone\fP,  width = \fCNone\fP)"
 .PP
-Definition at line 156 of file curseshelpers\&.py\&.
+Definition at line 140 of file curseshelpers.py.
+.SS "def curseshelpers::BottomText::_redraw ( self)\fC [private]\fP"
 .PP
-References curseshelpers\&.chunks(), curseshelpers\&.TabbedText\&.height(), curseshelpers\&.BottomText\&.height(), rootplotlib\&.Legend\&.height, curseshelpers\&.TabbedText\&.text, curseshelpers\&.BottomText\&.text, curseshelpers\&.TabbedText\&.width(), curseshelpers\&.BottomText\&.width(), and rootplotlib\&.Legend\&.width\&.
+Definition at line 156 of file curseshelpers.py.
+.SS "def curseshelpers::BottomText::addText ( self,  text)"
 .PP
-Referenced by curseshelpers\&.BottomText\&.addText(), curseshelpers\&.MultiText\&.addText(), and curseshelpers\&.Text\&.setText()\&.
-.SS "def curseshelpers\&.BottomText\&.addText (self, text)"
-
+Definition at line 150 of file curseshelpers.py.
+.SS "def curseshelpers::BottomText::clear ( self)"
 .PP
-Definition at line 150 of file curseshelpers\&.py\&.
+Definition at line 147 of file curseshelpers.py.
+.SS "def curseshelpers::BaseElement::end ( self)\fC [inherited]\fP"
 .PP
-References curseshelpers\&.TabbedText\&._redraw(), curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.TabbedText\&.text, and curseshelpers\&.BottomText\&.text\&.
+Reimplemented in \fBcurseshelpers::TabbedText\fP, \fBcurseshelpers::MultiText\fP, \fBcurseshelpers::Text\fP, and \fBcurseshelpers::SelectTable\fP.
 .PP
-Referenced by curseshelpers\&.MultiText\&.addFile()\&.
-.SS "def curseshelpers\&.BottomText\&.clear (self)"
-
+Definition at line 43 of file curseshelpers.py.
+.SS "def curseshelpers::BaseElement::goDown ( self)\fC [inherited]\fP"
 .PP
-Definition at line 147 of file curseshelpers\&.py\&.
+Reimplemented in \fBcurseshelpers::TabbedText\fP, \fBcurseshelpers::MultiText\fP, \fBcurseshelpers::Text\fP, and \fBcurseshelpers::SelectTable\fP.
 .PP
-References curseshelpers\&.TabbedText\&.text, and curseshelpers\&.BottomText\&.text\&.
-.SS "def curseshelpers\&.BaseElement\&.end (self)\fC [inherited]\fP"
-
+Definition at line 35 of file curseshelpers.py.
+.SS "def curseshelpers::BaseElement::goLeft ( self)\fC [inherited]\fP"
 .PP
-Definition at line 43 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BaseElement\&.goDown (self)\fC [inherited]\fP"
-
+Reimplemented in \fBcurseshelpers::TabbedText\fP.
 .PP
-Definition at line 35 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BaseElement\&.goLeft (self)\fC [inherited]\fP"
-
+Definition at line 29 of file curseshelpers.py.
+.SS "def curseshelpers::BaseElement::goRight ( self)\fC [inherited]\fP"
 .PP
-Definition at line 29 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BaseElement\&.goRight (self)\fC [inherited]\fP"
-
+Reimplemented in \fBcurseshelpers::TabbedText\fP.
 .PP
-Definition at line 31 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BaseElement\&.goUp (self)\fC [inherited]\fP"
-
+Definition at line 31 of file curseshelpers.py.
+.SS "def curseshelpers::BaseElement::goUp ( self)\fC [inherited]\fP"
 .PP
-Definition at line 33 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BottomText\&.height (self)"
-
+Reimplemented in \fBcurseshelpers::TabbedText\fP, \fBcurseshelpers::MultiText\fP, \fBcurseshelpers::Text\fP, and \fBcurseshelpers::SelectTable\fP.
 .PP
-Definition at line 172 of file curseshelpers\&.py\&.
+Definition at line 33 of file curseshelpers.py.
+.SS "def curseshelpers::BottomText::height ( self)"
 .PP
-References curseshelpers\&.TabbedText\&._height, and curseshelpers\&.BottomText\&._height\&.
+Definition at line 172 of file curseshelpers.py.
+.SS "def curseshelpers::BaseElement::home ( self)\fC [inherited]\fP"
 .PP
-Referenced by curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.MultiText\&.end(), curseshelpers\&.Text\&.end(), curseshelpers\&.SelectTable\&.end(), curseshelpers\&.MultiText\&.goDown(), curseshelpers\&.Text\&.goDown(), curseshelpers\&.SelectTable\&.goDown(), curseshelpers\&.MultiText\&.pageDown(), curseshelpers\&.Text\&.pageDown(), curseshelpers\&.SelectTable\&.pageDown(), curseshelpers\&.MultiText\&.pageUp(), curseshelpers\&.Text\&.pageUp(), curseshelpers\&.SelectTable\&.pageUp(), curseshelpers\&.MultiText\&.refresh(), curseshelpers\&.Text\&.refresh(), and curseshelpers\&.SelectTable\&.refresh()\&.
-.SS "def curseshelpers\&.BaseElement\&.home (self)\fC [inherited]\fP"
-
+Reimplemented in \fBcurseshelpers::TabbedText\fP, \fBcurseshelpers::MultiText\fP, \fBcurseshelpers::Text\fP, and \fBcurseshelpers::SelectTable\fP.
 .PP
-Definition at line 41 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BaseElement\&.pageDown (self)\fC [inherited]\fP"
-
+Definition at line 41 of file curseshelpers.py.
+.SS "def curseshelpers::BaseElement::pageDown ( self)\fC [inherited]\fP"
 .PP
-Definition at line 39 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BaseElement\&.pageUp (self)\fC [inherited]\fP"
-
+Reimplemented in \fBcurseshelpers::TabbedText\fP, \fBcurseshelpers::MultiText\fP, \fBcurseshelpers::Text\fP, and \fBcurseshelpers::SelectTable\fP.
 .PP
-Definition at line 37 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BottomText\&.refresh (self)"
-
+Definition at line 39 of file curseshelpers.py.
+.SS "def curseshelpers::BaseElement::pageUp ( self)\fC [inherited]\fP"
 .PP
-Definition at line 154 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.BottomText\&.width (self)"
-
+Reimplemented in \fBcurseshelpers::TabbedText\fP, \fBcurseshelpers::MultiText\fP, \fBcurseshelpers::Text\fP, and \fBcurseshelpers::SelectTable\fP.
 .PP
-Definition at line 175 of file curseshelpers\&.py\&.
+Definition at line 37 of file curseshelpers.py.
+.SS "def curseshelpers::BottomText::refresh ( self)"
 .PP
-References curseshelpers\&.TabbedText\&._width, and curseshelpers\&.BottomText\&._width\&.
+Reimplemented from \fBcurseshelpers::BaseElement\fP.
 .PP
-Referenced by curseshelpers\&.SelectTable\&._drawColHeaders(), curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.MultiText\&._redraw(), curseshelpers\&.Text\&._redraw(), curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.MultiText\&.refresh(), curseshelpers\&.Text\&.refresh(), and curseshelpers\&.SelectTable\&.refresh()\&.
+Definition at line 154 of file curseshelpers.py.
+.SS "def curseshelpers::BottomText::width ( self)"
+.PP
+Definition at line 175 of file curseshelpers.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "curseshelpers\&.BottomText\&._height\fC [private]\fP"
-
+.SS "\fBcurseshelpers::BottomText::_height\fP\fC [private]\fP"
 .PP
-Definition at line 143 of file curseshelpers\&.py\&.
+Definition at line 143 of file curseshelpers.py.
+.SS "\fBcurseshelpers::BottomText::_width\fP\fC [private]\fP"
 .PP
-Referenced by curseshelpers\&.BottomText\&.height(), curseshelpers\&.MultiText\&.height(), curseshelpers\&.Text\&.height(), and curseshelpers\&.SelectTable\&.height()\&.
-.SS "curseshelpers\&.BottomText\&._width\fC [private]\fP"
-
+Definition at line 144 of file curseshelpers.py.
+.SS "\fBcurseshelpers::BottomText::left\fP"
 .PP
-Definition at line 144 of file curseshelpers\&.py\&.
+Definition at line 142 of file curseshelpers.py.
+.SS "\fBcurseshelpers::BottomText::pad\fP"
 .PP
-Referenced by curseshelpers\&.BottomText\&.width(), curseshelpers\&.MultiText\&.width(), curseshelpers\&.Text\&.width(), and curseshelpers\&.SelectTable\&.width()\&.
-.SS "curseshelpers\&.BottomText\&.left"
-
+Definition at line 145 of file curseshelpers.py.
+.SS "\fBcurseshelpers::BottomText::parent\fP"
 .PP
-Definition at line 142 of file curseshelpers\&.py\&.
+Definition at line 141 of file curseshelpers.py.
+.SS "\fBcurseshelpers::BottomText::text\fP"
 .PP
-Referenced by curseshelpers\&.MultiText\&.refresh(), curseshelpers\&.Text\&.refresh(), and curseshelpers\&.SelectTable\&.refresh()\&.
-.SS "curseshelpers\&.BottomText\&.pad"
-
-.PP
-Definition at line 145 of file curseshelpers\&.py\&.
-.SS "curseshelpers\&.BottomText\&.parent"
-
-.PP
-Definition at line 141 of file curseshelpers\&.py\&.
-.SS "curseshelpers\&.BottomText\&.text"
-
-.PP
-Definition at line 146 of file curseshelpers\&.py\&.
-.PP
-Referenced by curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.MultiText\&._redraw(), curseshelpers\&.BottomText\&.addText(), curseshelpers\&.BottomText\&.clear(), curseshelpers\&.MultiText\&.clear(), and curseshelpers\&.Text\&.setText()\&.
+Definition at line 146 of file curseshelpers.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

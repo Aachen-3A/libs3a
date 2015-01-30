@@ -1,13 +1,11 @@
-.TH "curseshelpers.CursesMultiHandler" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "curseshelpers::CursesMultiHandler" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-curseshelpers.CursesMultiHandler \- 
+curseshelpers::CursesMultiHandler \- 
 .SH SYNOPSIS
 .br
 .PP
-.PP
-Inherits Handler\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -53,56 +51,39 @@ Inherits Handler\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 442 of file curseshelpers\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def curseshelpers\&.CursesMultiHandler\&.__init__ (self, stdscr, bottomText, log_q, level = \fClogging\&.DEBUG\fP)"
-
-.PP
-Definition at line 443 of file curseshelpers\&.py\&.
+Definition at line 442 of file curseshelpers.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def curseshelpers\&.CursesMultiHandler\&._format_record (self, record)\fC [private]\fP"
-
+.SS "def curseshelpers::CursesMultiHandler::__init__ ( self,  stdscr,  bottomText,  log_q,  level = \fClogging.DEBUG\fP)"
 .PP
-Definition at line 475 of file curseshelpers\&.py\&.
+Definition at line 443 of file curseshelpers.py.
+.SS "def curseshelpers::CursesMultiHandler::_format_record ( self,  record)\fC [private]\fP"
 .PP
-Referenced by curseshelpers\&.CursesMultiHandler\&.emit()\&.
-.SS "def curseshelpers\&.CursesMultiHandler\&.close (self)"
-
+Definition at line 475 of file curseshelpers.py.
+.SS "def curseshelpers::CursesMultiHandler::close ( self)"
 .PP
-Definition at line 498 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.CursesMultiHandler\&.emit (self, record)"
-
+Definition at line 498 of file curseshelpers.py.
+.SS "def curseshelpers::CursesMultiHandler::emit ( self,  record)"
 .PP
-Definition at line 489 of file curseshelpers\&.py\&.
+Definition at line 489 of file curseshelpers.py.
+.SS "def curseshelpers::CursesMultiHandler::receive ( self)"
 .PP
-References curseshelpers\&.CursesMultiHandler\&._format_record(), and curseshelpers\&.CursesMultiHandler\&.send()\&.
-.SS "def curseshelpers\&.CursesMultiHandler\&.receive (self)"
-
+Definition at line 458 of file curseshelpers.py.
+.SS "def curseshelpers::CursesMultiHandler::send ( self,  s)"
 .PP
-Definition at line 458 of file curseshelpers\&.py\&.
-.SS "def curseshelpers\&.CursesMultiHandler\&.send (self, s)"
-
+Definition at line 472 of file curseshelpers.py.
+.SS "def curseshelpers::CursesMultiHandler::setFormatter ( self,  fmt)"
 .PP
-Definition at line 472 of file curseshelpers\&.py\&.
-.PP
-Referenced by curseshelpers\&.CursesMultiHandler\&.emit()\&.
-.SS "def curseshelpers\&.CursesMultiHandler\&.setFormatter (self, fmt)"
-
-.PP
-Definition at line 454 of file curseshelpers\&.py\&.
+Definition at line 454 of file curseshelpers.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "curseshelpers\&.CursesMultiHandler\&._handler\fC [private]\fP"
-
+.SS "\fBcurseshelpers::CursesMultiHandler::_handler\fP\fC [private]\fP"
 .PP
-Definition at line 446 of file curseshelpers\&.py\&.
-.SS "curseshelpers\&.CursesMultiHandler\&.queue"
-
+Definition at line 446 of file curseshelpers.py.
+.SS "\fBcurseshelpers::CursesMultiHandler::queue\fP"
 .PP
-Definition at line 448 of file curseshelpers\&.py\&.
+Definition at line 448 of file curseshelpers.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

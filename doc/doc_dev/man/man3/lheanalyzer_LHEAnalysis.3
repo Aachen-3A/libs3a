@@ -1,8 +1,8 @@
-.TH "lheanalyzer.LHEAnalysis" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "lheanalyzer::LHEAnalysis" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-lheanalyzer.LHEAnalysis \- 
+lheanalyzer::LHEAnalysis \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -36,53 +36,40 @@ lheanalyzer.LHEAnalysis \-
 
 .in +1c
 .ti -1c
-.RI "\fBtotalCrossSection\fP = property(lambda self: sum(p\&.crossSection for p in self\&.processes))"
+.RI "\fBtotalCrossSection\fP = property(lambda self: sum(p.crossSection for p in self.processes))"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 75 of file lheanalyzer\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def lheanalyzer\&.LHEAnalysis\&.__init__ (self, filename)"
-
-.PP
-Definition at line 76 of file lheanalyzer\&.py\&.
+Definition at line 75 of file lheanalyzer.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def lheanalyzer\&.LHEAnalysis\&.__iter__ (self)"
-
+.SS "def lheanalyzer::LHEAnalysis::__init__ ( self,  filename)"
 .PP
-Definition at line 92 of file lheanalyzer\&.py\&.
-.SS "def lheanalyzer\&.LHEAnalysis\&.next (self)"
-
+Definition at line 76 of file lheanalyzer.py.
+.SS "def lheanalyzer::LHEAnalysis::__iter__ ( self)"
 .PP
-Definition at line 94 of file lheanalyzer\&.py\&.
+Definition at line 92 of file lheanalyzer.py.
+.SS "def lheanalyzer::LHEAnalysis::next ( self)"
 .PP
-References lheanalyzer\&.LHEAnalysis\&.lhefile\&.
+Definition at line 94 of file lheanalyzer.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "lheanalyzer\&.LHEAnalysis\&.lhefile"
-
+.SS "\fBlheanalyzer::LHEAnalysis::lhefile\fP"
 .PP
-Definition at line 77 of file lheanalyzer\&.py\&.
+Definition at line 77 of file lheanalyzer.py.
+.SS "\fBlheanalyzer::LHEAnalysis::nProcesses\fP"
 .PP
-Referenced by lheanalyzer\&.LHEAnalysis\&.next()\&.
-.SS "lheanalyzer\&.LHEAnalysis\&.nProcesses"
-
+Definition at line 81 of file lheanalyzer.py.
+.SS "\fBlheanalyzer::LHEAnalysis::processes\fP"
 .PP
-Definition at line 81 of file lheanalyzer\&.py\&.
-.SS "lheanalyzer\&.LHEAnalysis\&.processes"
-
-.PP
-Definition at line 84 of file lheanalyzer\&.py\&.
+Definition at line 84 of file lheanalyzer.py.
 .SH "Property Documentation"
 .PP 
-.SS "lheanalyzer\&.LHEAnalysis\&.totalCrossSection = property(lambda self: sum(p\&.crossSection for p in self\&.processes))\fC [static]\fP"
-
+.SS "lheanalyzer::LHEAnalysis::totalCrossSection = property(lambda self: sum(p.crossSection for p in self.processes))\fC [static]\fP"
 .PP
-Definition at line 116 of file lheanalyzer\&.py\&.
+Definition at line 116 of file lheanalyzer.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

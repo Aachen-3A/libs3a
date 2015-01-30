@@ -1,4 +1,4 @@
-.TH "cesubmit" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "cesubmit" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -63,102 +63,65 @@ cesubmit \-
 
 .in +1c
 .ti -1c
-.RI "tuple \fBlog\fP = logging\&.getLogger(__name__)"
+.RI "tuple \fBlog\fP = logging.getLogger(__name__)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "def cesubmit\&.checkAndRenewVomsProxy (time = \fC604800\fP, voms = \fC'cms:/cms/dcms'\fP, passphrase = \fCNone\fP)"
-
+.SS "def cesubmit::checkAndRenewVomsProxy ( time = \fC604800\fP,  voms = \fC'cms:/cms/dcms'\fP,  passphrase = \fCNone\fP)"
 .PP
-Definition at line 516 of file cesubmit\&.py\&.
-.PP
-References checkVomsProxy(), and renewVomsProxy()\&.
-.PP
-Referenced by cesubmit\&.Job\&.submit(), and cesubmit\&.Task\&.submit()\&.
-.SS "def cesubmit\&.checkVomsProxy (time = \fC86400\fP)"
-
-.PP
+Definition at line 516 of file cesubmit.py.
+.SS "def cesubmit::checkVomsProxy ( time = \fC86400\fP)".PP
 .nf
-Returns True if the proxy is valid longer than time, False otherwise.
-.fi
+Returns True if the proxy is valid longer than time, False otherwise..fi
 .PP
  
 .PP
-Definition at line 498 of file cesubmit\&.py\&.
-.PP
-References timeLeftVomsProxy()\&.
-.PP
-Referenced by checkAndRenewVomsProxy()\&.
-.SS "def cesubmit\&.chunks (l, n)"
-
-.PP
+Definition at line 498 of file cesubmit.py.
+.SS "def cesubmit::chunks ( l,  n)".PP
 .nf
 Yield successive n-sized chunks from l.
-
 .fi
 .PP
  
 .PP
-Definition at line 478 of file cesubmit\&.py\&.
+Definition at line 478 of file cesubmit.py.
+.SS "def cesubmit::killWorker ( job)"
 .PP
-Referenced by cesubmit\&.Task\&.getOutput()\&.
-.SS "def cesubmit\&.killWorker (job)"
-
+Definition at line 25 of file cesubmit.py.
+.SS "def cesubmit::parseGetOutput ( stdout)"
 .PP
-Definition at line 25 of file cesubmit\&.py\&.
-.SS "def cesubmit\&.parseGetOutput (stdout)"
-
+Definition at line 412 of file cesubmit.py.
+.SS "def cesubmit::parseStatus ( stdout)"
 .PP
-Definition at line 412 of file cesubmit\&.py\&.
+Definition at line 426 of file cesubmit.py.
+.SS "def cesubmit::parseStatusMultiple ( stdout)"
 .PP
-Referenced by cesubmit\&.Task\&.getOutput()\&.
-.SS "def cesubmit\&.parseStatus (stdout)"
-
+Definition at line 438 of file cesubmit.py.
+.SS "def cesubmit::parseStatusMultipleL1 ( stdout)"
 .PP
-Definition at line 426 of file cesubmit\&.py\&.
-.SS "def cesubmit\&.parseStatusMultiple (stdout)"
-
-.PP
-Definition at line 438 of file cesubmit\&.py\&.
-.SS "def cesubmit\&.parseStatusMultipleL1 (stdout)"
-
-.PP
-Definition at line 454 of file cesubmit\&.py\&.
-.PP
-Referenced by cesubmit\&.Task\&._getStatusMultiple()\&.
-.SS "def cesubmit\&.renewVomsProxy (voms = \fC'cms:/cms/dcms'\fP, passphrase = \fCNone\fP)"
-
-.PP
+Definition at line 454 of file cesubmit.py.
+.SS "def cesubmit::renewVomsProxy ( voms = \fC'cms:/cms/dcms'\fP,  passphrase = \fCNone\fP)".PP
 .nf
-Make a new proxy with a lifetime of one week.
-.fi
+Make a new proxy with a lifetime of one week..fi
 .PP
  
 .PP
-Definition at line 503 of file cesubmit\&.py\&.
+Definition at line 503 of file cesubmit.py.
+.SS "def cesubmit::resubmitWorker ( job)"
 .PP
-Referenced by checkAndRenewVomsProxy()\&.
-.SS "def cesubmit\&.resubmitWorker (job)"
-
+Definition at line 21 of file cesubmit.py.
+.SS "def cesubmit::submitWorker ( job)"
 .PP
-Definition at line 21 of file cesubmit\&.py\&.
-.SS "def cesubmit\&.submitWorker (job)"
-
+Definition at line 17 of file cesubmit.py.
+.SS "def cesubmit::timeLeftVomsProxy ()"
 .PP
-Definition at line 17 of file cesubmit\&.py\&.
-.SS "def cesubmit\&.timeLeftVomsProxy ()"
-
-.PP
-Definition at line 487 of file cesubmit\&.py\&.
-.PP
-Referenced by checkVomsProxy()\&.
+Definition at line 487 of file cesubmit.py.
 .SH "Variable Documentation"
 .PP 
-.SS "tuple cesubmit\&.log = logging\&.getLogger(__name__)"
-
+.SS "tuple \fBcesubmit::log\fP = logging.getLogger(__name__)"
 .PP
-Definition at line 14 of file cesubmit\&.py\&.
+Definition at line 14 of file cesubmit.py.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

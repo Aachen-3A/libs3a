@@ -1,4 +1,4 @@
-.TH "remote_example" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "remote_example" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -29,51 +29,31 @@ remote_example \-
 
 .in +1c
 .ti -1c
-.RI "tuple \fBlog\fP = logging\&.getLogger( 'remote' )"
+.RI "tuple \fBlog\fP = logging.getLogger( 'remote' )"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "def remote_example\&.getFilesfromFile (cfgFile)"
-
+.SS "def remote_example::getFilesfromFile ( cfgFile)"
 .PP
-Definition at line 12 of file remote_example\&.py\&.
+Definition at line 12 of file remote_example.py.
+.SS "def remote_example::main ()"
 .PP
-References gridFunctions\&.getdcachelist(), and readDcachePickle()\&.
+Definition at line 177 of file remote_example.py.
+.SS "def remote_example::makeExe ( user)"
 .PP
-Referenced by main()\&.
-.SS "def remote_example\&.main ()"
-
+Definition at line 80 of file remote_example.py.
+.SS "def remote_example::prepare_teli ( options)"
 .PP
-Definition at line 177 of file remote_example\&.py\&.
+Definition at line 125 of file remote_example.py.
+.SS "def remote_example::readDcachePickle ( file)"
 .PP
-References checkEnvironment\&.checkEnvironment(), getFilesfromFile(), makeExe(), and prepare_teli()\&.
-.SS "def remote_example\&.makeExe (user)"
-
-.PP
-Definition at line 80 of file remote_example\&.py\&.
-.PP
-Referenced by main()\&.
-.SS "def remote_example\&.prepare_teli (options)"
-
-.PP
-Definition at line 125 of file remote_example\&.py\&.
-.PP
-References TimedCall\&.retry()\&.
-.PP
-Referenced by main()\&.
-.SS "def remote_example\&.readDcachePickle (file)"
-
-.PP
-Definition at line 54 of file remote_example\&.py\&.
-.PP
-Referenced by getFilesfromFile()\&.
+Definition at line 54 of file remote_example.py.
 .SH "Variable Documentation"
 .PP 
-.SS "tuple remote_example\&.log = logging\&.getLogger( 'remote' )"
-
+.SS "tuple \fBremote_example::log\fP = logging.getLogger( 'remote' )"
 .PP
-Definition at line 10 of file remote_example\&.py\&.
+Definition at line 10 of file remote_example.py.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

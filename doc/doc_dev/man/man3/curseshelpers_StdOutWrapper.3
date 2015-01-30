@@ -1,8 +1,8 @@
-.TH "curseshelpers.StdOutWrapper" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "curseshelpers::StdOutWrapper" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-curseshelpers.StdOutWrapper \- 
+curseshelpers::StdOutWrapper \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -31,50 +31,35 @@ curseshelpers.StdOutWrapper \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-
 .PP
 .nf
 This is a Stream object to redirect stdout and stderr to a BottomText element, which
 can be dispayed in curses
-
 .fi
 .PP
  
 .PP
-Definition at line 408 of file curseshelpers\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def curseshelpers\&.StdOutWrapper\&.__init__ (self, screen, nlines = \fC10\fP)"
-
-.PP
-Definition at line 412 of file curseshelpers\&.py\&.
+Definition at line 408 of file curseshelpers.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def curseshelpers\&.StdOutWrapper\&.flush (self)"
-
+.SS "def curseshelpers::StdOutWrapper::__init__ ( self,  screen,  nlines = \fC10\fP)"
 .PP
-Definition at line 419 of file curseshelpers\&.py\&.
+Definition at line 412 of file curseshelpers.py.
+.SS "def curseshelpers::StdOutWrapper::flush ( self)"
 .PP
-References curseshelpers\&.StdOutWrapper\&.doflush\&.
-.SS "def curseshelpers\&.StdOutWrapper\&.write (self, txt)"
-
+Definition at line 419 of file curseshelpers.py.
+.SS "def curseshelpers::StdOutWrapper::write ( self,  txt)"
 .PP
-Definition at line 416 of file curseshelpers\&.py\&.
-.PP
-References curseshelpers\&.StdOutWrapper\&.doflush\&.
+Definition at line 416 of file curseshelpers.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "curseshelpers\&.StdOutWrapper\&.bottomText"
-
+.SS "\fBcurseshelpers::StdOutWrapper::bottomText\fP"
 .PP
-Definition at line 414 of file curseshelpers\&.py\&.
-.SS "curseshelpers\&.StdOutWrapper\&.doflush"
-
+Definition at line 414 of file curseshelpers.py.
+.SS "\fBcurseshelpers::StdOutWrapper::doflush\fP"
 .PP
-Definition at line 415 of file curseshelpers\&.py\&.
-.PP
-Referenced by curseshelpers\&.StdOutWrapper\&.flush(), and curseshelpers\&.StdOutWrapper\&.write()\&.
+Definition at line 415 of file curseshelpers.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

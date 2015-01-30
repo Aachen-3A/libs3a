@@ -1,4 +1,4 @@
-.TH "aix3adb" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "aix3adb" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -57,37 +57,30 @@ aix3adb \-
 
 .in +1c
 .ti -1c
-.RI "tuple \fBlog\fP = logging\&.getLogger( '\fBaix3adb\fP' )"
+.RI "tuple \fBlog\fP = logging.getLogger( '\fBaix3adb\fP' )"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "def aix3adb\&.transport (uri)"
-
-.PP
+.SS "def aix3adb::transport ( uri)".PP
 .nf
 Return an appropriate Transport for the URI.
 
 If the URI type is https, return a CookieSafeTransport.
 If the type is http, return a CookieTransport.
-
 .fi
 .PP
  
 .PP
-Definition at line 242 of file aix3adb\&.py\&.
+Definition at line 242 of file aix3adb.py.
+.SS "def aix3adb::tryServerAuth ( funct)"
 .PP
-Referenced by aix3adb\&.aix3adb\&.getAuthServerProxy()\&.
-.SS "def aix3adb\&.tryServerAuth (funct)"
-
-.PP
-Definition at line 10 of file aix3adb\&.py\&.
+Definition at line 10 of file aix3adb.py.
 .SH "Variable Documentation"
 .PP 
-.SS "tuple aix3adb\&.log = logging\&.getLogger( '\fBaix3adb\fP' )"
-
+.SS "tuple \fBaix3adb::log\fP = logging.getLogger( '\fBaix3adb\fP' )"
 .PP
-Definition at line 8 of file aix3adb\&.py\&.
+Definition at line 8 of file aix3adb.py.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

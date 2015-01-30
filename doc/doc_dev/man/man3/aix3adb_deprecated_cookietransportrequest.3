@@ -1,13 +1,13 @@
-.TH "aix3adb_deprecated.cookietransportrequest" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "aix3adb_deprecated::cookietransportrequest" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-aix3adb_deprecated.cookietransportrequest \- 
+aix3adb_deprecated::cookietransportrequest \- 
 .SH SYNOPSIS
 .br
 .PP
 .PP
-Inherited by \fBaix3adb_deprecated\&.cookiesafetransport\fP, and \fBaix3adb_deprecated\&.cookietransport\fP\&.
+Inherited by \fBaix3adb_deprecated::cookiesafetransport\fP, and \fBaix3adb_deprecated::cookietransport\fP.
 .SS "Public Member Functions"
 
 .in +1c
@@ -40,7 +40,6 @@ Inherited by \fBaix3adb_deprecated\&.cookiesafetransport\fP, and \fBaix3adb_depr
 .in -1c
 .SH "Detailed Description"
 .PP 
-
 .PP
 .nf
 A Transport request method that retains cookies over its lifetime.
@@ -52,45 +51,34 @@ the Bugzilla XMLRPC interface.
 So this is a helper for defining a Transport which looks for
 cookies being set in responses and saves them to add to all future
 requests.
-
 .fi
 .PP
  
 .PP
-Definition at line 120 of file aix3adb_deprecated\&.py\&.
+Definition at line 120 of file aix3adb_deprecated.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def aix3adb_deprecated\&.cookietransportrequest\&.request (self, host, handler, request_body, verbose = \fC0\fP)"
-
+.SS "def aix3adb_deprecated::cookietransportrequest::request ( self,  host,  handler,  request_body,  verbose = \fC0\fP)"
 .PP
-Definition at line 153 of file aix3adb_deprecated\&.py\&.
-.SS "def aix3adb_deprecated\&.cookietransportrequest\&.send_cookies (self, connection)"
-
+Definition at line 153 of file aix3adb_deprecated.py.
+.SS "def aix3adb_deprecated::cookietransportrequest::send_cookies ( self,  connection)"
 .PP
-Definition at line 148 of file aix3adb_deprecated\&.py\&.
+Definition at line 148 of file aix3adb_deprecated.py.
+.SS "def aix3adb_deprecated::cookietransportrequest::setcookies ( self,  cookiefile,  domain)"
 .PP
-References aix3adb_deprecated\&.cookietransportrequest\&.cookies, and aix3adb\&.cookietransportrequest\&.cookies\&.
-.SS "def aix3adb_deprecated\&.cookietransportrequest\&.setcookies (self, cookiefile, domain)"
-
-.PP
-Definition at line 141 of file aix3adb_deprecated\&.py\&.
+Definition at line 141 of file aix3adb_deprecated.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "list aix3adb_deprecated\&.cookietransportrequest\&.cookies = []\fC [static]\fP"
-
+.SS "\fBaix3adb_deprecated::cookietransportrequest::cookies\fP"
 .PP
-Definition at line 140 of file aix3adb_deprecated\&.py\&.
+Definition at line 142 of file aix3adb_deprecated.py.
+.SS "list \fBaix3adb_deprecated::cookietransportrequest::cookies\fP = []\fC [static]\fP"
 .PP
-Referenced by aix3adb_deprecated\&.cookietransportrequest\&.send_cookies()\&.
-.SS "aix3adb_deprecated\&.cookietransportrequest\&.cookies"
-
+Definition at line 140 of file aix3adb_deprecated.py.
+.SS "\fBaix3adb_deprecated::cookietransportrequest::verbose\fP"
 .PP
-Definition at line 142 of file aix3adb_deprecated\&.py\&.
-.SS "aix3adb_deprecated\&.cookietransportrequest\&.verbose"
-
-.PP
-Definition at line 154 of file aix3adb_deprecated\&.py\&.
+Definition at line 154 of file aix3adb_deprecated.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

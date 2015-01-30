@@ -1,8 +1,8 @@
-.TH "dbutilscms.McMUtilities" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "dbutilscms::McMUtilities" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-dbutilscms.McMUtilities \- 
+dbutilscms::McMUtilities \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -61,106 +61,57 @@ dbutilscms.McMUtilities \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 17 of file dbutilscms\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def dbutilscms\&.McMUtilities\&.__init__ (self)"
-
-.PP
-Definition at line 18 of file dbutilscms\&.py\&.
+Definition at line 17 of file dbutilscms.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def dbutilscms\&.McMUtilities\&.getCMSSW (self)"
-
+.SS "def dbutilscms::McMUtilities::__init__ ( self)"
 .PP
-Definition at line 105 of file dbutilscms\&.py\&.
+Definition at line 18 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getCMSSW ( self)"
 .PP
-References dbutilscms\&.McMUtilities\&.getInfo()\&.
-.SS "def dbutilscms\&.McMUtilities\&.getCrossSection (self)"
-
+Definition at line 105 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getCrossSection ( self)"
 .PP
-Definition at line 77 of file dbutilscms\&.py\&.
+Definition at line 77 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getEnergy ( self)"
 .PP
-References dbutilscms\&.McMUtilities\&.getGenInfo()\&.
-.SS "def dbutilscms\&.McMUtilities\&.getEnergy (self)"
-
+Definition at line 101 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getEvents ( self)"
 .PP
-Definition at line 101 of file dbutilscms\&.py\&.
+Definition at line 93 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getFilterEfficiency ( self)"
 .PP
-References dbutilscms\&.McMUtilities\&.getInfo()\&.
-.SS "def dbutilscms\&.McMUtilities\&.getEvents (self)"
-
+Definition at line 81 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getGenerators ( self)"
 .PP
-Definition at line 93 of file dbutilscms\&.py\&.
+Definition at line 97 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getGenInfo ( self,  key)"
 .PP
-References dbutilscms\&.McMUtilities\&.getInfo()\&.
-.SS "def dbutilscms\&.McMUtilities\&.getFilterEfficiency (self)"
-
+Definition at line 44 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getInfo ( self,  key)"
 .PP
-Definition at line 81 of file dbutilscms\&.py\&.
+Definition at line 86 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::getWorkingGroup ( self)"
 .PP
-References dbutilscms\&.McMUtilities\&.getGenInfo()\&.
-.SS "def dbutilscms\&.McMUtilities\&.getGenerators (self)"
-
+Definition at line 109 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::readJSON ( self,  json_string)"
 .PP
-Definition at line 97 of file dbutilscms\&.py\&.
+Definition at line 24 of file dbutilscms.py.
+.SS "def dbutilscms::McMUtilities::readURL ( self,  mcm_dataset)"
 .PP
-References dbutilscms\&.McMUtilities\&.getInfo()\&.
-.SS "def dbutilscms\&.McMUtilities\&.getGenInfo (self, key)"
-
-.PP
-Definition at line 44 of file dbutilscms\&.py\&.
-.PP
-References dbutilscms\&.McMUtilities\&.gen_json, dbutilscms\&.McMUtilities\&.mcm_json, dbutilscms\&.McMUtilities\&.mcm_prefix, and dbutilscms\&.McMUtilities\&.readJSON()\&.
-.PP
-Referenced by dbutilscms\&.McMUtilities\&.getCrossSection(), and dbutilscms\&.McMUtilities\&.getFilterEfficiency()\&.
-.SS "def dbutilscms\&.McMUtilities\&.getInfo (self, key)"
-
-.PP
-Definition at line 86 of file dbutilscms\&.py\&.
-.PP
-References dbutilscms\&.McMUtilities\&.mcm_json\&.
-.PP
-Referenced by dbutilscms\&.McMUtilities\&.getCMSSW(), dbutilscms\&.McMUtilities\&.getEnergy(), dbutilscms\&.McMUtilities\&.getEvents(), dbutilscms\&.McMUtilities\&.getGenerators(), and dbutilscms\&.McMUtilities\&.getWorkingGroup()\&.
-.SS "def dbutilscms\&.McMUtilities\&.getWorkingGroup (self)"
-
-.PP
-Definition at line 109 of file dbutilscms\&.py\&.
-.PP
-References dbutilscms\&.McMUtilities\&.getInfo()\&.
-.SS "def dbutilscms\&.McMUtilities\&.readJSON (self, json_string)"
-
-.PP
-Definition at line 24 of file dbutilscms\&.py\&.
-.PP
-Referenced by dbutilscms\&.McMUtilities\&.getGenInfo(), and dbutilscms\&.McMUtilities\&.readURL()\&.
-.SS "def dbutilscms\&.McMUtilities\&.readURL (self, mcm_dataset)"
-
-.PP
-Definition at line 32 of file dbutilscms\&.py\&.
-.PP
-References dbutilscms\&.McMUtilities\&.gen_json, dbutilscms\&.McMUtilities\&.mcm_json, dbutilscms\&.McMUtilities\&.mcm_prefix, and dbutilscms\&.McMUtilities\&.readJSON()\&.
+Definition at line 32 of file dbutilscms.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "dbutilscms\&.McMUtilities\&.gen_json"
-
+.SS "\fBdbutilscms::McMUtilities::gen_json\fP"
 .PP
-Definition at line 21 of file dbutilscms\&.py\&.
+Definition at line 21 of file dbutilscms.py.
+.SS "\fBdbutilscms::McMUtilities::mcm_json\fP"
 .PP
-Referenced by dbutilscms\&.McMUtilities\&.getGenInfo(), and dbutilscms\&.McMUtilities\&.readURL()\&.
-.SS "dbutilscms\&.McMUtilities\&.mcm_json"
-
+Definition at line 20 of file dbutilscms.py.
+.SS "\fBdbutilscms::McMUtilities::mcm_prefix\fP"
 .PP
-Definition at line 20 of file dbutilscms\&.py\&.
-.PP
-Referenced by dbutilscms\&.McMUtilities\&.getGenInfo(), dbutilscms\&.McMUtilities\&.getInfo(), and dbutilscms\&.McMUtilities\&.readURL()\&.
-.SS "dbutilscms\&.McMUtilities\&.mcm_prefix"
-
-.PP
-Definition at line 19 of file dbutilscms\&.py\&.
-.PP
-Referenced by dbutilscms\&.McMUtilities\&.getGenInfo(), and dbutilscms\&.McMUtilities\&.readURL()\&.
+Definition at line 19 of file dbutilscms.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

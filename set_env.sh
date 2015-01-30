@@ -10,3 +10,13 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 export LIBS3A=$DIR
 export PYTHONPATH=${LIBS3A}/python:${PYTHONPATH}
 
+# make sure right git version is sourced for githookcontroller
+if [[ ":$PATH:" == *":/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/git/1.8.3.1-cms/bin/"* ]]; then
+    export PATH=/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/git/1.8.3.1-cms/bin/:$PATH
+fi
+
+# make sure githookcontroller is installed
+if [ ! -e "./.git/hooks/githookcontroller.py" ]; then
+    echo "Did not find githookcontroller in .git/hooks"
+    echo "Please make sure you installed the repo correctly"
+fi

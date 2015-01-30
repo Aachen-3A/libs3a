@@ -1,13 +1,11 @@
-.TH "rootplotlib.Legend" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "rootplotlib::Legend" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-rootplotlib.Legend \- 
+rootplotlib::Legend \- 
 .SH SYNOPSIS
 .br
 .PP
-.PP
-Inherits object\&.
 .SS "Public Member Functions"
 
 .in +1c
@@ -92,22 +90,22 @@ Inherits object\&.
 
 .in +1c
 .ti -1c
-.RI "\fBx0\fP = property(lambda self: self\&.__position[0])"
+.RI "\fBx0\fP = property(lambda self: self.__position[0])"
 .br
 .ti -1c
-.RI "\fBy0\fP = property(lambda self: self\&.__position[1])"
+.RI "\fBy0\fP = property(lambda self: self.__position[1])"
 .br
 .ti -1c
-.RI "\fBx1\fP = property(lambda self: self\&.__position[2])"
+.RI "\fBx1\fP = property(lambda self: self.__position[2])"
 .br
 .ti -1c
-.RI "\fBy1\fP = property(lambda self: self\&.__position[3])"
+.RI "\fBy1\fP = property(lambda self: self.__position[3])"
 .br
 .ti -1c
-.RI "\fBwidth\fP = property(lambda self: self\&.__position[2]-self\&.__position[0])"
+.RI "\fBwidth\fP = property(lambda self: self.__position[2]-self.__position[0])"
 .br
 .ti -1c
-.RI "\fBheight\fP = property(lambda self: self\&.__position[3]-self\&.__position[1])"
+.RI "\fBheight\fP = property(lambda self: self.__position[3]-self.__position[1])"
 .br
 .in -1c
 .SS "Private Attributes"
@@ -119,166 +117,107 @@ Inherits object\&.
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 129 of file rootplotlib\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def rootplotlib\&.Legend\&.__init__ (self, align = \fC'right'\fP, valign = \fC'top'\fP, pad = \fCNone\fP, vspace = \fC0\fP, hspace = \fC0\fP, ncolumns = \fC1\fP)"
-
-.PP
-Definition at line 130 of file rootplotlib\&.py\&.
+Definition at line 129 of file rootplotlib.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def rootplotlib\&.Legend\&.add (self, hist, label, option = \fC''\fP)"
-
+.SS "def rootplotlib::Legend::__init__ ( self,  align = \fC'right'\fP,  valign = \fC'top'\fP,  pad = \fCNone\fP,  vspace = \fC0\fP,  hspace = \fC0\fP,  ncolumns = \fC1\fP)"
 .PP
-Definition at line 155 of file rootplotlib\&.py\&.
+Definition at line 130 of file rootplotlib.py.
+.SS "def rootplotlib::Legend::add ( self,  hist,  label,  option = \fC''\fP)"
 .PP
-Referenced by rootplotlib\&.Legend\&.AddEntry()\&.
-.SS "def rootplotlib\&.Legend\&.AddEntry (self, hist, label, option = \fC''\fP)"
-
+Definition at line 155 of file rootplotlib.py.
+.SS "def rootplotlib::Legend::AddEntry ( self,  hist,  label,  option = \fC''\fP)"
 .PP
-Definition at line 157 of file rootplotlib\&.py\&.
+Definition at line 157 of file rootplotlib.py.
+.SS "def rootplotlib::Legend::draw ( self)"
 .PP
-References lheanalyzer\&.LorentzVector\&.add(), and rootplotlib\&.Legend\&.add()\&.
-.SS "def rootplotlib\&.Legend\&.Draw (self)"
-
+Definition at line 168 of file rootplotlib.py.
+.SS "def rootplotlib::Legend::Draw ( self)"
 .PP
-Definition at line 166 of file rootplotlib\&.py\&.
+Definition at line 166 of file rootplotlib.py.
+.SS "def rootplotlib::Legend::getTextWidth ( self,  text)"
 .PP
-References rootplotlib\&.Legend\&.draw()\&.
-.SS "def rootplotlib\&.Legend\&.draw (self)"
-
-.PP
-Definition at line 168 of file rootplotlib\&.py\&.
-.PP
-References rootplotlib\&.Legend\&.entries, and rootplotlib\&.Legend\&.getTextWidth()\&.
-.PP
-Referenced by rootplotlib\&.Legend\&.Draw()\&.
-.SS "def rootplotlib\&.Legend\&.getTextWidth (self, text)"
-
-.PP
-Definition at line 159 of file rootplotlib\&.py\&.
-.PP
-References rootplotlib\&.CmsDecoration\&.referenceHeight, rootplotlib\&.Legend\&.referenceHeight, rootplotlib\&.Legend\&.textFont, and rootplotlib\&.Legend\&.textSize\&.
-.PP
-Referenced by rootplotlib\&.Legend\&.draw()\&.
+Definition at line 159 of file rootplotlib.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "rootplotlib\&.Legend\&.__position\fC [private]\fP"
-
+.SS "\fBrootplotlib::Legend::__position\fP\fC [private]\fP"
 .PP
-Definition at line 154 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.align"
-
+Definition at line 154 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::align\fP"
 .PP
-Definition at line 189 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.entries"
-
+Definition at line 189 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::entries\fP"
 .PP
-Definition at line 153 of file rootplotlib\&.py\&.
+Definition at line 153 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::hspace\fP"
 .PP
-Referenced by rootplotlib\&.Legend\&.draw()\&.
-.SS "rootplotlib\&.Legend\&.hspace"
-
+Definition at line 140 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::leg\fP"
 .PP
-Definition at line 140 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.leg"
-
+Definition at line 210 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::legendGap\fP"
 .PP
-Definition at line 210 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.legendGap"
-
+Definition at line 138 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::lineHeight\fP"
 .PP
-Definition at line 138 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.lineHeight"
-
+Definition at line 136 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::margin\fP"
 .PP
-Definition at line 136 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.margin"
-
+Definition at line 178 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::ncolumns\fP"
 .PP
-Definition at line 178 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.ncolumns"
-
+Definition at line 141 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::pad\fP"
 .PP
-Definition at line 141 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.pad"
-
+Definition at line 143 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::referenceHeight\fP"
 .PP
-Definition at line 143 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.referenceHeight"
-
+Definition at line 149 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::relPosX\fP"
 .PP
-Definition at line 149 of file rootplotlib\&.py\&.
+Definition at line 134 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::relPosY\fP"
 .PP
-Referenced by rootplotlib\&.Legend\&.getTextWidth()\&.
-.SS "rootplotlib\&.Legend\&.relPosX"
-
+Definition at line 135 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::symbolWidth\fP"
 .PP
-Definition at line 134 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.relPosY"
-
+Definition at line 137 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::textFont\fP"
 .PP
-Definition at line 135 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.symbolWidth"
-
+Definition at line 131 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::textSize\fP"
 .PP
-Definition at line 137 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.textFont"
-
+Definition at line 132 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::tickOffset\fP"
 .PP
-Definition at line 131 of file rootplotlib\&.py\&.
+Definition at line 133 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::valign\fP"
 .PP
-Referenced by rootplotlib\&.Legend\&.getTextWidth()\&.
-.SS "rootplotlib\&.Legend\&.textSize"
-
+Definition at line 152 of file rootplotlib.py.
+.SS "\fBrootplotlib::Legend::vspace\fP"
 .PP
-Definition at line 132 of file rootplotlib\&.py\&.
-.PP
-Referenced by rootplotlib\&.Legend\&.getTextWidth()\&.
-.SS "rootplotlib\&.Legend\&.tickOffset"
-
-.PP
-Definition at line 133 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.valign"
-
-.PP
-Definition at line 152 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.vspace"
-
-.PP
-Definition at line 139 of file rootplotlib\&.py\&.
+Definition at line 139 of file rootplotlib.py.
 .SH "Property Documentation"
 .PP 
-.SS "rootplotlib\&.Legend\&.height = property(lambda self: self\&.__position[3]-self\&.__position[1])\fC [static]\fP"
-
+.SS "rootplotlib::Legend::height = property(lambda self: self.__position[3]-self.__position[1])\fC [static]\fP"
 .PP
-Definition at line 216 of file rootplotlib\&.py\&.
+Definition at line 216 of file rootplotlib.py.
+.SS "rootplotlib::Legend::width = property(lambda self: self.__position[2]-self.__position[0])\fC [static]\fP"
 .PP
-Referenced by curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.TabbedText\&.addText(), curseshelpers\&.TabbedText\&.end(), curseshelpers\&.MultiText\&.end(), curseshelpers\&.Text\&.end(), curseshelpers\&.SelectTable\&.end(), curseshelpers\&.TabbedText\&.goDown(), curseshelpers\&.MultiText\&.goDown(), curseshelpers\&.Text\&.goDown(), curseshelpers\&.SelectTable\&.goDown(), curseshelpers\&.TabbedText\&.pageDown(), curseshelpers\&.MultiText\&.pageDown(), curseshelpers\&.Text\&.pageDown(), curseshelpers\&.SelectTable\&.pageDown(), curseshelpers\&.TabbedText\&.pageUp(), curseshelpers\&.MultiText\&.pageUp(), curseshelpers\&.Text\&.pageUp(), curseshelpers\&.SelectTable\&.pageUp(), curseshelpers\&.TabbedText\&.refresh(), curseshelpers\&.MultiText\&.refresh(), curseshelpers\&.Text\&.refresh(), and curseshelpers\&.SelectTable\&.refresh()\&.
-.SS "rootplotlib\&.Legend\&.width = property(lambda self: self\&.__position[2]-self\&.__position[0])\fC [static]\fP"
-
+Definition at line 215 of file rootplotlib.py.
+.SS "rootplotlib::Legend::x0 = property(lambda self: self.__position[0])\fC [static]\fP"
 .PP
-Definition at line 215 of file rootplotlib\&.py\&.
+Definition at line 211 of file rootplotlib.py.
+.SS "rootplotlib::Legend::x1 = property(lambda self: self.__position[2])\fC [static]\fP"
 .PP
-Referenced by curseshelpers\&.TabbedText\&._countLines(), curseshelpers\&.SelectTable\&._drawColHeaders(), curseshelpers\&.TabbedText\&._redraw(), curseshelpers\&.BottomText\&._redraw(), curseshelpers\&.MultiText\&._redraw(), curseshelpers\&.Text\&._redraw(), curseshelpers\&.TabbedText\&._redrawHeading(), curseshelpers\&.SelectTable\&._redrawRows(), curseshelpers\&.TabbedText\&.addText(), curseshelpers\&.TabbedText\&.refresh(), curseshelpers\&.MultiText\&.refresh(), curseshelpers\&.Text\&.refresh(), and curseshelpers\&.SelectTable\&.refresh()\&.
-.SS "rootplotlib\&.Legend\&.x0 = property(lambda self: self\&.__position[0])\fC [static]\fP"
-
+Definition at line 213 of file rootplotlib.py.
+.SS "rootplotlib::Legend::y0 = property(lambda self: self.__position[1])\fC [static]\fP"
 .PP
-Definition at line 211 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.x1 = property(lambda self: self\&.__position[2])\fC [static]\fP"
-
+Definition at line 212 of file rootplotlib.py.
+.SS "rootplotlib::Legend::y1 = property(lambda self: self.__position[3])\fC [static]\fP"
 .PP
-Definition at line 213 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.y0 = property(lambda self: self\&.__position[1])\fC [static]\fP"
-
-.PP
-Definition at line 212 of file rootplotlib\&.py\&.
-.SS "rootplotlib\&.Legend\&.y1 = property(lambda self: self\&.__position[3])\fC [static]\fP"
-
-.PP
-Definition at line 214 of file rootplotlib\&.py\&.
+Definition at line 214 of file rootplotlib.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

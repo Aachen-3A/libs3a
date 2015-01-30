@@ -1,8 +1,8 @@
-.TH "cesubmit.Task" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "cesubmit::Task" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-cesubmit.Task \- 
+cesubmit::Task \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -95,164 +95,87 @@ cesubmit.Task \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 171 of file cesubmit\&.py\&.
-.SH "Constructor & Destructor Documentation"
-.PP 
-.SS "def cesubmit\&.Task\&.__init__ (self, name, directory = \fCNone\fP, mode = \fC'RECREATE'\fP, scramArch = \fC'slc5_amd64_gcc462'\fP, cmsswVersion = \fC'CMSSW_5_3_14'\fP, ceId = \fC'grid-ce\&.physik\&.rwth-aachen\&.de:8443/cream-pbs-cms'\fP)"
-
-.PP
-Definition at line 183 of file cesubmit\&.py\&.
+Definition at line 171 of file cesubmit.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def cesubmit\&.Task\&._dosubmit (self, nodeids, processes, worker)\fC [private]\fP"
-
+.SS "def cesubmit::Task::__init__ ( self,  name,  directory = \fCNone\fP,  mode = \fC'RECREATE'\fP,  scramArch = \fC'slc5_amd64_gcc462'\fP,  cmsswVersion = \fC'CMSSW_5_3_14'\fP,  ceId = \fC'grid-ce.physik.rwth-aachen.de:8443/cream-pbs-cms'\fP)"
 .PP
-Definition at line 235 of file cesubmit\&.py\&.
+Definition at line 183 of file cesubmit.py.
+.SS "def cesubmit::Task::_dosubmit ( self,  nodeids,  processes,  worker)\fC [private]\fP"
 .PP
-References cesubmit\&.Task\&.jobs\&.
+Definition at line 235 of file cesubmit.py.
+.SS "def cesubmit::Task::_getStatusMultiple ( self)\fC [private]\fP"
 .PP
-Referenced by cesubmit\&.Task\&.kill(), cesubmit\&.Task\&.resubmit(), and cesubmit\&.Task\&.submit()\&.
-.SS "def cesubmit\&.Task\&._getStatusMultiple (self)\fC [private]\fP"
-
+Definition at line 305 of file cesubmit.py.
+.SS "def cesubmit::Task::addJob ( self,  job)"
 .PP
-Definition at line 305 of file cesubmit\&.py\&.
+Definition at line 209 of file cesubmit.py.
+.SS "def cesubmit::Task::cleanUp ( self)"
 .PP
-References cesubmit\&.Task\&.jobs, cesubmit\&.Task\&.name, and cesubmit\&.parseStatusMultipleL1()\&.
+Definition at line 398 of file cesubmit.py.
+.SS "def cesubmit::Task::createdir ( self)"
 .PP
-Referenced by cesubmit\&.Task\&.getStatus()\&.
-.SS "def cesubmit\&.Task\&.addJob (self, job)"
-
+Definition at line 299 of file cesubmit.py.
+.SS "def cesubmit::Task::getOutput ( self,  connections = \fC1\fP)"
 .PP
-Definition at line 209 of file cesubmit\&.py\&.
-.SS "def cesubmit\&.Task\&.cleanUp (self)"
-
+Definition at line 350 of file cesubmit.py.
+.SS "def cesubmit::Task::getStatus ( self)"
 .PP
-Definition at line 398 of file cesubmit\&.py\&.
+Definition at line 327 of file cesubmit.py.
+.SS "def cesubmit::Task::jobStatusNumbers ( self)"
 .PP
-References cesubmit\&.Task\&.directory, cesubmit\&.Task\&.jobs, and cesubmit\&.Task\&.name\&.
+Definition at line 377 of file cesubmit.py.
+.SS "def cesubmit::Task::kill ( self,  nodeids,  processes = \fC0\fP)"
 .PP
-Referenced by cesubmit\&.Task\&.kill(), and cesubmit\&.Task\&.resubmit()\&.
-.SS "def cesubmit\&.Task\&.createdir (self)"
-
+Definition at line 259 of file cesubmit.py.
+.SS "def cesubmit::Task::load ( cls,  directory)"
 .PP
-Definition at line 299 of file cesubmit\&.py\&.
+Definition at line 173 of file cesubmit.py.
+.SS "def cesubmit::Task::makePrologue ( self)"
 .PP
-References cesubmit\&.Task\&.directory, and cesubmit\&.Task\&.mode\&.
+Definition at line 265 of file cesubmit.py.
+.SS "def cesubmit::Task::resubmit ( self,  nodeids,  processes = \fC0\fP)"
 .PP
-Referenced by cesubmit\&.Task\&.submit()\&.
-.SS "def cesubmit\&.Task\&.getOutput (self, connections = \fC1\fP)"
-
+Definition at line 252 of file cesubmit.py.
+.SS "def cesubmit::Task::save ( self)"
 .PP
-Definition at line 350 of file cesubmit\&.py\&.
+Definition at line 197 of file cesubmit.py.
+.SS "def cesubmit::Task::submit ( self,  processes = \fC0\fP)"
 .PP
-References cesubmit\&.chunks(), cesubmit\&.Task\&.directory, cesubmit\&.Task\&.jobs, cesubmit\&.Task\&.name, cesubmit\&.parseGetOutput(), and cesubmit\&.Task\&.save()\&.
-.SS "def cesubmit\&.Task\&.getStatus (self)"
-
-.PP
-Definition at line 327 of file cesubmit\&.py\&.
-.PP
-References cesubmit\&.Task\&._getStatusMultiple(), cesubmit\&.Job\&.frontEndStatus, cesubmit\&.Task\&.frontEndStatus, cesubmit\&.Task\&.jobs, cesubmit\&.Task\&.name, and cesubmit\&.Task\&.save()\&.
-.SS "def cesubmit\&.Task\&.jobStatusNumbers (self)"
-
-.PP
-Definition at line 377 of file cesubmit\&.py\&.
-.PP
-References cesubmit\&.Task\&.jobs\&.
-.SS "def cesubmit\&.Task\&.kill (self, nodeids, processes = \fC0\fP)"
-
-.PP
-Definition at line 259 of file cesubmit\&.py\&.
-.PP
-References cesubmit\&.Task\&._dosubmit(), cesubmit\&.Task\&.cleanUp(), cesubmit\&.Task\&.name, and cesubmit\&.Task\&.save()\&.
-.SS "def cesubmit\&.Task\&.load (cls, directory)"
-
-.PP
-Definition at line 173 of file cesubmit\&.py\&.
-.SS "def cesubmit\&.Task\&.makePrologue (self)"
-
-.PP
-Definition at line 265 of file cesubmit\&.py\&.
-.PP
-References cesubmit\&.Task\&.cmsswVersion, and cesubmit\&.Task\&.scramArch\&.
-.PP
-Referenced by cesubmit\&.Task\&.submit()\&.
-.SS "def cesubmit\&.Task\&.resubmit (self, nodeids, processes = \fC0\fP)"
-
-.PP
-Definition at line 252 of file cesubmit\&.py\&.
-.PP
-References cesubmit\&.Task\&._dosubmit(), cesubmit\&.Task\&.cleanUp(), cesubmit\&.Job\&.frontEndStatus, cesubmit\&.Task\&.frontEndStatus, cesubmit\&.Task\&.name, and cesubmit\&.Task\&.save()\&.
-.SS "def cesubmit\&.Task\&.save (self)"
-
-.PP
-Definition at line 197 of file cesubmit\&.py\&.
-.PP
-References cesubmit\&.Task\&.directory, cesubmit\&.Task\&.jobs, and cesubmit\&.Task\&.name\&.
-.PP
-Referenced by cesubmit\&.Task\&.getOutput(), cesubmit\&.Task\&.getStatus(), cesubmit\&.Task\&.kill(), cesubmit\&.Task\&.resubmit(), and cesubmit\&.Task\&.submit()\&.
-.SS "def cesubmit\&.Task\&.submit (self, processes = \fC0\fP)"
-
-.PP
-Definition at line 212 of file cesubmit\&.py\&.
-.PP
-References cesubmit\&.Task\&._dosubmit(), cesubmit\&.checkAndRenewVomsProxy(), cesubmit\&.Task\&.createdir(), cesubmit\&.Task\&.directory, cesubmit\&.Job\&.frontEndStatus, cesubmit\&.Task\&.frontEndStatus, cesubmit\&.Task\&.jobs, cesubmit\&.Task\&.makePrologue(), cesubmit\&.Task\&.name, and cesubmit\&.Task\&.save()\&.
+Definition at line 212 of file cesubmit.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "cesubmit\&.Task\&.ceId"
-
+.SS "\fBcesubmit::Task::ceId\fP"
 .PP
-Definition at line 194 of file cesubmit\&.py\&.
-.SS "cesubmit\&.Task\&.cmsswVersion"
-
+Definition at line 194 of file cesubmit.py.
+.SS "\fBcesubmit::Task::cmsswVersion\fP"
 .PP
-Definition at line 193 of file cesubmit\&.py\&.
+Definition at line 193 of file cesubmit.py.
+.SS "\fBcesubmit::Task::directory\fP"
 .PP
-Referenced by cesubmit\&.Task\&.makePrologue()\&.
-.SS "cesubmit\&.Task\&.directory"
-
+Definition at line 185 of file cesubmit.py.
+.SS "\fBcesubmit::Task::executable\fP"
 .PP
-Definition at line 185 of file cesubmit\&.py\&.
+Definition at line 190 of file cesubmit.py.
+.SS "\fBcesubmit::Task::frontEndStatus\fP"
 .PP
-Referenced by cesubmit\&.Task\&.cleanUp(), cesubmit\&.Task\&.createdir(), cesubmit\&.Task\&.getOutput(), dbconfigmanager\&.DBConfigManager\&.latest_abs_file(), dbconfigmanager\&.DBConfigManager\&.latest_revision(), dbconfigmanager\&.DBConfigManager\&.read_config(), cesubmit\&.Task\&.save(), dbconfigmanager\&.DBConfigManager\&.set_directory(), cesubmit\&.Task\&.submit(), and dbconfigmanager\&.DBConfigManager\&.update_config()\&.
-.SS "cesubmit\&.Task\&.executable"
-
+Definition at line 196 of file cesubmit.py.
+.SS "\fBcesubmit::Task::jdlfilename\fP"
 .PP
-Definition at line 190 of file cesubmit\&.py\&.
-.SS "cesubmit\&.Task\&.frontEndStatus"
-
+Definition at line 189 of file cesubmit.py.
+.SS "\fBcesubmit::Task::jobs\fP"
 .PP
-Definition at line 196 of file cesubmit\&.py\&.
+Definition at line 195 of file cesubmit.py.
+.SS "\fBcesubmit::Task::mode\fP"
 .PP
-Referenced by cesubmit\&.Task\&.getStatus(), cesubmit\&.Task\&.resubmit(), and cesubmit\&.Task\&.submit()\&.
-.SS "cesubmit\&.Task\&.jdlfilename"
-
+Definition at line 191 of file cesubmit.py.
+.SS "\fBcesubmit::Task::name\fP"
 .PP
-Definition at line 189 of file cesubmit\&.py\&.
-.SS "cesubmit\&.Task\&.jobs"
-
+Definition at line 184 of file cesubmit.py.
+.SS "\fBcesubmit::Task::scramArch\fP"
 .PP
-Definition at line 195 of file cesubmit\&.py\&.
-.PP
-Referenced by cesubmit\&.Task\&._dosubmit(), cesubmit\&.Task\&._getStatusMultiple(), cesubmit\&.Task\&.cleanUp(), cesubmit\&.Task\&.getOutput(), cesubmit\&.Task\&.getStatus(), cesubmit\&.Task\&.jobStatusNumbers(), cesubmit\&.Task\&.save(), cesubmit\&.Task\&.submit(), crabFunctions\&.CrabTask\&.update(), and crabFunctions\&.CrabTask\&.updateJobStats()\&.
-.SS "cesubmit\&.Task\&.mode"
-
-.PP
-Definition at line 191 of file cesubmit\&.py\&.
-.PP
-Referenced by cesubmit\&.Task\&.createdir()\&.
-.SS "cesubmit\&.Task\&.name"
-
-.PP
-Definition at line 184 of file cesubmit\&.py\&.
-.PP
-Referenced by cesubmit\&.Task\&._getStatusMultiple(), cesubmit\&.Task\&.cleanUp(), cesubmit\&.Task\&.getOutput(), cesubmit\&.Task\&.getStatus(), cesubmit\&.Task\&.kill(), cesubmit\&.Task\&.resubmit(), cesubmit\&.Task\&.save(), cesubmit\&.Task\&.submit(), and crabFunctions\&.CrabTask\&.update()\&.
-.SS "cesubmit\&.Task\&.scramArch"
-
-.PP
-Definition at line 192 of file cesubmit\&.py\&.
-.PP
-Referenced by cesubmit\&.Task\&.makePrologue()\&.
+Definition at line 192 of file cesubmit.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

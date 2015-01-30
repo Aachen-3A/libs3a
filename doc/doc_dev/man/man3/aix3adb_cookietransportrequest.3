@@ -1,13 +1,13 @@
-.TH "aix3adb.cookietransportrequest" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "aix3adb::cookietransportrequest" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-aix3adb.cookietransportrequest \- 
+aix3adb::cookietransportrequest \- 
 .SH SYNOPSIS
 .br
 .PP
 .PP
-Inherited by \fBaix3adb\&.cookiesafetransport\fP, and \fBaix3adb\&.cookietransport\fP\&.
+Inherited by \fBaix3adb::cookiesafetransport\fP, and \fBaix3adb::cookietransport\fP.
 .SS "Public Member Functions"
 
 .in +1c
@@ -40,7 +40,6 @@ Inherited by \fBaix3adb\&.cookiesafetransport\fP, and \fBaix3adb\&.cookietranspo
 .in -1c
 .SH "Detailed Description"
 .PP 
-
 .PP
 .nf
 A Transport request method that retains cookies over its lifetime.
@@ -52,47 +51,34 @@ the Bugzilla XMLRPC interface.
 So this is a helper for defining a Transport which looks for
 cookies being set in responses and saves them to add to all future
 requests.
-
 .fi
 .PP
  
 .PP
-Definition at line 162 of file aix3adb\&.py\&.
+Definition at line 162 of file aix3adb.py.
 .SH "Member Function Documentation"
 .PP 
-.SS "def aix3adb\&.cookietransportrequest\&.request (self, host, handler, request_body, verbose = \fC0\fP)"
-
+.SS "def aix3adb::cookietransportrequest::request ( self,  host,  handler,  request_body,  verbose = \fC0\fP)"
 .PP
-Definition at line 195 of file aix3adb\&.py\&.
-.SS "def aix3adb\&.cookietransportrequest\&.send_cookies (self, connection)"
-
+Definition at line 195 of file aix3adb.py.
+.SS "def aix3adb::cookietransportrequest::send_cookies ( self,  connection)"
 .PP
-Definition at line 190 of file aix3adb\&.py\&.
+Definition at line 190 of file aix3adb.py.
+.SS "def aix3adb::cookietransportrequest::setcookies ( self,  cookiefile,  domain)"
 .PP
-References aix3adb\&.cookietransportrequest\&.cookies\&.
-.SS "def aix3adb\&.cookietransportrequest\&.setcookies (self, cookiefile, domain)"
-
-.PP
-Definition at line 183 of file aix3adb\&.py\&.
+Definition at line 183 of file aix3adb.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "list aix3adb\&.cookietransportrequest\&.cookies = []\fC [static]\fP"
-
+.SS "\fBaix3adb::cookietransportrequest::cookies\fP"
 .PP
-Definition at line 182 of file aix3adb\&.py\&.
+Definition at line 184 of file aix3adb.py.
+.SS "list \fBaix3adb::cookietransportrequest::cookies\fP = []\fC [static]\fP"
 .PP
-Referenced by aix3adb_deprecated\&.cookietransportrequest\&.send_cookies(), and aix3adb\&.cookietransportrequest\&.send_cookies()\&.
-.SS "aix3adb\&.cookietransportrequest\&.cookies"
-
+Definition at line 182 of file aix3adb.py.
+.SS "\fBaix3adb::cookietransportrequest::verbose\fP"
 .PP
-Definition at line 184 of file aix3adb\&.py\&.
-.PP
-Referenced by aix3adb_deprecated\&.cookietransportrequest\&.send_cookies()\&.
-.SS "aix3adb\&.cookietransportrequest\&.verbose"
-
-.PP
-Definition at line 196 of file aix3adb\&.py\&.
+Definition at line 196 of file aix3adb.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

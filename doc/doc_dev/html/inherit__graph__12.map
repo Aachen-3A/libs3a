@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classcurseshelpers_1_1BaseElement.html" title="curseshelpers::BaseElement" alt="" coords="7,112,223,141"/>
+<area shape="rect" id="node3" href="$classcurseshelpers_1_1BottomText.html" title="curseshelpers::BottomText" alt="" coords="272,5,480,35"/>
+<area shape="rect" id="node5" href="$classcurseshelpers_1_1MultiText.html" title="curseshelpers::MultiText" alt="" coords="283,59,469,88"/>
+<area shape="rect" id="node7" href="$classcurseshelpers_1_1SelectTable.html" title="curseshelpers::SelectTable" alt="" coords="275,112,477,141"/>
+<area shape="rect" id="node9" href="$classcurseshelpers_1_1TabbedText.html" title="curseshelpers::TabbedText" alt="" coords="275,165,477,195"/>
+<area shape="rect" id="node11" href="$classcurseshelpers_1_1Text.html" title="curseshelpers::Text" alt="" coords="299,219,453,248"/>
+</map>

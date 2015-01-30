@@ -1,4 +1,4 @@
-.TH "githookcontroller" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "githookcontroller" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -24,13 +24,13 @@ githookcontroller \-
 
 .in +1c
 .ti -1c
-.RI "tuple \fBlog\fP = logging\&.getLogger( 'githookcontroller' )"
+.RI "tuple \fBlog\fP = logging.getLogger( 'githookcontroller' )"
 .br
 .ti -1c
-.RI "tuple \fBch\fP = logging\&.StreamHandler( sys\&.stdout )"
+.RI "tuple \fBch\fP = logging.StreamHandler( sys.stdout )"
 .br
 .ti -1c
-.RI "tuple \fBformatter\fP = logging\&.Formatter( '%(levelname)s (%(name)s): %(message)s' )"
+.RI "tuple \fBformatter\fP = logging.Formatter( '%(levelname)s (%(name)s): %(message)s' )"
 .br
 .ti -1c
 .RI "tuple \fBPush\fP"
@@ -41,46 +41,36 @@ githookcontroller \-
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "def githookcontroller\&.main ()"
-
+.SS "def githookcontroller::main ()"
 .PP
-Definition at line 450 of file githookcontroller\&.py\&.
+Definition at line 450 of file githookcontroller.py.
 .SH "Variable Documentation"
 .PP 
-.SS "tuple githookcontroller\&.ch = logging\&.StreamHandler( sys\&.stdout )"
-
+.SS "tuple \fBgithookcontroller::ch\fP = logging.StreamHandler( sys.stdout )"
 .PP
-Definition at line 37 of file githookcontroller\&.py\&.
-.SS "tuple githookcontroller\&.Commit"
-\fBInitial value:\fP
+Definition at line 37 of file githookcontroller.py.
+.SS "tuple \fBgithookcontroller::Commit\fP"\fBInitial value:\fP
 .PP
 .nf
-1 = namedtuple('Commit', ['local_ref', 'local_sha1', 'remote_ref', 'remote_sha1',
-2                                'local_branch', 'remote_branch'])
+namedtuple('Commit', ['local_ref', 'local_sha1', 'remote_ref', 'remote_sha1',
+                               'local_branch', 'remote_branch'])
 .fi
 .PP
-Definition at line 45 of file githookcontroller\&.py\&.
+Definition at line 45 of file githookcontroller.py.
+.SS "tuple \fBgithookcontroller::formatter\fP = logging.Formatter( '%(levelname)s (%(name)s): %(message)s' )"
 .PP
-Referenced by githookcontroller\&.GitHookController\&.parse_pre_push()\&.
-.SS "tuple githookcontroller\&.formatter = logging\&.Formatter( '%(levelname)s (%(name)s): %(message)s' )"
-
+Definition at line 39 of file githookcontroller.py.
+.SS "tuple \fBgithookcontroller::log\fP = logging.getLogger( 'githookcontroller' )"
 .PP
-Definition at line 39 of file githookcontroller\&.py\&.
-.SS "tuple githookcontroller\&.log = logging\&.getLogger( 'githookcontroller' )"
-
-.PP
-Definition at line 35 of file githookcontroller\&.py\&.
-.SS "tuple githookcontroller\&.Push"
-\fBInitial value:\fP
+Definition at line 35 of file githookcontroller.py.
+.SS "tuple \fBgithookcontroller::Push\fP"\fBInitial value:\fP
 .PP
 .nf
-1 = namedtuple('Push', ['commits', 'remote_name', 'remote_url',
-2                            'current_branch', 'removing_remote', 'forcing'])
+namedtuple('Push', ['commits', 'remote_name', 'remote_url',
+                           'current_branch', 'removing_remote', 'forcing'])
 .fi
 .PP
-Definition at line 43 of file githookcontroller\&.py\&.
-.PP
-Referenced by githookcontroller\&.GitHookController\&.parse_pre_push()\&.
+Definition at line 43 of file githookcontroller.py.
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.

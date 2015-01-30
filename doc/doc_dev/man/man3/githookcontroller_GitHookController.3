@@ -1,8 +1,8 @@
-.TH "githookcontroller.GitHookController" 3 "Fri Jan 30 2015" "libs3a" \" -*- nroff -*-
+.TH "githookcontroller::GitHookController" 3 "30 Jan 2015" "libs3a" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-githookcontroller.GitHookController \- 
+githookcontroller::GitHookController \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,59 +12,115 @@ githookcontroller.GitHookController \-
 .ti -1c
 .RI "def \fB__init__\fP"
 .br
-.RI "\fIThe constructor\&. \fP"
+.RI "\fIThe constructor. \fP"
 .ti -1c
 .RI "def \fBroot_name\fP"
 .br
-.RI "\fIgit helper functions ### \fP"
+.RI "\fIGet root name of repo. \fP"
 .ti -1c
 .RI "def \fBremote_root_name\fP"
 .br
-.RI "\fIGet root name of remote (the original repo name) \fP"
+.RI "\fIGet root name of remote (the original repo name). \fP"
 .ti -1c
 .RI "def \fBremote_url\fP"
 .br
-.RI "\fIGet url from remote\&. \fP"
+.RI "\fIGet url from remote. \fP"
 .ti -1c
 .RI "def \fBcurrent_branch\fP"
 .br
-.RI "\fIGet currently chosen branch\&. \fP"
+.RI "\fIGet currently chosen branch. \fP"
 .ti -1c
 .RI "def \fBremote_branches\fP"
 .br
-.RI "\fIGet list of remote branches\&. \fP"
+.RI "\fIGet list of remote branches. \fP"
 .ti -1c
 .RI "def \fBcheckout_branch\fP"
 .br
-.RI "\fICheckout another branch\&. \fP"
+.RI "\fICheckout another branch. \fP"
 .ti -1c
 .RI "def \fBpost_commit\fP"
 .br
-.RI "\fIfunctions for hooks ### \fP"
+.RI "\fIParse message from post commit. \fP"
 .ti -1c
 .RI "def \fBparse_pre_commit\fP"
 .br
-.RI "\fIGet list of chagend files in commit\&. \fP"
+.RI "\fIGet list of chagend files in commit. \fP"
 .ti -1c
 .RI "def \fBparse_pre_push\fP"
 .br
-.RI "\fIParse message from pre-push\&. \fP"
+.RI "\fIParse message from pre-push. \fP"
 .ti -1c
 .RI "def \fBcheck_cpplint\fP"
 .br
-.RI "\fIfunctions for code style enforcment ### \fP"
+.RI "\fICheck if file fullfills cpplint check. \fP"
 .ti -1c
 .RI "def \fBprepare_doxygen_cfg\fP"
 .br
-.RI "\fIfunctions for doxygen integration ### \fP"
+.RI "\fIPrepare doxygen config file from template. \fP"
 .ti -1c
 .RI "def \fBpublish_doxygen\fP"
 .br
-.RI "\fICheckout all doygen folders in gh-pages branch and commit changes\&. \fP"
+.RI "\fICheckout all doygen folders in gh-pages branch and commit changes. \fP"
 .ti -1c
 .RI "def \fBupdate_doxygen\fP"
 .br
-.RI "\fIUpdate the doxygen documentation for this folder repo\&. \fP"
+.RI "\fIUpdate the doxygen documentation for this folder repo. \fP"
+.ti -1c
+.RI "def \fB__init__\fP"
+.br
+.RI "\fIThe constructor. \fP"
+.ti -1c
+.RI "def \fBroot_name\fP"
+.br
+.RI "\fIGet root name of repo. \fP"
+.ti -1c
+.RI "def \fBremote_root_name\fP"
+.br
+.RI "\fIGet root name of remote (the original repo name). \fP"
+.ti -1c
+.RI "def \fBremote_url\fP"
+.br
+.RI "\fIGet url from remote. \fP"
+.ti -1c
+.RI "def \fBcurrent_branch\fP"
+.br
+.RI "\fIGet currently chosen branch. \fP"
+.ti -1c
+.RI "def \fBremote_branches\fP"
+.br
+.RI "\fIGet list of remote branches. \fP"
+.ti -1c
+.RI "def \fBcheckout_branch\fP"
+.br
+.RI "\fICheckout another branch. \fP"
+.ti -1c
+.RI "def \fBpost_commit\fP"
+.br
+.RI "\fIParse message from post commit. \fP"
+.ti -1c
+.RI "def \fBparse_pre_commit\fP"
+.br
+.RI "\fIGet list of chagend files in commit. \fP"
+.ti -1c
+.RI "def \fBparse_pre_push\fP"
+.br
+.RI "\fIParse message from pre-push. \fP"
+.ti -1c
+.RI "def \fBcheck_cpplint\fP"
+.br
+.RI "\fICheck if file fullfills cpplint check. \fP"
+.ti -1c
+.RI "def \fBprepare_doxygen_cfg\fP"
+.br
+.RI "\fIPrepare doxygen config file from template. \fP"
+.ti -1c
+.RI "def \fBpublish_doxygen\fP"
+.br
+.RI "\fICheckout all doygen folders in gh-pages branch and commit changes. \fP"
+.ti -1c
+.RI "def \fBupdate_doxygen\fP"
+.br
+.RI "\fIUpdate the doxygen documentation for this folder repo. \fP"
 .in -1c
 .SS "Public Attributes"
 
@@ -97,19 +153,20 @@ githookcontroller.GitHookController \-
 .ti -1c
 .RI "def \fB_get_doxygen_warnings\fP"
 .br
-.RI "\fIGet all doxygen warnings\&. \fP"
+.RI "\fIGet all doxygen warnings. \fP"
+.ti -1c
+.RI "def \fB_get_doxygen_warnings\fP"
+.br
+.RI "\fIGet all doxygen warnings. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 47 of file githookcontroller\&.py\&.
-.SH "Constructor & Destructor Documentation"
+Definition at line 47 of file githookcontroller.py.
+.SH "Member Function Documentation"
 .PP 
-.SS "def githookcontroller\&.GitHookController\&.__init__ (self, tempdir = \fC'/tmp/'\fP)"
-
+.SS "def githookcontroller::GitHookController::__init__ ( self,  tempdir = \fC'/tmp/'\fP)"
 .PP
-The constructor\&. 
-.PP
-\fBParameters:\fP
+The constructor. \fBParameters:\fP
 .RS 4
 \fIself\fP The object pointer 
 .br
@@ -118,23 +175,32 @@ The constructor\&.
 .PP
 
 .PP
-Definition at line 53 of file githookcontroller\&.py\&.
-.SH "Member Function Documentation"
-.PP 
-.SS "def githookcontroller\&.GitHookController\&._get_doxygen_warnings (self)\fC [private]\fP"
+Definition at line 53 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::__init__ ( self,  tempdir = \fC'/tmp/'\fP)"
+.PP
+The constructor. \fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.br
+\fItempdir\fP Directory where files are stored temporarily outside the repo default: /tmp/ 
+.RE
+.PP
 
 .PP
-Get all doxygen warnings\&. 
+Definition at line 53 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::_get_doxygen_warnings ( self)\fC [private]\fP"
 .PP
-Definition at line 436 of file githookcontroller\&.py\&.
+Get all doxygen warnings. 
 .PP
-Referenced by githookcontroller\&.GitHookController\&.update_doxygen()\&.
-.SS "def githookcontroller\&.GitHookController\&.check_cpplint (self, filepath)"
-
+Definition at line 436 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::_get_doxygen_warnings ( self)\fC [private]\fP"
 .PP
-functions for code style enforcment ### Check if file fullfills cpplint check
+Get all doxygen warnings. 
 .PP
-\fBParameters:\fP
+Definition at line 436 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::check_cpplint ( self,  filepath)"
+.PP
+Check if file fullfills cpplint check. \fBParameters:\fP
 .RS 4
 \fIself\fP The object pointer 
 .br
@@ -143,13 +209,22 @@ functions for code style enforcment ### Check if file fullfills cpplint check
 .PP
 
 .PP
-Definition at line 244 of file githookcontroller\&.py\&.
-.SS "def githookcontroller\&.GitHookController\&.checkout_branch (self, branchname, forced = \fCFalse\fP)"
+Definition at line 244 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::check_cpplint ( self,  filepath)"
+.PP
+Check if file fullfills cpplint check. \fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.br
+\fIfilepath\fP path to the file where lint check should be performed 
+.RE
+.PP
 
 .PP
-Checkout another branch\&. 
+Definition at line 244 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::checkout_branch ( self,  branchname,  forced = \fCFalse\fP)"
 .PP
-\fBParameters:\fP
+Checkout another branch. \fBParameters:\fP
 .RS 4
 \fIself\fP The object pointer 
 .br
@@ -160,36 +235,54 @@ Checkout another branch\&.
 .PP
 
 .PP
-Definition at line 159 of file githookcontroller\&.py\&.
+Definition at line 159 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::checkout_branch ( self,  branchname,  forced = \fCFalse\fP)"
 .PP
-Referenced by githookcontroller\&.GitHookController\&.publish_doxygen()\&.
-.SS "def githookcontroller\&.GitHookController\&.current_branch (self)"
+Checkout another branch. \fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.br
+\fIbranchname\fP name of branch which is checked out 
+.br
+\fIforced\fP boolean for forced checkout 
+.RE
+.PP
 
 .PP
-Get currently chosen branch\&. 
+Definition at line 159 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::current_branch ( self)"
 .PP
-Definition at line 136 of file githookcontroller\&.py\&.
+Get currently chosen branch. 
 .PP
-Referenced by githookcontroller\&.GitHookController\&.prepare_doxygen_cfg(), githookcontroller\&.GitHookController\&.publish_doxygen(), and githookcontroller\&.GitHookController\&.update_doxygen()\&.
-.SS "def githookcontroller\&.GitHookController\&.parse_pre_commit (self)"
-
+Definition at line 136 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::current_branch ( self)"
 .PP
-Get list of chagend files in commit\&. 
+Get currently chosen branch. 
 .PP
-\fBParameters:\fP
+Definition at line 136 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::parse_pre_commit ( self)"
+.PP
+Get list of chagend files in commit. \fBParameters:\fP
 .RS 4
 \fIself\fP The object pointer 
 .RE
 .PP
 
 .PP
-Definition at line 180 of file githookcontroller\&.py\&.
+Definition at line 180 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::parse_pre_commit ( self)"
 .PP
-References HistClass\&.split()\&.
-.SS "def githookcontroller\&.GitHookController\&.parse_pre_push (self)"
+Get list of chagend files in commit. \fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.RE
+.PP
 
 .PP
-Parse message from pre-push\&. Based on example in: http://axialcorps.com/2014/06/03/preventing-errant-git-pushes-with-a-pre-push-hook/
+Definition at line 180 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::parse_pre_push ( self)"
+.PP
+Parse message from pre-push. Based on example in: http://axialcorps.com/2014/06/03/preventing-errant-git-pushes-with-a-pre-push-hook/
 .PP
 \fBParameters:\fP
 .RS 4
@@ -203,34 +296,53 @@ namedtupe of type Push fields: ['commits', 'remote_name', 'remote_url','current_
 .PP
 
 .PP
-Definition at line 198 of file githookcontroller\&.py\&.
+Definition at line 198 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::parse_pre_push ( self)"
 .PP
-References githookcontroller\&.Commit, githookcontroller\&.Push, and HistClass\&.split()\&.
-.SS "def githookcontroller\&.GitHookController\&.post_commit (self)"
-
-.PP
-functions for hooks ### Parse message from post commit
+Parse message from pre-push. Based on example in: http://axialcorps.com/2014/06/03/preventing-errant-git-pushes-with-a-pre-push-hook/
 .PP
 \fBParameters:\fP
 .RS 4
 \fIself\fP The object pointer 
 .RE
 .PP
+\fBReturns:\fP
+.RS 4
+namedtupe of type Push fields: ['commits', 'remote_name', 'remote_url','current_branch', 'removing_remote', 'forcing'] 
+.RE
+.PP
 
 .PP
-Definition at line 174 of file githookcontroller\&.py\&.
-.SS "def githookcontroller\&.GitHookController\&.prepare_doxygen_cfg (self)"
+Definition at line 198 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::post_commit ( self)"
+.PP
+Parse message from post commit. \fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.RE
+.PP
 
 .PP
-functions for doxygen integration ### Prepare doxygen config file from template
+Definition at line 174 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::post_commit ( self)"
 .PP
-The function replaces Tokens for files in \&./doc/:
+Parse message from post commit. \fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.RE
+.PP
+
+.PP
+Definition at line 174 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::prepare_doxygen_cfg ( self)"
+.PP
+Prepare doxygen config file from template. The function replaces Tokens for files in ./doc/:
 .IP "\(bu" 2
 template_cfg available Tokens: branchname% current branch name remote_root_name% html_header% path to html header file html_footer% path to html header file
 .IP "\(bu" 2
-header_template\&.html
+header_template.html
 .IP "\(bu" 2
-footer_template\&.html available Tokens: +++optionsline+++ a fixed url path ++branch_name++ current branch name ++remote_url++ see object property ++remote_root_name++ see object property
+footer_template.html available Tokens: +++optionsline+++ a fixed url path ++branch_name++ current branch name ++remote_url++ see object property ++remote_root_name++ see object property
 .PP
 .PP
 \fBParameters:\fP
@@ -240,87 +352,119 @@ footer_template\&.html available Tokens: +++optionsline+++ a fixed url path ++br
 .PP
 
 .PP
-Definition at line 269 of file githookcontroller\&.py\&.
+Definition at line 269 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::prepare_doxygen_cfg ( self)"
 .PP
-References githookcontroller\&.GitHookController\&.current_branch(), githookcontroller\&.GitHookController\&.organisation, githookcontroller\&.GitHookController\&.remote_branches(), githookcontroller\&.GitHookController\&.remote_root_name(), githookcontroller\&.GitHookController\&.remote_url(), and githookcontroller\&.GitHookController\&.vetobranches\&.
-.SS "def githookcontroller\&.GitHookController\&.publish_doxygen (self, branchnames)"
+Prepare doxygen config file from template. The function replaces Tokens for files in ./doc/:
+.IP "\(bu" 2
+template_cfg available Tokens: branchname% current branch name remote_root_name% html_header% path to html header file html_footer% path to html header file
+.IP "\(bu" 2
+header_template.html
+.IP "\(bu" 2
+footer_template.html available Tokens: +++optionsline+++ a fixed url path ++branch_name++ current branch name ++remote_url++ see object property ++remote_root_name++ see object property
+.PP
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.RE
+.PP
 
 .PP
-Checkout all doygen folders in gh-pages branch and commit changes\&. 
+Definition at line 269 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::publish_doxygen ( self,  branchnames)"
 .PP
-Definition at line 335 of file githookcontroller\&.py\&.
+Checkout all doygen folders in gh-pages branch and commit changes. 
 .PP
-References githookcontroller\&.GitHookController\&.checkout_branch(), and githookcontroller\&.GitHookController\&.current_branch()\&.
-.SS "def githookcontroller\&.GitHookController\&.remote_branches (self)"
-
+Definition at line 335 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::publish_doxygen ( self,  branchnames)"
 .PP
-Get list of remote branches\&. 
+Checkout all doygen folders in gh-pages branch and commit changes. 
 .PP
-\fBReturns:\fP
+Definition at line 335 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::remote_branches ( self)"
+.PP
+Get list of remote branches. \fBReturns:\fP
 .RS 4
 A list of strings containing all remot branch names 
 .RE
 .PP
 
 .PP
-Definition at line 146 of file githookcontroller\&.py\&.
+Definition at line 146 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::remote_branches ( self)"
 .PP
-References HistClass\&.split()\&.
+Get list of remote branches. \fBReturns:\fP
+.RS 4
+A list of strings containing all remot branch names 
+.RE
 .PP
-Referenced by githookcontroller\&.GitHookController\&.prepare_doxygen_cfg()\&.
-.SS "def githookcontroller\&.GitHookController\&.remote_root_name (self)"
 
 .PP
-Get root name of remote (the original repo name) 
+Definition at line 146 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::remote_root_name ( self)"
 .PP
-\fBReturns:\fP
+Get root name of remote (the original repo name). \fBReturns:\fP
 .RS 4
 string containing the name of the remote root name 
 .RE
 .PP
 
 .PP
-Definition at line 86 of file githookcontroller\&.py\&.
+Definition at line 86 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::remote_root_name ( self)"
 .PP
-References HistClass\&.split()\&.
-.PP
-Referenced by githookcontroller\&.GitHookController\&.prepare_doxygen_cfg()\&.
-.SS "def githookcontroller\&.GitHookController\&.remote_url (self)"
-
-.PP
-Get url from remote\&. 
-.PP
-\fBReturns:\fP
+Get root name of remote (the original repo name). \fBReturns:\fP
 .RS 4
 string containing the name of the remote root name 
 .RE
 .PP
 
 .PP
-Definition at line 103 of file githookcontroller\&.py\&.
+Definition at line 86 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::remote_url ( self)"
 .PP
-References HistClass\&.split()\&.
+Get url from remote. \fBReturns:\fP
+.RS 4
+string containing the name of the remote root name 
+.RE
 .PP
-Referenced by githookcontroller\&.GitHookController\&.prepare_doxygen_cfg()\&.
-.SS "def githookcontroller\&.GitHookController\&.root_name (self)"
 
 .PP
-git helper functions ### Get root name of repo
+Definition at line 103 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::remote_url ( self)"
 .PP
-\fBReturns:\fP
+Get url from remote. \fBReturns:\fP
+.RS 4
+string containing the name of the remote root name 
+.RE
+.PP
+
+.PP
+Definition at line 103 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::root_name ( self)"
+.PP
+Get root name of repo. \fBReturns:\fP
 .RS 4
 string containing the name of the root name 
 .RE
 .PP
 
 .PP
-Definition at line 76 of file githookcontroller\&.py\&.
+Definition at line 76 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::root_name ( self)"
 .PP
-Referenced by githookcontroller\&.GitHookController\&.update_doxygen()\&.
-.SS "def githookcontroller\&.GitHookController\&.update_doxygen (self, configpath = \fC'\&./doc/doxy_cfg'\fP)"
+Get root name of repo. \fBReturns:\fP
+.RS 4
+string containing the name of the root name 
+.RE
+.PP
 
 .PP
-Update the doxygen documentation for this folder repo\&. Based on example in: http://axialcorps.com/2014/06/03/preventing-errant-git-pushes-with-a-pre-push-hook/
+Definition at line 76 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::update_doxygen ( self,  configpath = \fC'./doc/doxy_cfg'\fP)"
+.PP
+Update the doxygen documentation for this folder repo. Based on example in: http://axialcorps.com/2014/06/03/preventing-errant-git-pushes-with-a-pre-push-hook/
 .PP
 \fBParameters:\fP
 .RS 4
@@ -331,46 +475,45 @@ Update the doxygen documentation for this folder repo\&. Based on example in: ht
 .PP
 
 .PP
-Definition at line 402 of file githookcontroller\&.py\&.
+Definition at line 402 of file githookcontroller.py.
+.SS "def githookcontroller::GitHookController::update_doxygen ( self,  configpath = \fC'./doc/doxy_cfg'\fP)"
 .PP
-References githookcontroller\&.GitHookController\&._get_doxygen_warnings(), githookcontroller\&.GitHookController\&.current_branch(), githookcontroller\&.GitHookController\&.doxy_enforce_repos, githookcontroller\&.GitHookController\&.root_name(), and githookcontroller\&.GitHookController\&.vetobranches\&.
+Update the doxygen documentation for this folder repo. Based on example in: http://axialcorps.com/2014/06/03/preventing-errant-git-pushes-with-a-pre-push-hook/
+.PP
+\fBParameters:\fP
+.RS 4
+\fIself\fP The object pointer 
+.br
+\fIconfigpath\fP Path to the doxygen confi file 
+.RE
+.PP
+
+.PP
+Definition at line 402 of file githookcontroller.py.
 .SH "Member Data Documentation"
 .PP 
-.SS "githookcontroller\&.GitHookController\&.args"
-
+.SS "\fBgithookcontroller::GitHookController::args\fP"
 .PP
-Definition at line 54 of file githookcontroller\&.py\&.
-.SS "githookcontroller\&.GitHookController\&.doxy_enforce_repos"
-
+Definition at line 54 of file githookcontroller.py.
+.SS "\fBgithookcontroller::GitHookController::doxy_enforce_repos\fP"
 .PP
-Definition at line 65 of file githookcontroller\&.py\&.
+Definition at line 65 of file githookcontroller.py.
+.SS "\fBgithookcontroller::GitHookController::organisation\fP"
 .PP
-Referenced by githookcontroller\&.GitHookController\&.update_doxygen()\&.
-.SS "githookcontroller\&.GitHookController\&.organisation"
-
+Definition at line 59 of file githookcontroller.py.
+.SS "\fBgithookcontroller::GitHookController::parser\fP"
 .PP
-Definition at line 59 of file githookcontroller\&.py\&.
+Definition at line 57 of file githookcontroller.py.
+.SS "\fBgithookcontroller::GitHookController::stdin\fP"
 .PP
-Referenced by githookcontroller\&.GitHookController\&.prepare_doxygen_cfg()\&.
-.SS "githookcontroller\&.GitHookController\&.parser"
-
+Definition at line 55 of file githookcontroller.py.
+.SS "\fBgithookcontroller::GitHookController::tempdir\fP"
 .PP
-Definition at line 57 of file githookcontroller\&.py\&.
-.SS "githookcontroller\&.GitHookController\&.stdin"
-
+Definition at line 60 of file githookcontroller.py.
+.SS "\fBgithookcontroller::GitHookController::vetobranches\fP"
 .PP
-Definition at line 55 of file githookcontroller\&.py\&.
-.SS "githookcontroller\&.GitHookController\&.tempdir"
-
-.PP
-Definition at line 60 of file githookcontroller\&.py\&.
-.SS "githookcontroller\&.GitHookController\&.vetobranches"
-
-.PP
-Definition at line 62 of file githookcontroller\&.py\&.
-.PP
-Referenced by githookcontroller\&.GitHookController\&.prepare_doxygen_cfg(), and githookcontroller\&.GitHookController\&.update_doxygen()\&.
+Definition at line 62 of file githookcontroller.py.
 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libs3a from the source code\&.
+Generated automatically by Doxygen for libs3a from the source code.
