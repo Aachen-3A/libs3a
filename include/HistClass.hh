@@ -36,7 +36,7 @@ namespace HistClass {
     static std::map<std::string, THnSparseD * > histon; /*!< Map of a string and a THnSparseD histogram, for easy nSparse handling. */
     static std::map<std::string, TNtupleD * > ttupple; /*!< Map of a string and a TNtupleD histogram, for easy Ntuple handling. */
     static std::map<std::string, TTree * > trees; /*!< Map of a string and a TTree histogram, for easy tree handling. */
-    static std::map<std::string, TEficiency * > effs; /*!< Map of a string and a TEfficiency container. */
+    static std::map<std::string, TEfficiency * > effs; /*!< Map of a string and a TEfficiency container. */
 
     /*! \brief Function to create a number of 1D histograms in the histo map
      *
@@ -387,7 +387,7 @@ namespace HistClass {
      * \param[in] valuex x-value that should be filled
      * \param[in] passed Boolean if the event passed or not
      */
-    SUPPRESS_NOT_USED_WARN static void Fill(const char * name, double valuex, bool passed)
+    SUPPRESS_NOT_USED_WARN static void FillEff(const char * name, double valuex, bool passed)
     {
         std::string dummy = Form("eff_%s", name);
         effs[dummy]->Fill(passed,valuex);
