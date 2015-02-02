@@ -1,5 +1,23 @@
 from __future__ import division
 import ROOT
+import math
+
+def zvaluetopvalue(z, sided=2):
+    if sided==1:
+        return -1*(ROOT.TMath.Erf(z/math.sqrt(2))-1)
+    elif sided==2:
+        return -0.5*(ROOT.TMath.Erf(z/math.sqrt(2))-1)
+    else:
+        raise Exception("sided must be either 1 or 2")
+
+def pvaluetozvalue(p, sided=2):
+    if sided==1:
+        return math.sqrt(2)*ROOT.TMath.ErfInverse(1-p)
+    elif sided==2:
+        return math.sqrt(2)*ROOT.TMath.ErfInverse(1-2*p)
+    else:
+        raise Exception("sided must be either 1 or 2")
+
 def Latex(pad=None):
     if pad is None:
         for i in range(1000):
