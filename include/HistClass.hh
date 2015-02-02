@@ -17,7 +17,6 @@
 #include "THnSparse.h"
 #include "TString.h"
 #include "TNtupleD.h"
-#include "TEfficiency.h"
 #include "boost/format.hpp"
 #include <stdarg.h>
 
@@ -36,7 +35,6 @@ namespace HistClass {
     static std::map<std::string, THnSparseD * > histon; /*!< Map of a string and a THnSparseD histogram, for easy nSparse handling. */
     static std::map<std::string, TNtupleD * > ttupple; /*!< Map of a string and a TNtupleD histogram, for easy Ntuple handling. */
     static std::map<std::string, TTree * > trees; /*!< Map of a string and a TTree histogram, for easy tree handling. */
-    static std::map<std::string, TEfficiency * > effs; /*!< Map of a string and a TEfficiency container. */
 
     /*! \brief Function to create a number of 1D histograms in the histo map
      *
@@ -228,20 +226,6 @@ namespace HistClass {
         }
     }
 
-    /*! \brief Function to create one 1D Efficiency container in the eff map
-     *
-     * \param[in] name Name of the Efficiency container that should be created
-     * \param[in] nbinsx Number of bins on the x-axis
-     * \param[in] xlow Lower edge of the x-axis
-     * \param[in] xup Upper edge of the x-axis
-     * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
-     */
-    SUPPRESS_NOT_USED_WARN const static void CreateEff(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, const char* xtitle = "")
-    {
-        TEfficiency * tmpeff = new TEfficiency(Form("eff_%s", name), Form("%s;%s;%s",name,xtitle,"#epsilon"), nbinsx, xlow, xup);
-        effs[Form("eff_%s", name)] = tmpeff;
-    }
-
     /*! \brief Function to fill an event in a 1D histogram of the map
      *
      * This function fills one value with one weight for one event in one
@@ -381,18 +365,6 @@ namespace HistClass {
         trees[name]->Fill();
     }
 
-    /*! \brief Function to fill an event in a efficiency container of the map
-     *
-     * \param[in] name Name of the histogram which should be filled
-     * \param[in] valuex x-value that should be filled
-     * \param[in] passed Boolean if the event passed or not
-     */
-    SUPPRESS_NOT_USED_WARN static void FillEff(const char * name, double valuex, bool passed)
-    {
-        std::string dummy = Form("eff_%s", name);
-        effs[dummy]->Fill(passed,valuex);
-    }
-
     /*! \brief Function to write one 1D histogram of the map
      *
      * \param[in] n_histo Number of the histogram that should be written
@@ -492,7 +464,7 @@ namespace HistClass {
      * and returns the resulting substrings as a vector.
      * \param[in] &s String that should be split
      * \param[in] delim Delimiter where the string should be split
-     * \return[out] elems Vector in which the substrings were pushed
+     * \param[out] elems Vector in which the substrings were pushed
     */
     SUPPRESS_NOT_USED_WARN std::vector<std::string> split(const std::string &s, char delim) {
         std::vector<std::string> elems;
@@ -702,25 +674,6 @@ namespace HistClass {
         histo2[dummy]->Write();
     }
 
-    /*! \brief Function to write many efficiency containers of the map
-     *
-     * This function writes all efficiency containers of the map with the
-     * default options, otherwise it writes all efficiency containers that
-     * contain the given string in there name.
-     * \param[in] name Optional string that all efficiency containers names that should be written contain (DEFAULT = "")
-     */
-    SUPPRESS_NOT_USED_WARN static void WriteAllEff(const char * name = "")
-    {
-        std::map<std::string, TEfficiency * >::iterator it;
-        for (std::map<std::string, TEfficiency * >::iterator it=effs.begin(); it!=effs.end(); ++it){
-            if(strcmp( name, "") != 0 && std::string::npos!=it->first.find(name)){
-                it->second -> Write();
-            }else if(strcmp( name, "") == 0){
-                it->second -> Write();
-            }
-        }
-    }
-
     /*! \brief Function to set all negative bin contents to zero for a 1D histogram
      *
      * \param[in] n_histo Number of the histogram that should be modified
@@ -741,7 +694,7 @@ namespace HistClass {
     /*! \brief Function to get one 1D histogram from the map without number
      *
      * \param[in] name Name of the histogram that should be returned
-     * \returns histo Returned histogram
+     * \param[out] histo Returned histogram
      */
     SUPPRESS_NOT_USED_WARN static TH1D* ReturnHist(const char * name)
     {
