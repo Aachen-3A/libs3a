@@ -95,21 +95,21 @@ class aix3adb:
         return DataSkim(s.insertDataSkim(skim.__dict__))
     # edits
     @tryServerAuth
-    def editMCSample(self, name, sample):
+    def editMCSample(self, sample):
         s = self.getAuthServerProxy()
-        return s.editMCSample(name, sample)
+        return s.editMCSample(sample)
     @tryServerAuth
-    def editDataSample(self, name, sample):
+    def editDataSample(self, sample):
         s = self.getAuthServerProxy()
-        return s.editDataSample(name, sample)
+        return s.editDataSample(sample)
     @tryServerAuth
-    def editMCSkim(self, skimid, skim):
+    def editMCSkim(self, skim):
         s = self.getAuthServerProxy()
-        return s.editMCSkim(skimid, skim)
+        return s.editMCSkim(skim)
     @tryServerAuth
-    def editDataSkim(self, skimid, skim):
+    def editDataSkim(self, skim):
         s = self.getAuthServerProxy()
-        return s.editDataSkim(skimid, skim)
+        return s.editDataSkim(skim)
     # gets
     def getMCSample(self, name):
         s = xmlrpclib.ServerProxy(self.readurl)
