@@ -464,7 +464,7 @@ namespace HistClass {
      * and returns the resulting substrings as a vector.
      * \param[in] &s String that should be split
      * \param[in] delim Delimiter where the string should be split
-     * \return[out] elems Vector in which the substrings were pushed
+     * \param[out] elems Vector in which the substrings were pushed
     */
     SUPPRESS_NOT_USED_WARN std::vector<std::string> split(const std::string &s, char delim) {
         std::vector<std::string> elems;
@@ -694,7 +694,7 @@ namespace HistClass {
     /*! \brief Function to get one 1D histogram from the map without number
      *
      * \param[in] name Name of the histogram that should be returned
-     * \returns histo Returned histogram
+     * \param[out] histo Returned histogram
      */
     SUPPRESS_NOT_USED_WARN static TH1D* ReturnHist(const char * name)
     {

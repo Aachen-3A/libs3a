@@ -1,11 +1,4 @@
-# ignore temporary doxygen files
-doxy.warn
-doxy_cfg
-./doc/header.html
-./doc/footer.html
-# ignore hooks folder with githookcontroller
-./hooks/
-# ignore compiled and temporary files
-*.o
+# ignore the doc folder
+doc/
 *.pyc
 *~
