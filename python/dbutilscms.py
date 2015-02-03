@@ -31,6 +31,7 @@ class McMUtilities():
 
     def readURL(self, mcm_dataset):
         try:
+            log.error('calling MCM with %s' % (self.mcm_prefix + mcm_dataset) )
             self.mcm_json = self.readJSON(urllib2.urlopen(self.mcm_prefix + mcm_dataset))
         except urllib2.HTTPError:
             log.error("Could not find dataset " + mcm_dataset)
