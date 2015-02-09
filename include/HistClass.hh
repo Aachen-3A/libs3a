@@ -10,15 +10,18 @@
 #ifndef HistClass_hh
 #define HistClass_hh
 
+#include <stdarg.h>
 #include <iostream>
 #include <map>
+#include <string>
+#include <vector>
 #include "TH1F.h"
 #include "TH2F.h"
 #include "THnSparse.h"
 #include "TString.h"
 #include "TNtupleD.h"
+#include "TEfficiency.h"
 #include "boost/format.hpp"
-#include <stdarg.h>
 
 /** To avoid compiler problems, we tell gcc to ignore any unused function error
  */
@@ -35,6 +38,7 @@ namespace HistClass {
     static std::map<std::string, THnSparseD * > histon; /*!< Map of a string and a THnSparseD histogram, for easy nSparse handling. */
     static std::map<std::string, TNtupleD * > ttupple; /*!< Map of a string and a TNtupleD histogram, for easy Ntuple handling. */
     static std::map<std::string, TTree * > trees; /*!< Map of a string and a TTree histogram, for easy tree handling. */
+    static std::map<std::string, TEfficiency * > effs; /*!< Map of a string and a TEfficiency container. */
 
     /*! \brief Function to create a number of 1D histograms in the histo map
      *
@@ -45,9 +49,8 @@ namespace HistClass {
      * \param[in] xup Upper edge of the x-axis
      * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void CreateHisto(Int_t n_histos, const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "")
-    {
-        for(int i = 0; i < n_histos; i++){
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(Int_t n_histos, const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "") {
+        for (int i = 0; i < n_histos; i++) {
             TH1D * tmphist = new TH1D(Form("h1_%d_%s", i, name), xtitle, nbinsx, xlow, xup);
             tmphist->SetXTitle(xtitle);
             tmphist->Sumw2();
@@ -65,13 +68,12 @@ namespace HistClass {
      * \param[in] xup Upper edge of the x-axis
      * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void CreateHisto(Int_t n_histos, const char* name, const char* particle, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "")
-    {
-        for(int i = 0; i < n_histos; i++){
-            TH1D * tmphist = new TH1D(Form("h1_%d_%s_%s", i,particle, name), xtitle, nbinsx, xlow, xup);
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(Int_t n_histos, const char* name, const char* particle, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "") {
+        for (int i = 0; i < n_histos; i++) {
+            TH1D * tmphist = new TH1D(Form("h1_%d_%s_%s", i, particle, name), xtitle, nbinsx, xlow, xup);
             tmphist->SetXTitle(xtitle);
             tmphist->Sumw2();
-            histo[Form("h1_%d_%s_%s", i,particle, name)] = tmphist;
+            histo[Form("h1_%d_%s_%s", i, particle, name)] = tmphist;
         }
     }
 
@@ -83,8 +85,7 @@ namespace HistClass {
      * \param[in] xup Upper edge of the x-axis
      * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void CreateHistoUnchangedName(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "")
-    {
+    SUPPRESS_NOT_USED_WARN static void CreateHistoUnchangedName(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "") {
         TH1D * tmphist = new TH1D(Form("%s", name), xtitle, nbinsx, xlow, xup);
         tmphist->SetXTitle(xtitle);
         tmphist->Sumw2();
@@ -99,8 +100,7 @@ namespace HistClass {
      * \param[in] xup Upper edge of the x-axis
      * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN const static void CreateHisto(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "")
-    {
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "") {
         TH1D * tmphist = new TH1D(Form("h1_%s", name), xtitle, nbinsx, xlow, xup);
         tmphist->SetXTitle(xtitle);
         tmphist->Sumw2();
@@ -116,12 +116,11 @@ namespace HistClass {
      * \param[in] xup Upper edge of the x-axis
      * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN const static void CreateHisto(const char* name, const char* particle, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "")
-    {
-        TH1D * tmphist = new TH1D(Form("h1_%s_%s", particle,name), xtitle, nbinsx, xlow, xup);
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(const char* name, const char* particle, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "") {
+        TH1D * tmphist = new TH1D(Form("h1_%s_%s", particle, name), xtitle, nbinsx, xlow, xup);
         tmphist->SetXTitle(xtitle);
         tmphist->Sumw2();
-        histo[Form("h1_%s_%s", particle,name)] = tmphist;
+        histo[Form("h1_%s_%s", particle, name)] = tmphist;
     }
 
     /*! \brief Function to create one 1D histograms in the histo map with a boost name as input
@@ -132,8 +131,7 @@ namespace HistClass {
      * \param[in] xup Upper edge of the x-axis
      * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN const static void CreateHisto(boost::basic_format<char> name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "")
-    {
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(boost::basic_format<char> name, Int_t nbinsx, Double_t xlow, Double_t xup, TString xtitle = "") {
         CreateHisto(str(name).c_str(), nbinsx, xlow, xup, xtitle);
     }
 
@@ -149,8 +147,7 @@ namespace HistClass {
      * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
      * \param[in] ytitle Optinal title of the y-axis (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void CreateHisto(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle = "", TString ytitle = "")
-    {
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle = "", TString ytitle = "") {
         std::string dummy = Form("h2_%s", name);
         histo2[dummy] = new TH2D(Form("h2_%s", name), Form("h2_%s", name), nbinsx, xlow, xup, nbinsy, ylow, yup);
         histo2[dummy] -> Sumw2();
@@ -171,9 +168,8 @@ namespace HistClass {
      * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
      * \param[in] ytitle Optinal title of the y-axis (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void CreateHisto(Int_t n_histos, const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle = "", TString ytitle = "")
-    {
-        for(int i = 0; i < n_histos; i++){
+    SUPPRESS_NOT_USED_WARN static void CreateHisto(Int_t n_histos, const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, TString xtitle = "", TString ytitle = "") {
+        for (int i = 0; i < n_histos; i++) {
             TH2D * tmphist = new TH2D(Form("h2_%d_%s", i, name), Form("h2_%d_%s", i, name), nbinsx, xlow, xup, nbinsy, ylow, yup);
             tmphist->SetXTitle(xtitle);
             tmphist->SetYTitle(ytitle);
@@ -191,12 +187,11 @@ namespace HistClass {
      * \param[in] xmax Array of the upper edge of the axis for each dimension
      * \param[in] axisTitle[] Array of the axis title for each dimension
      */
-    SUPPRESS_NOT_USED_WARN static void CreateNSparse(const char* name, int dimension, int* bins, double* xmin, double* xmax, string axisTitle[])
-    {
+    SUPPRESS_NOT_USED_WARN static void CreateNSparse(const char* name, int dimension, int* bins, double* xmin, double* xmax, std::string axisTitle[]) {
         std::string dummy = Form("hn_%s", name);
-        histon[dummy] = new THnSparseD(Form("hn_%s", name), Form("hn_%s", name), dimension,bins, xmin, xmax );
+        histon[dummy] = new THnSparseD(Form("hn_%s", name), Form("hn_%s", name), dimension, bins, xmin, xmax );
         histon[dummy] -> Sumw2();
-        for(int i=0;i<dimension;i++){
+        for (int i = 0 ; i < dimension; i++) {
             histon[dummy]->GetAxis(i)->SetTitle(axisTitle[i].c_str());
         }
     }
@@ -207,10 +202,9 @@ namespace HistClass {
      * \param[in] varlist Colon sepereated list with the name of the branches that should be created
      * \param[in] bufsize Buffer size that the NtupleD should have
      */
-    SUPPRESS_NOT_USED_WARN static void CreateTree(const char* name, const char* varlist, int bufsize)
-    {
+    SUPPRESS_NOT_USED_WARN static void CreateTree(const char* name, const char* varlist, int bufsize) {
         std::string dummy = Form("tree_%s", name);
-        ttupple[dummy] = new TNtupleD(Form("tree_%s", name),name,varlist,bufsize);
+        ttupple[dummy] = new TNtupleD(Form("tree_%s", name), name, varlist, bufsize);
     }
 
     /*! \brief Function to create one Tree in the TTree map
@@ -218,12 +212,24 @@ namespace HistClass {
      * \param[in] m Map of the name and variable that should be matched to each branch
      * \param[in] name Name of the TTree that should be created
      */
-    SUPPRESS_NOT_USED_WARN static void CreateTree( std::map< std::string , float > & m, const char * name)
-    {
-        trees[name] = new TTree(name,name);
-        for( std::map< std::string , float >::iterator it=m.begin(); it!=m.end();it++){
-                trees[name]->Branch(it->first.c_str(),&(it->second),Form("%s/F",it->first.c_str()));
+    SUPPRESS_NOT_USED_WARN static void CreateTree(std::map< std::string , float > *m, const char * name) {
+        trees[name] = new TTree(name, name);
+        for (std::map< std::string , float >::iterator it = m->begin(); it != m->end(); it++) {
+                trees[name]->Branch(it->first.c_str(), &(it->second), Form("%s/F", it->first.c_str()));
         }
+    }
+
+    /*! \brief Function to create one 1D Efficiency container in the eff map
+     *
+     * \param[in] name Name of the Efficiency container that should be created
+     * \param[in] nbinsx Number of bins on the x-axis
+     * \param[in] xlow Lower edge of the x-axis
+     * \param[in] xup Upper edge of the x-axis
+     * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void CreateEff(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, const char* xtitle = "") {
+        TEfficiency * tmpeff = new TEfficiency(Form("eff_%s", name), Form("%s;%s;%s", name, xtitle, "#epsilon"), nbinsx, xlow, xup);
+        effs[Form("eff_%s", name)] = tmpeff;
     }
 
     /*! \brief Function to fill an event in a 1D histogram of the map
@@ -236,12 +242,11 @@ namespace HistClass {
      * \param[in] value Value that should be filled
      * \param[in] weight Weight of the event that should be filled
      */
-    static void Fill(Int_t n_histo, const char * name, double value, double weight)
-    {
-        std::map<string, TH1D * >::iterator it =histo.find(Form("h1_%d_%s", n_histo, name));
-        if(it!=histo.end()){
-            it->second->Fill(value,weight);
-        }else{
+    static void Fill(Int_t n_histo, const char * name, double value, double weight) {
+        std::map<std::string, TH1D * >::iterator it = histo.find(Form("h1_%d_%s", n_histo, name));
+        if (it != histo.end()) {
+            it->second->Fill(value, weight);
+        } else {
             std::cerr << "(Fill) No hist: " << Form("h1_%d_%s", n_histo, name) << " in map " << n_histo << std::endl;
         }
     }
@@ -253,9 +258,8 @@ namespace HistClass {
      * \param[in] value Value that should be filled
      * \param[in] weight Weight of the event that should be filled
      */
-    SUPPRESS_NOT_USED_WARN static void Fill(Int_t n_histo, std::string name, double value, double weight)
-    {
-        Fill( n_histo, name.c_str(), value,weight);
+    SUPPRESS_NOT_USED_WARN static void Fill(Int_t n_histo, std::string name, double value, double weight) {
+        Fill(n_histo, name.c_str(), value, weight);
     }
 
     /*! \brief Function to fill an event in a 1D histogram of the map without histo number
@@ -267,19 +271,17 @@ namespace HistClass {
      * \param[in] value Value that should be filled
      * \param[in] weight Weight of the event that should be filled
      */
-    SUPPRESS_NOT_USED_WARN static void Fill(const char * name, double value, double weight)
-    {
-        std::map<string, TH1D * >::iterator it;
-        if (strcmp( name, "h_counters")==0) {
-                it =histo.find(Form("%s", name));
-        }
-        else {
-                it =histo.find(Form("h1_%s", name));
+    SUPPRESS_NOT_USED_WARN static void Fill(const char * name, double value, double weight) {
+        std::map<std::string, TH1D * >::iterator it;
+        if (strcmp(name, "h_counters") == 0) {
+                it = histo.find(Form("%s", name));
+        } else {
+                it = histo.find(Form("h1_%s", name));
         }
 
-        if(it!=histo.end()){
-            it->second->Fill(value,weight);
-        }else{
+        if (it != histo.end()) {
+            it->second->Fill(value, weight);
+        } else {
             std::cerr << "(Fill) No hist: " << Form("h1_%s", name) << " in map " << std::endl;
         }
     }
@@ -291,10 +293,9 @@ namespace HistClass {
      * \param[in] valuey y-value that should be filled
      * \param[in] weight Weight of the event that should be filled
      */
-    SUPPRESS_NOT_USED_WARN static void Fill(const char * name, double valuex, double valuey, double weight)
-    {
+    SUPPRESS_NOT_USED_WARN static void Fill(const char * name, double valuex, double valuey, double weight) {
         std::string dummy = Form("h2_%s", name);
-        histo2[dummy]->Fill(valuex,valuey,weight);
+        histo2[dummy]->Fill(valuex, valuey, weight);
     }
 
     /*! \brief Function to fill an event in a 2D histogram of the map
@@ -308,12 +309,11 @@ namespace HistClass {
      * \param[in] valuey y-value that should be filled
      * \param[in] weight Weight of the event that should be filled
      */
-    static void Fill(Int_t n_histo, const char * name, double valuex, double valuey, double weight)
-    {
-        std::map<string, TH2D * >::iterator it =histo2.find(Form("h2_%d_%s", n_histo, name));
-        if(it!=histo2.end()){
-            it->second->Fill(valuex,valuey,weight);
-        }else{
+    static void Fill(Int_t n_histo, const char * name, double valuex, double valuey, double weight) {
+        std::map<std::string, TH2D * >::iterator it = histo2.find(Form("h2_%d_%s", n_histo, name));
+        if (it != histo2.end()) {
+            it->second->Fill(valuex, valuey, weight);
+        } else {
             std::cerr << "(Fill) No hist: " << Form("h2_%d_%s", n_histo, name) << " in map " << n_histo << std::endl;
         }
     }
@@ -328,19 +328,18 @@ namespace HistClass {
      * \param[in] ...
      * \todo complete the function
      */
-    SUPPRESS_NOT_USED_WARN static void FillSparse(const char * name, int n, ...)
-    {
-        std::map<string, THnSparseD * >::iterator it =histon.find(Form("hn_%s", name));
-        if(it!=histon.end()){
-            vector <double> v;
+    SUPPRESS_NOT_USED_WARN static void FillSparse(const char * name, int n, ...) {
+        std::map<std::string, THnSparseD * >::iterator it = histon.find(Form("hn_%s", name));
+        if (it != histon.end()) {
+            std::vector <double> v;
             va_list vl;
-            va_start(vl,n);
-            for (int i=0;i<n;i++){
-                v.push_back(va_arg(vl,double));
+            va_start(vl, n);
+            for (int i = 0; i < n; i++) {
+                v.push_back(va_arg(vl, double));
             }
             va_end(vl);
-            //it->second->Fill(&v[0]);
-        }else{
+            // it->second->Fill(&v[0]);
+        } else {
             std::cerr << "(Fill) No hist: " << name << " in map " << std::endl;
         }
     }
@@ -350,8 +349,7 @@ namespace HistClass {
      * \param[in] name Name of the NTupleD which should be filled
      * \param[in] values Array of values that should be filled
      */
-    SUPPRESS_NOT_USED_WARN static void FillTree(const char * name, double* values)
-    {
+    SUPPRESS_NOT_USED_WARN static void FillTree(const char * name, double* values) {
         std::string dummy = Form("tree_%s", name);
         ttupple[dummy]->Fill(values);
     }
@@ -360,9 +358,19 @@ namespace HistClass {
      *
      * \param[in] name Name of the TTree which should be filled
      */
-    SUPPRESS_NOT_USED_WARN static void FillTree( const char * name )
-    {
+    SUPPRESS_NOT_USED_WARN static void FillTree(const char * name) {
         trees[name]->Fill();
+    }
+
+    /*! \brief Function to fill an event in a efficiency container of the map
+     *
+     * \param[in] name Name of the histogram which should be filled
+     * \param[in] valuex x-value that should be filled
+     * \param[in] passed Boolean if the event passed or not
+     */
+    SUPPRESS_NOT_USED_WARN static void FillEff(const char * name, double valuex, bool passed) {
+        std::string dummy = Form("eff_%s", name);
+        effs[dummy]->Fill(passed, valuex);
     }
 
     /*! \brief Function to write one 1D histogram of the map
@@ -370,8 +378,7 @@ namespace HistClass {
      * \param[in] n_histo Number of the histogram that should be written
      * \param[in] name Name of the histogram that should be written
      */
-    SUPPRESS_NOT_USED_WARN static void Write(Int_t n_histo, const char * name)
-    {
+    SUPPRESS_NOT_USED_WARN static void Write(Int_t n_histo, const char * name) {
         std::string dummy = Form("h1_%d_%s", n_histo, name);
         histo[dummy]->Write();
     }
@@ -380,8 +387,7 @@ namespace HistClass {
      *
      * \param[in] name Name of the histogram that should be written
      */
-    SUPPRESS_NOT_USED_WARN static void Write(const char * name)
-    {
+    SUPPRESS_NOT_USED_WARN static void Write(const char * name) {
         std::string dummy = Form("h1_%s", name);
         histo[dummy]->Write();
     }
@@ -393,13 +399,12 @@ namespace HistClass {
      * contain the given string in there name.
      * \param[in] name Optional string that all histogram names that should be written contain (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void WriteAll(const char * name = "")
-    {
+    SUPPRESS_NOT_USED_WARN static void WriteAll(const char * name = "") {
         std::map<std::string, TH1D * >::iterator it;
-        for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
-            if(strcmp( name, "") != 0 && std::string::npos!=it->first.find(name)){
+        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+            if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
-            }else if(strcmp( name, "") == 0){
+            } else if (strcmp(name, "") == 0) {
                 it->second -> Write();
             }
         }
@@ -412,13 +417,12 @@ namespace HistClass {
      * contain the given string in there name.
      * \param[in] name Optional string that all histogram names that should be written contain (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name = "")
-    {
+    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name = "") {
         std::map<std::string, TH2D * >::iterator it;
-        for (std::map<std::string, TH2D * >::iterator it=histo2.begin(); it!=histo2.end(); ++it){
-            if(strcmp( name, "") != 0 && std::string::npos!=it->first.find(name)){
+        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+            if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
-            }else if(strcmp( name, "") == 0){
+            } else if (strcmp(name, "") == 0) {
                 it->second -> Write();
             }
         }
@@ -450,11 +454,11 @@ namespace HistClass {
      * \param[in] delim Delimiter where the string should be split
      * \param[in] &elems Vector in which the substrings should be pushed
     */
-    SUPPRESS_NOT_USED_WARN void split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    SUPPRESS_NOT_USED_WARN void split(const std::string &s, char delim, std::vector<std::string> *elems) {
         std::stringstream ss(s);
         std::string item;
         while (std::getline(ss, item, delim)) {
-            elems.push_back(item);
+            elems->push_back(item);
         }
     }
 
@@ -468,7 +472,7 @@ namespace HistClass {
     */
     SUPPRESS_NOT_USED_WARN std::vector<std::string> split(const std::string &s, char delim) {
         std::vector<std::string> elems;
-        split(s, delim, elems);
+        split(s, delim, &elems);
         return elems;
     }
 
@@ -481,18 +485,17 @@ namespace HistClass {
      * \param[in] name String that all histogram names that should be written contain
      * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
      */
-    SUPPRESS_NOT_USED_WARN static void WriteAll(const char * name, const char * contains_i)
-    {
+    SUPPRESS_NOT_USED_WARN static void WriteAll(const char * name, const char * contains_i) {
         const std::string contains(contains_i);
-        std::vector<std::string> i_cont = split(contains,':');
+        std::vector<std::string> i_cont = split(contains, ':');
         std::map<std::string, TH1D * >::iterator it;
-        for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
-            if(std::string::npos!=it->first.find(name)){
+        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+            if (std::string::npos != it->first.find(name)) {
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
-                    if (std::string::npos!=it->first.find(i_cont[i])){
+                    if (std::string::npos != it->first.find(i_cont[i])) {
                         do_write = true;
-                    }else{
+                    } else {
                         do_write = false;
                         break;
                     }
@@ -513,18 +516,17 @@ namespace HistClass {
      * \param[in] name String that all histogram names that should be written contain
      * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
      */
-    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name, const char * contains_i)
-    {
+    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name, const char * contains_i) {
         const std::string contains(contains_i);
-        std::vector<std::string> i_cont = split(contains,':');
+        std::vector<std::string> i_cont = split(contains, ':');
         std::map<std::string, TH2D * >::iterator it;
-        for (std::map<std::string, TH2D * >::iterator it=histo2.begin(); it!=histo2.end(); ++it){
-            if(std::string::npos!=it->first.find(name)){
+        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+            if (std::string::npos != it->first.find(name)) {
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
-                    if (std::string::npos!=it->first.find(i_cont[i])){
+                    if (std::string::npos != it->first.find(i_cont[i])) {
                         do_write = true;
-                    }else{
+                    } else {
                         do_write = false;
                         break;
                     }
@@ -547,26 +549,25 @@ namespace HistClass {
      * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
      * \param[in] vetos_i String that of names (seperated by ':') that the histogram name should not contain
      */
-    SUPPRESS_NOT_USED_WARN static void WriteAll(const char * name, const char * contains_i, const char * vetos_i)
-    {
+    SUPPRESS_NOT_USED_WARN static void WriteAll(const char * name, const char * contains_i, const char * vetos_i) {
         const std::string contains(contains_i);
         const std::string vetos(vetos_i);
-        std::vector<std::string> i_cont = split(contains,':');
-        std::vector<std::string> i_veto = split(vetos,':');
+        std::vector<std::string> i_cont = split(contains, ':');
+        std::vector<std::string> i_veto = split(vetos, ':');
         std::map<std::string, TH1D * >::iterator it;
-        for (std::map<std::string, TH1D * >::iterator it=histo.begin(); it!=histo.end(); ++it){
-            if(std::string::npos!=it->first.find(name)){
+        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+            if (std::string::npos != it->first.find(name)) {
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
-                    if (std::string::npos!=it->first.find(i_cont[i])){
+                    if (std::string::npos != it->first.find(i_cont[i])) {
                         do_write = true;
-                    }else{
+                    } else {
                         do_write = false;
                         break;
                     }
                 }
                 for (uint i = 0; i < i_veto.size(); i++) {
-                    if (std::string::npos!=it->first.find(i_veto[i])){
+                    if (std::string::npos != it->first.find(i_veto[i])) {
                         do_write = false;
                         break;
                     }
@@ -589,26 +590,25 @@ namespace HistClass {
      * \param[in] contains_i String that of names (seperated by ':') that the histogram name should contain
      * \param[in] vetos_i String that of names (seperated by ':') that the histogram name should not contain
      */
-    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name, const char * contains_i, const char * vetos_i)
-    {
+    SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name, const char * contains_i, const char * vetos_i) {
         const std::string contains(contains_i);
         const std::string vetos(vetos_i);
-        std::vector<std::string> i_cont = split(contains,':');
-        std::vector<std::string> i_veto = split(vetos,':');
+        std::vector<std::string> i_cont = split(contains, ':');
+        std::vector<std::string> i_veto = split(vetos, ':');
         std::map<std::string, TH2D * >::iterator it;
-        for (std::map<std::string, TH2D * >::iterator it=histo2.begin(); it!=histo2.end(); ++it){
-            if(std::string::npos!=it->first.find(name)){
+        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+            if (std::string::npos != it->first.find(name)) {
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
-                    if (std::string::npos!=it->first.find(i_cont[i])){
+                    if (std::string::npos != it->first.find(i_cont[i])) {
                         do_write = true;
-                    }else{
+                    } else {
                         do_write = false;
                         break;
                     }
                 }
                 for (uint i = 0; i < i_veto.size(); i++) {
-                    if (std::string::npos!=it->first.find(i_veto[i])){
+                    if (std::string::npos != it->first.find(i_veto[i])) {
                         do_write = false;
                         break;
                     }
@@ -627,19 +627,18 @@ namespace HistClass {
      * that contain the given string in there name.
      * \param[in] name Optional string that all TTrees or TNtupleDs names that should be written contain (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void WriteAllTrees(const char * name = "")
-    {
-        for (std::map<std::string, TNtupleD * >::iterator it=ttupple.begin(); it!=ttupple.end(); ++it){
-            if(strcmp( name, "") != 0 && std::string::npos!=it->first.find(name)){
+    SUPPRESS_NOT_USED_WARN static void WriteAllTrees(const char * name = "") {
+        for (std::map<std::string, TNtupleD * >::iterator it = ttupple.begin(); it != ttupple.end(); ++it) {
+            if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
-            }else if(strcmp( name, "") == 0){
+            } else if (strcmp(name, "") == 0) {
                 it->second -> Write();
             }
         }
-        for (std::map<std::string, TTree * >::iterator it=trees.begin(); it!=trees.end(); ++it){
-            if(strcmp( name, "") != 0 && std::string::npos!=it->first.find(name)){
+        for (std::map<std::string, TTree * >::iterator it = trees.begin(); it != trees.end(); ++it) {
+            if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
-            }else if(strcmp( name, "") == 0){
+            } else if (strcmp(name, "") == 0) {
                 it->second -> Write();
             }
         }
@@ -652,13 +651,12 @@ namespace HistClass {
      * contain the given string in there name.
      * \param[in] name Optional string that all nSparses names that should be written contain (DEFAULT = "")
      */
-    SUPPRESS_NOT_USED_WARN static void WriteN(const char * name = "")
-    {
+    SUPPRESS_NOT_USED_WARN static void WriteN(const char * name = "") {
         std::map<std::string, THnSparseD * >::iterator it;
-        for (std::map<std::string, THnSparseD * >::iterator it=histon.begin(); it!=histon.end(); ++it){
-            if(strcmp( name, "") != 0 && std::string::npos!=it->first.find(name)){
+        for (std::map<std::string, THnSparseD * >::iterator it = histon.begin(); it != histon.end(); ++it) {
+            if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
-            }else if(strcmp( name, "") == 0){
+            } else if (strcmp(name, "") == 0) {
                 it->second -> Write();
             }
         }
@@ -668,10 +666,27 @@ namespace HistClass {
      *
      * \param[in] name Name of the histogram that should be written
      */
-    SUPPRESS_NOT_USED_WARN static void Write2(const char * name)
-    {
+    SUPPRESS_NOT_USED_WARN static void Write2(const char * name) {
         std::string dummy = Form("h2_%s", name);
         histo2[dummy]->Write();
+    }
+
+    /*! \brief Function to write many efficiency containers of the map
+     *
+     * This function writes all efficiency containers of the map with the
+     * default options, otherwise it writes all efficiency containers that
+     * contain the given string in there name.
+     * \param[in] name Optional string that all efficiency containers names that should be written contain (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void WriteAllEff(const char * name = "") {
+        std::map<std::string, TEfficiency * >::iterator it;
+        for (std::map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
+            if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
+                it->second -> Write();
+            } else if (strcmp(name, "") == 0) {
+                it->second -> Write();
+            }
+        }
     }
 
     /*! \brief Function to set all negative bin contents to zero for a 1D histogram
@@ -679,14 +694,13 @@ namespace HistClass {
      * \param[in] n_histo Number of the histogram that should be modified
      * \param[in] name Name of the histogram that should be modified
      */
-    SUPPRESS_NOT_USED_WARN static void SetToZero(Int_t n_histo, const char * name)
-    {
+    SUPPRESS_NOT_USED_WARN static void SetToZero(Int_t n_histo, const char * name) {
         std::string dummy = Form("h1_%d_%s", n_histo, name);
         int Nbins2 = histo[dummy] -> GetNbinsX();
-        for ( int bb = 0; bb < Nbins2+1; bb++) {
+        for (int bb = 0; bb < Nbins2+1; bb++) {
             double binValue = histo[dummy] -> GetBinContent(bb);
             if (binValue < 0) {
-                 histo[dummy] -> SetBinContent(bb,0.);
+                 histo[dummy] -> SetBinContent(bb, 0.);
             }
         }
     }
@@ -696,10 +710,9 @@ namespace HistClass {
      * \param[in] name Name of the histogram that should be returned
      * \param[out] histo Returned histogram
      */
-    SUPPRESS_NOT_USED_WARN static TH1D* ReturnHist(const char * name)
-    {
-        std::string dummy="";
-        if (strcmp( name, "h_counters")==0) {
+    SUPPRESS_NOT_USED_WARN static TH1D* ReturnHist(const char * name) {
+        std::string dummy = "";
+        if (strcmp(name, "h_counters") == 0) {
             dummy = Form("%s", name);
         } else {
             dummy = Form("h1_%s", name);
@@ -713,13 +726,10 @@ namespace HistClass {
      * \param[in] n_bins of bins that should be renamed
      * \param[in] d_mydisc Array with the names that th bins should get
      */
-    SUPPRESS_NOT_USED_WARN static void NameBins(const char * name, const uint n_bins, TString* d_mydisc)
-    {
+    SUPPRESS_NOT_USED_WARN static void NameBins(const char * name, const uint n_bins, TString* d_mydisc) {
         std::string dummy = Form("h1_%s", name);
-        TString mydisc[n_bins];
-        for(uint i = 0; i < n_bins; i++) mydisc[i] = d_mydisc[i];
-        for(uint i = 0; i < n_bins; i++) {
-            histo[dummy]->GetXaxis()->SetBinLabel(i+1,mydisc[i]);
+        for (uint i = 0; i < n_bins; i++) {
+            histo[dummy]->GetXaxis()->SetBinLabel(i+1, d_mydisc[i]);
         }
     }
 
@@ -730,17 +740,13 @@ namespace HistClass {
      * \param[in] n_bins of bins that should be renamed
      * \param[in] d_mydisc Array with the names that th bins should get
      */
-    SUPPRESS_NOT_USED_WARN static void NameBins(Int_t n_histo, const char * name, const uint n_bins, TString* d_mydisc)
-    {
-        for(int i = 0; i < n_histo; i++){
+    SUPPRESS_NOT_USED_WARN static void NameBins(Int_t n_histo, const char * name, const uint n_bins, TString* d_mydisc) {
+        for (int i = 0; i < n_histo; i++) {
             std::string dummy = Form("h1_%d_%s", i, name);
-            TString mydisc[n_bins];
-            for(uint i = 0; i < n_bins; i++) mydisc[i] = d_mydisc[i];
-            for(uint i = 0; i < n_bins; i++) {
-                histo[dummy]->GetXaxis()->SetBinLabel(i+1,mydisc[i]);
+            for (uint i = 0; i < n_bins; i++) {
+                histo[dummy]->GetXaxis()->SetBinLabel(i+1, d_mydisc[i]);
             }
         }
     }
-
-}
+}  // namespace HistClass
 #endif

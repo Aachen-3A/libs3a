@@ -105,8 +105,7 @@ class CrabController():
             p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
             (stringlist,string_err) = p.communicate()
             self.logger.info("crab sumbit called for task %s"%name)
-            #~ self.logger.error( stringlist )
-            #~ self.logger.error( string_err )
+
 
     ## Resubmit all failed tasks in job or specified list of jobs in task
     #
