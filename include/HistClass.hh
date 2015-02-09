@@ -232,6 +232,23 @@ namespace HistClass {
         effs[Form("eff_%s", name)] = tmpeff;
     }
 
+    /*! \brief Function to create one 2D Efficiency container in the eff map
+     *
+     * \param[in] name Name of the Efficiency container that should be created
+     * \param[in] nbinsx Number of bins on the x-axis
+     * \param[in] xlow Lower edge of the x-axis
+     * \param[in] xup Upper edge of the x-axis
+     * \param[in] nbinsy Number of bins on the y-axis
+     * \param[in] ylow Lower edge of the y-axis
+     * \param[in] yup Upper edge of the y-axis
+     * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
+     * \param[in] ytitle Optinal title of the y-axis (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void CreateEff(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, const char* xtitle = "", const char* ytitle = "") {
+        TEfficiency * tmpeff = new TEfficiency(Form("eff_%s", name), Form("%s;%s;%s;%s", name, xtitle, ytitle, "#epsilon"), nbinsx, xlow, xup, nbinsy, ylow, yup);
+        effs[Form("eff_%s", name)] = tmpeff;
+    }
+
     /*! \brief Function to fill an event in a 1D histogram of the map
      *
      * This function fills one value with one weight for one event in one
@@ -371,6 +388,18 @@ namespace HistClass {
     SUPPRESS_NOT_USED_WARN static void FillEff(const char * name, double valuex, bool passed) {
         std::string dummy = Form("eff_%s", name);
         effs[dummy]->Fill(passed, valuex);
+    }
+
+    /*! \brief Function to fill an event in a 2D efficiency container of the map
+     *
+     * \param[in] name Name of the histogram which should be filled
+     * \param[in] valuex x-value that should be filled
+     * \param[in] valuey y-value that should be filled
+     * \param[in] passed Boolean if the event passed or not
+     */
+    SUPPRESS_NOT_USED_WARN static void FillEff(const char * name, double valuex, double valuey, bool passed) {
+        std::string dummy = Form("eff_%s", name);
+        effs[dummy]->Fill(passed, valuex, valuey);
     }
 
     /*! \brief Function to write one 1D histogram of the map
