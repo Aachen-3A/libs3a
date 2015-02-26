@@ -185,6 +185,14 @@ class CrabController():
             try:
                 # split output in lines and rverse order
                 stdout = stdout.splitlines()
+                
+                if 'Try to do "rm -rf ~/.crab3"' in '\n'.join(stdout):
+                    self.logger.error("~/.crab3 malformed. Forg tries to fix it")
+                    cmd = ["rm -rf ~/.crab3"]
+                    p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
+                    (stdout_mal,stderr_mal) = p.communicate()
+                    return self.status(name)
+                    
                 for line in stdout:
                     if line.strip().startswith("Task status:"):
                         state = line.split(":")[1].strip() 
