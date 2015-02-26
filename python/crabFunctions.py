@@ -208,11 +208,17 @@ class CrabController():
                 import ast
                 try:
                     statusDict = ast.literal_eval(statusJSON)
+                    self.logger.info("Finished status state %s for %s " % (state, name))
                     return state,statusDict
                 except:
                     self.logger.error("Can not parse Crab request JSON output")
                     return "NOSTATE",{}
             except:
+                if 'Cannot find .requestcache file' in stdout[0]:
+                    self.logger.error("No requestcache, Task not submitted ?")
+                    return "REQUESTCACHE",{}
+
+                
                 self.logger.error( "Error: current working directory %s"%self.workingArea)
                 self.logger.error('Error parsing crab status json output, please check cout below ')
                 self.logger.error(stdout)
