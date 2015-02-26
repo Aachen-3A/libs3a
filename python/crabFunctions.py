@@ -41,6 +41,15 @@ class CrabController():
             
         if logger is not None:
             self.logger = logger.getChild("CrabController")
+            #~ ch = logging.FileHandler('frog.log', mode='a', encoding=None, delay=False)
+            #~ ch.setLevel(logging.DEBUG)
+            # create formatter
+            #~ formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
+            
+            # add formatter to ch
+            #~ ch.setFormatter(formatter)
+            #~ self.logger.addHandler(ch)
+                
         else:
             #~ raise(Exception)
             # add instance logger as logger to root
@@ -49,19 +58,21 @@ class CrabController():
             # we assume that the default logging is not configured
             # if handler is present
             if len(logging.getLogger().handlers) < 1 :
-                logging.basicConfig( level=logging._levelNames[ 'DEBUG' ])
-                
-                # create console handler and set level to debug
-                ch = logging.StreamHandler()
+                #~ logging.basicConfig( level=logging._levelNames[ 'DEBUG' ])
+                #~ 
+                #~ # create console handler and set level to debug
+                #~ ch = logging.StreamHandler()
+                ch = logging.FileHandler('crabController.log', mode='a', encoding=None, delay=False)
                 ch.setLevel(logging.DEBUG)
-                # create formatter
+                #~ # create formatter
                 formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
-                
-                # add formatter to ch
+                #~ 
+                #~ # add formatter to ch
                 ch.setFormatter(formatter)
-                
-                # add ch to logger
-                logging.getLogger().addHandler(ch)
+                #~ 
+                #~ # add ch to logger
+                #~ self.logging = logging.getLogger()
+                self.logger.addHandler(ch)
                 
     ## Check if crab can write to specified site
     #
