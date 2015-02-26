@@ -289,15 +289,12 @@ class CrabTask:
         self.name = taskname
         self.uuid = uuid.uuid4()
         #~ self.lock = multiprocessing.Lock()       
-        if crabController is None:
-            self.controller =  CrabController()
-        else:
-            self.controller =  crabController
         self.jobs = {}
         self.localDir = localDir
         self.outlfn = outlfn
         self.StorageFileList = StorageFileList
         self.isUpdating = False
+        self.taskId = -1
         #variables for statistics
         self.nJobs = 0
         self.state = "NOSTATE"
@@ -310,31 +307,49 @@ class CrabTask:
         self.nFailed    = 0
         self.nFinished    = 0
         self.nComplete    = 0
-        
+        self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
         #start with first updates
         if initUpdate:
             self.update()
             self.updateJobStats()
-            
+    
+    ## Function to resubmit failed jobs in tasks
+    #
+    # @param self: CrabTask The object pointer.
+    def resubmit_failed( self ):
+        failedJobIds = []
+        controller =  CrabController()
+        for jobkey in crabTask.jobs.keys():
+            job = task.jobs[jobkey]
+            if job['State'] == 'failed':
+                failedJobIds.append( job['JobIds'][-1] )
+        controller.resubmit( self.name, joblist = failedJobIds )
+        self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
+
     ## Function to update Task in associated Jobs
     #
-    # @type self: CrabTask
-    # @param self: The object pointer.        
+    # @param self: CrabTask The object pointer.        
     def update(self):
         #~ self.lock.acquire()
         self.isUpdating = True
-        self.state = "UPDATING"
-        self.state , self.jobs = self.controller.status(self.name) 
+        controller =  CrabController()
+        #~ self.controller.logger.info('starting update')
+        #~ self.state = "UPDATING"
+        #~ self.state , self.jobs = self.controller.status(self.name) 
+        self.state , self.jobs = controller.status(self.name) 
         self.nJobs = len(self.jobs.keys())
         self.updateJobStats()
         self.isUpdating = False
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
-        #~ if "COMPLETE" in self.state:
-            #~ if nComplete == nJobs:
-                #~ self.state = "DONE"
-            #~ else:
-                #~ self.state = "COMPLETE"
+        if "COMPLETE" in self.state:
+            if self.nComplete == self.nJobs:
+                self.state = "DONE"
+            else:
+                self.state = "COMPLETE"
         #~ self.lock.release()
+        
+    def test_print(self):
+        return self.uuid
     ## Function to update JobStatistics
     #
     # @type self: CrabTask
