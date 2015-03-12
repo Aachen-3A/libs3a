@@ -132,7 +132,7 @@ class DBConfigManager:
     def compare_sample(self, sample):
         try:
             skimid = self.config.getint(sample, "id") if self.config.has_option(sample, "id") else None
-            db_skim, db_sample = self.aix3adb.getMCSkimAndSample(sample, skimid)
+            db_skim, db_sample = self.aix3adb.getMCSkimAndSample(skimid, sample)
         except aix3adb.Aix3adbException:
             log.error("Sample '" + sample + "' could not be found in the database. It has been removed from the config.")
             # if sample is not in the database and not in the config,

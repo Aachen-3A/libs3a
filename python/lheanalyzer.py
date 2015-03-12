@@ -107,6 +107,8 @@ class LHEAnalysis:
         for line in self.lhefile:
             if line.strip()=="</event>":
                 break
+            if 'wgt' in line:
+                continue
             try:
                 particle=Particle(line)
             except (ValueError, IndexError):
