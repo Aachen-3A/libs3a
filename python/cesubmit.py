@@ -303,27 +303,31 @@ class Task:
             shutil.rmtree(self.directory)
         os.makedirs(self.directory)
     def _getStatusMultiple(self):
-        jobs = [job for job in self.jobs if job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        jobids = [job.jobid for job in jobs if job.jobid is not None]
-        if not jobids: return 0
-        command = ["glite-ce-job-status", "-L1"] + jobids
-        process = subprocess.Popen(command, stdout=subprocess.PIPE)
-        stdout, stderr = process.communicate()
-        if process.returncode!=0:
-            log.warning('Status retrieval failed for task '+self.name)
-            log.info(stdout)
-            log.info(stderr)
-        result = parseStatusMultipleL1(stdout)
-        for job in jobs:
-            try:
-                infos = result[job.jobid]
-                if len(infos)>0:
-                    job.infos = infos
-                else:
+        totaljobs = [job for job in self.jobs if job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
+        jobpackages = list(chunks(totaljobs, 100))
+        njobs = 0
+        for jobs in jobpackages:
+            jobids = [job.jobid for job in jobs if job.jobid is not None]
+            if not jobids: return 0
+            command = ["glite-ce-job-status", "-L1"] + jobids
+            process = subprocess.Popen(command, stdout=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            if process.returncode!=0:
+                log.warning('Status retrieval failed for task '+self.name)
+                log.info(stdout)
+                log.info(stderr)
+            result = parseStatusMultipleL1(stdout)
+            for job in jobs:
+                try:
+                    infos = result[job.jobid]
+                    if len(infos)>0:
+                        job.infos = infos
+                    else:
+                        log.warning('Failed to get status of job %s of task %s',job.jobid, self.name)
+                except KeyError:
                     log.warning('Failed to get status of job %s of task %s',job.jobid, self.name)
-            except KeyError:
-                log.warning('Failed to get status of job %s of task %s',job.jobid, self.name)
-        return len(jobids)
+            njobs+=len(jobids)
+        return njobs
     def getStatus(self):
         log.debug('Get status of task %s',self.name)
         numberOfJobs = self._getStatusMultiple()
