@@ -10,6 +10,7 @@ import multiprocessing
 import logging
 import glob
 import re
+import datetime
 #logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 #log = multiprocessing.get_logger()
@@ -25,6 +26,36 @@ def resubmitWorker(job):
 def killWorker(job):
     job.kill()
     return job
+def getCernUserName():
+    try:
+        username = os.environ["CERNUSERNAME"]
+        return username
+    except:
+        raise Exception("CERN user name could not be obtained. Please specify your CERN user name using the environment variable $CERNUSERNAME.")
+
+def createAndUploadGridPack(localfiles, uploadurl, tarfile="gridpacktemp.tar.gz", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
+    # create pack file
+    command = ['tar', "zcvf", tarfile, localfiles]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    if process.returncode!=0:
+        raise Exception ("Could not create tar file for grid pack: "+stdout+"\n"+stderr)
+    return uploadGridPack(tarfile, uploadurl, uploadsite)
+
+def uploadGridPack(tarfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
+    replacedict=dict()
+    replacedict["createdate"]=datetime.datetime.now().strftime('%Y-%m-%d')
+    replacedict["createdatetime"]=datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    replacedict['username']=getCernUserName()
+    # upload pack file
+    resultuploadurl=uploadurl.format(**replacedict)
+    command = ["srmcp", "file:///"+tarfile, (uploadsite).format(**replacedict)+resultuploadurl ]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    if process.returncode!=0:
+        raise Exception ("Could not upload grid pack: "+stdout+"\n"+stderr)
+    return resultuploadurl
+
 
 class Job:
     def __init__(self):
@@ -53,11 +84,13 @@ class Job:
             'StdError  = "err.txt";\n'
             'outputsandboxbasedesturi="gsiftp://localhost";\n'
             )
-
-        jdl += 'InputSandbox = { "' + ('", "'.join(["./prologue.sh", self.executable]+self.inputfiles+self.task.inputfiles)) + '"};\n'
+        standardinput = ["./prologue.sh"]
+        if self.task.uploadexecutable: 
+            standardinput.append(self.executable)
+        jdl += 'InputSandbox = { "' + ('", "'.join(standardinput+self.inputfiles+self.task.inputfiles)) + '"};\n'
         stds=["out.txt", "err.txt"]
         jdl += 'OutputSandbox = { "' + ('", "'.join(stds+self.outputfiles+self.task.outputfiles)) + '"};\n'
-        jdl += 'Arguments = "' + (' '.join(["./"+os.path.basename(self.executable)] + self.arguments)) + '";\n'
+        jdl += 'Arguments = "' + (' '.join([str(self.nodeid), "./"+os.path.basename(self.executable)] + self.arguments)) + '";\n'
         jdl += "]"
         self.jdlfilename = "job"+str(self.nodeid)+".jdl"
         jdl_file = open(self.jdlfilename, 'w')
@@ -194,6 +227,9 @@ class Task:
         self.ceId = ceId
         self.jobs = []
         self.frontEndStatus=""
+        self.stageOutDCache, self.gridPacks = [], []
+        self.uploadexecutable = True
+        self.replacedict = {'username': '${CESUBMITUSERNAME}', 'nodeid': '${CESUBMITNODEID}', 'createdate': '${CESUBMITCREATEDATE}', 'createdatetime': '${CESUBMITCREATEDATETIME}', 'taskname': "${CESUBMITTASKNAME}", 'runid': "${CESUBMITRUNID}"}
     def save(self):
         log.debug('Save task %s',self.name)
         f = open(os.path.join(self.directory, "task.pkl"), 'wb')
@@ -261,12 +297,21 @@ class Task:
         self._dosubmit(nodeids, processes, killWorker)
         self.save()
         self.cleanUp()
-            
+    def copyResultsToDCache(self, resultfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
+        self.stageOutDCache.append((resultfile, uploadsite+uploadurl))
+    def addGridPack(self, uploadurl, extractdir="$CMSSW_BASE", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
+        self.gridPacks.append((uploadsite+uploadurl, extractdir))
     def makePrologue(self):
         executable = (
         '#!/bin/sh -e\n'
         +'echo Job started: $(date)\n'
-        +'chmod u+x $1\n'
+        +'CESUBMITTASKNAME='+self.name+'\n'
+        +'CESUBMITCREATEDATE='+datetime.datetime.now().strftime('%Y-%m-%d')+'\n'
+        +'CESUBMITCREATEDATETIME='+datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')+'\n'
+        +'CESUBMITUSERNAME='+getCernUserName()+'\n'
+        +'CESUBMITNODEID=$1\n'
+        +'rchars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789; CESUBMITRUNID=; for i in {1..40}; do CESUBMITRUNID=$CESUBMITRUNID${rchars:$(($RANDOM % 4)):1}; done\n'
+        +'shift\n'
         +'RUNAREA=$(pwd)\n'
         +'echo Running in: $RUNAREA\n'
         +'echo Running on: $HOSTNAME\n'
@@ -282,16 +327,49 @@ class Task:
             +'eval $(scramv1 ru -sh)\n'
             +'cd $RUNAREA\n'
             )
+        buildcmssw=False
+        if self.gridPacks:
+            executable += 'echo Retrieving grid packs\n'
+            for inurl, outpath in self.gridPacks:
+                if "$CMSSW_BASE" in outpath:
+                    buildcmssw=True
+                command = "srmcp {inurl} file:///gridpacktemp.tar.gz".format(inurl=inurl)
+                command = command.format(**self.replacedict)
+                executable+= (
+                command+"\n"
+                +'mkdir -p '+outpath+"\n"
+                +'tar xfz gridpacktemp.tar.gz -C '+outpath+'\n'
+                +'rm gridpacktemp.tar.gz\n'
+                )
+        if buildcmssw:
+            executable+=(
+            'cd $CMSSW_BASE\n'
+            +'scram b\n'
+            +'cd $RUNAREA\n'
+            )
         executable += (
         'env\n'
         +'echo Current directory $PWD\n'
         +'echo Directory content:\n'
         +'ls\n'
+        +'chmod u+x $1\n'
+        +'echo Executing $@\n'
+        +'echo ================= Start output =================\n'
         +'$@\n'
+        +'echo ================== End output ==================\n'
         +'echo Current directory $PWD\n'
         +'echo Directory content:\n'
         +'ls\n'
-        +'echo Job ended: $(date)\n'
+        )
+        if self.stageOutDCache:
+            executable += 'echo Copying files to dcache\n'
+            for infile, outurl in self.stageOutDCache:
+                command = "srmcp file:///{infile} {outurl}".format(infile=infile, outurl=outurl)
+                command = command.format(**self.replacedict)
+                executable+=command+"\n"
+
+        executable += (
+        'echo Job ended: $(date)\n'
         )
         f = open("prologue.sh","w")
         f.write(executable)
