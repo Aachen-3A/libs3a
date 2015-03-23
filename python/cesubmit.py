@@ -297,7 +297,7 @@ class Task:
         self._dosubmit(nodeids, processes, killWorker)
         self.save()
         self.cleanUp()
-    def copyResultsToDCache(self, resultfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
+    def copyResultsToDCache(self, resultfile, uploadurl="{createdate}/{taskname}/{resultfileprefix}-{nodeid}_{runid}.{resultfilesuffix}", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
         self.stageOutDCache.append((resultfile, uploadsite+uploadurl))
     def addGridPack(self, uploadurl, extractdir="$CMSSW_BASE", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
         self.gridPacks.append((uploadsite+uploadurl, extractdir))
@@ -310,7 +310,7 @@ class Task:
         +'CESUBMITCREATEDATETIME='+datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')+'\n'
         +'CESUBMITUSERNAME='+getCernUserName()+'\n'
         +'CESUBMITNODEID=$1\n'
-        +'rchars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789; CESUBMITRUNID=; for i in {1..40}; do CESUBMITRUNID=$CESUBMITRUNID${rchars:$(($RANDOM % 4)):1}; done\n'
+        +'rchars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789; CESUBMITRUNID=; for i in {1..4}; do CESUBMITRUNID=$CESUBMITRUNID${rchars:$(($RANDOM % 62)):1}; done\n'
         +'shift\n'
         +'RUNAREA=$(pwd)\n'
         +'echo Running in: $RUNAREA\n'
@@ -365,7 +365,8 @@ class Task:
             executable += 'echo Copying files to dcache\n'
             for infile, outurl in self.stageOutDCache:
                 command = "srmcp file:///{infile} {outurl}".format(infile=infile, outurl=outurl)
-                command = command.format(**self.replacedict)
+                infileparts=os.path.basename(infile).rsplit(".", 1)
+                command = command.format(resultfileprefix=infileparts[0], resultfilesuffix=infileparts[-1], **self.replacedict)
                 executable+=command+"\n"
 
         executable += (
