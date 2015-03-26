@@ -119,7 +119,10 @@ class dasClientHelper():
     def __init__(self):
         # get all default options for queries
         init_parser = das_client.DASOptionParser()
-        self.opts , _= init_parser.get_opt()
+        # we can not use the class memebr function
+        # get_opt because it may lead to conflicts with other
+        # parsers
+        self.opts , _= init_parser.parser.parse_args([' '])
         # we get all as default
         self.opts.limit = 0
         self.datasetJSON = None
@@ -153,7 +156,7 @@ class dasClientHelper():
     #
     # @param dataset: String containing the dataset name
     # @return A dictionary containing the infos: name, nevents, nfiles, nlumis, nblocks, size (byte)
-    def get_datasetSummary( self, dataset):
+    def getDatasetSummary( self, dataset):
         if self.datasetJSON is None:
             jsondict = self.get_data( dataset )
             self.datasetJSON = jsondict
