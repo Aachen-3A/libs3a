@@ -9,8 +9,6 @@
 import urllib2
 import json
 import logging
-# dbs imports
-from dbs.apis.dbsClient import DbsApi
 
 log = logging.getLogger( 'dbutilscms' )
 
@@ -109,42 +107,6 @@ class McMUtilities():
 
     def getWorkingGroup(self):
         return self.getInfo("pwg")
-
-## The DBSUtilities Class
-#
-# This is a helper class for the dbs database
-# This implementation is obsolete and works only
-# with the DBSApi implementation in crab3.
-# You should use dasClientHelper now
-
-class DBSUtilities():
-
-    ## The constructor.
-    # @param self The object pointer.
-    def __init__(self):
-        self.dbsUrl = 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader'
-        self.dbsApi = DbsApi( url = self.dbsUrl )
-        self.numEvents = 0
-        self.numFiles = 0
-        self.totalFileSize = 0
-
-    ## Function to get all detail blocks for a dataset
-    # @param self DBSUtilities The object pointer.
-    # @param dataset String containing the dataset name
-    def getDatasetBlocks(self, dataset):
-        return  self.dbsApi.listBlockSummaries( dataset = dataset )
-
-    ## Function to get a summary for a dataset
-    # @param self DBSUtilities The object pointer.
-    # @param dataset String containing the dataset name
-    def getDatasetSummary(self, dataset):
-        datasetBlocks = self.getDatasetBlocks(dataset)
-        datasetSummary = {}
-
-        datasetSummary.update({"numEvents":sum( [ block['num_event'] for block in datasetBlocks ] )} )
-        datasetSummary.update({"numFiles":sum( [ block['num_file'] for block in datasetBlocks ] )} )
-        datasetSummary.update({"totalFileSize":sum( [ block['file_size'] for block in datasetBlocks ] ) })
-        return datasetSummary
 
 import das_client
 ## The dasClientHelper Class
