@@ -3,7 +3,7 @@
 # This module provides classes to work with various cms databases
 #
 # This module provides classes to work with various cms databases
-# Currently supported databases: McM, DBS 
+# Currently supported databases: McM, DBS
 
 # mcm utilities imports
 import urllib2
@@ -49,7 +49,7 @@ class McMUtilities():
         if len(tmp_json["results"]) is 0:
             log.error("JSON file is empty. Wrong URL?")
             return None
-        
+
         # check if sample has generator parameters entry
         while len(tmp_json["results"]["generator_parameters"]) is 0:
             # if not, find parent dataset
@@ -62,7 +62,7 @@ class McMUtilities():
 
         # store gen json for quicker access upon next call
         self.gen_json = tmp_json
-        
+
         # return value
         # find position of dict in list
         for dictcand in tmp_json["results"]["generator_parameters"]:
@@ -113,36 +113,34 @@ class McMUtilities():
 ## The DBSUtilities Class
 #
 # This is a helper class for the dbs database
+# This implementation is obsolete and works only
+# with the DBSApi implementation in crab3.
+# You should use dasClientHelper now
 
 class DBSUtilities():
-    
+
     ## The constructor.
-    # @type self: DBSUtilities
-    # @param self: The object pointer.
+    # @param self The object pointer.
     def __init__(self):
         self.dbsUrl = 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader'
         self.dbsApi = DbsApi( url = self.dbsUrl )
         self.numEvents = 0
         self.numFiles = 0
         self.totalFileSize = 0
-    
+
     ## Function to get all detail blocks for a dataset
-    # @type self: DBSUtilities
-    # @param self: The object pointer.        
-    # @type dataset: string
-    # @param dataset: the dataset name    
+    # @param self DBSUtilities The object pointer.
+    # @param dataset String containing the dataset name
     def getDatasetBlocks(self, dataset):
         return  self.dbsApi.listBlockSummaries( dataset = dataset )
 
     ## Function to get a summary for a dataset
-    # @type self: DBSUtilities
-    # @param self: The object pointer.        
-    # @type dataset: string
-    # @param dataset: the dataset name        
+    # @param self DBSUtilities The object pointer.
+    # @param dataset String containing the dataset name
     def getDatasetSummary(self, dataset):
         datasetBlocks = self.getDatasetBlocks(dataset)
         datasetSummary = {}
-        
+
         datasetSummary.update({"numEvents":sum( [ block['num_event'] for block in datasetBlocks ] )} )
         datasetSummary.update({"numFiles":sum( [ block['num_file'] for block in datasetBlocks ] )} )
         datasetSummary.update({"totalFileSize":sum( [ block['file_size'] for block in datasetBlocks ] ) })
