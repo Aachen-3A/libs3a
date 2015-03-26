@@ -145,4 +145,62 @@ class DBSUtilities():
         datasetSummary.update({"numFiles":sum( [ block['num_file'] for block in datasetBlocks ] )} )
         datasetSummary.update({"totalFileSize":sum( [ block['file_size'] for block in datasetBlocks ] ) })
         return datasetSummary
-        
+
+import das_client
+## The dasClientHelper Class
+#
+# This is a helper class for the das_client cli
+#
+class dasClientHelper():
+    ## The constructor.
+    # @param self: The object pointer.
+    def __init__(self):
+        # get all default options for queries
+        init_parser = das_client.DASOptionParser()
+        self.opts , _= init_parser.get_opt()
+        # we get all as default
+        self.opts.limit = 0
+        self.datasetJSON = None
+
+    ## Reimplementation of get_data from das_client
+    #
+    # This function is used to send a general query to das
+    # The query is seperated i 3 parts (see arguments)
+    # @param self: The object pointer.
+    # @param dataset: String containing the dataset name
+    # @param queryobject: String which specifies the object you want to query (file, block etc.)
+    # @param query_aggregation: additional aggregation query parts at the end.
+    # @return json dictionary containing the das query response
+    def get_data(self, dataset, queryobject = None, query_aggregation=None):
+        if queryobject is not None:
+            query = queryobject + " "
+        else: query = ''
+        query += "dataset=%s " % dataset
+        if query_aggregation is not None:
+            query += " | %s" % query_aggregation
+        jsondict = das_client.get_data( self.opts.host,
+                                        query,
+                                        self.opts.idx,
+                                        self.opts.limit,
+                                        self.opts.verbose,
+                                        self.opts.threshold,
+                                        self.opts.ckey,
+                                        self.opts.cert)
+        return jsondict
+    ## Get a dict containing most common dataset infos
+    #
+    # @param dataset: String containing the dataset name
+    # @return A dictionary containing the infos: name, nevents, nfiles, nlumis, nblocks, size (byte)
+    def get_datasetSummary( self, dataset):
+        if self.datasetJSON is None:
+            jsondict = self.get_data( dataset )
+            self.datasetJSON = jsondict
+        summary = self.datasetJSON['data'][0]['dataset'][1]
+        for infodict in self.datasetJSON['data'][0]['dataset']:
+            if 'nlumis' in infodict.keys():
+                summary = infodict
+            if 'acquisition_era_name' in infodict.keys():
+                extrainfos = infodict
+        summary['acquisition_era_name'] = extrainfos['acquisition_era_name']
+        summary['datatype'] = extrainfos['datatype']
+        return summary
