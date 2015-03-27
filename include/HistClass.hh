@@ -762,6 +762,24 @@ namespace HistClass {
         }
     }
 
+    /*! \brief Function to give one 2D histogram from the map alphanumeric bin labels without number
+     *
+     * \param[in] name Name of the histogram that should get bin names
+     * \param[in] n_bins_x Number of x-bins that should be renamed
+     * \param[in] x_bin_names Array with the names that the x-bins should get
+     * \param[in] n_bins_y Number of y-bins that should be renamed
+     * \param[in] y_bin_names Array with the names that the y-bins should get
+     */
+    SUPPRESS_NOT_USED_WARN static void NameBins(const char * name, const uint n_bins_x, TString* x_bin_names, const uint n_bins_y, TString* y_bin_names) {
+        std::string dummy = Form("h2_%s", name);
+        for (uint i = 0; i < n_bins_x; i++) {
+            histo2[dummy]->GetXaxis()->SetBinLabel(i+1, x_bin_names[i]);
+        }
+        for (uint i = 0; i < n_bins_y; i++) {
+            histo2[dummy]->GetYaxis()->SetBinLabel(i+1, y_bin_names[i]);
+        }
+    }
+
     /*! \brief Function to give one 1D histogram from the map alphanumeric bin labels
      *
      * \param[in] n_histo Number of the histogram that should get bin names
@@ -775,6 +793,30 @@ namespace HistClass {
             for (uint i = 0; i < n_bins; i++) {
                 histo[dummy]->GetXaxis()->SetBinLabel(i+1, d_mydisc[i]);
             }
+        }
+    }
+
+    /*! \brief Function to clean up the memory usage of the HistClass
+     *
+     */
+    SUPPRESS_NOT_USED_WARN static void CleanUp() {
+        for (std::map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, THnSparseD * >::iterator it = histon.begin(); it != histon.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, TNtupleD * >::iterator it = ttupple.begin(); it != ttupple.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, TTree * >::iterator it = trees.begin(); it != trees.end(); ++it) {
+            delete it->second;
         }
     }
 }  // namespace HistClass
