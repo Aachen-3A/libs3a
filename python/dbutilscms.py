@@ -3,14 +3,12 @@
 # This module provides classes to work with various cms databases
 #
 # This module provides classes to work with various cms databases
-# Currently supported databases: McM, DBS 
+# Currently supported databases: McM, DBS
 
 # mcm utilities imports
 import urllib2
 import json
 import logging
-# dbs imports
-from dbs.apis.dbsClient import DbsApi
 
 log = logging.getLogger( 'dbutilscms' )
 
@@ -49,7 +47,7 @@ class McMUtilities():
         if len(tmp_json["results"]) is 0:
             log.error("JSON file is empty. Wrong URL?")
             return None
-        
+
         # check if sample has generator parameters entry
         while len(tmp_json["results"]["generator_parameters"]) is 0:
             # if not, find parent dataset
@@ -62,7 +60,7 @@ class McMUtilities():
 
         # store gen json for quicker access upon next call
         self.gen_json = tmp_json
-        
+
         # return value
         # find position of dict in list
         for dictcand in tmp_json["results"]["generator_parameters"]:
@@ -110,41 +108,64 @@ class McMUtilities():
     def getWorkingGroup(self):
         return self.getInfo("pwg")
 
-## The DBSUtilities Class
+import das_client
+## The dasClientHelper Class
 #
-# This is a helper class for the dbs database
-
-class DBSUtilities():
-    
+# This is a helper class for the das_client cli
+#
+class dasClientHelper():
     ## The constructor.
-    # @type self: DBSUtilities
     # @param self: The object pointer.
     def __init__(self):
-        self.dbsUrl = 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader'
-        self.dbsApi = DbsApi( url = self.dbsUrl )
-        self.numEvents = 0
-        self.numFiles = 0
-        self.totalFileSize = 0
-    
-    ## Function to get all detail blocks for a dataset
-    # @type self: DBSUtilities
-    # @param self: The object pointer.        
-    # @type dataset: string
-    # @param dataset: the dataset name    
-    def getDatasetBlocks(self, dataset):
-        return  self.dbsApi.listBlockSummaries( dataset = dataset )
+        # get all default options for queries
+        init_parser = das_client.DASOptionParser()
+        # we can not use the class memebr function
+        # get_opt because it may lead to conflicts with other
+        # parsers
+        self.opts , _= init_parser.parser.parse_args([' '])
+        # we get all as default
+        self.opts.limit = 0
+        self.datasetJSON = None
 
-    ## Function to get a summary for a dataset
-    # @type self: DBSUtilities
-    # @param self: The object pointer.        
-    # @type dataset: string
-    # @param dataset: the dataset name        
-    def getDatasetSummary(self, dataset):
-        datasetBlocks = self.getDatasetBlocks(dataset)
-        datasetSummary = {}
-        
-        datasetSummary.update({"numEvents":sum( [ block['num_event'] for block in datasetBlocks ] )} )
-        datasetSummary.update({"numFiles":sum( [ block['num_file'] for block in datasetBlocks ] )} )
-        datasetSummary.update({"totalFileSize":sum( [ block['file_size'] for block in datasetBlocks ] ) })
-        return datasetSummary
-        
+    ## Reimplementation of get_data from das_client
+    #
+    # This function is used to send a general query to das
+    # The query is seperated i 3 parts (see arguments)
+    # @param self: The object pointer.
+    # @param dataset: String containing the dataset name
+    # @param queryobject: String which specifies the object you want to query (file, block etc.)
+    # @param query_aggregation: additional aggregation query parts at the end.
+    # @return json dictionary containing the das query response
+    def get_data(self, dataset, queryobject = None, query_aggregation=None):
+        if queryobject is not None:
+            query = queryobject + " "
+        else: query = ''
+        query += "dataset=%s " % dataset
+        if query_aggregation is not None:
+            query += " | %s" % query_aggregation
+        jsondict = das_client.get_data( self.opts.host,
+                                        query,
+                                        self.opts.idx,
+                                        self.opts.limit,
+                                        self.opts.verbose,
+                                        self.opts.threshold,
+                                        self.opts.ckey,
+                                        self.opts.cert)
+        return jsondict
+    ## Get a dict containing most common dataset infos
+    #
+    # @param dataset: String containing the dataset name
+    # @return A dictionary containing the infos: name, nevents, nfiles, nlumis, nblocks, size (byte)
+    def getDatasetSummary( self, dataset):
+        if self.datasetJSON is None:
+            jsondict = self.get_data( dataset )
+            self.datasetJSON = jsondict
+        summary = self.datasetJSON['data'][0]['dataset'][1]
+        for infodict in self.datasetJSON['data'][0]['dataset']:
+            if 'nlumis' in infodict.keys():
+                summary = infodict
+            if 'acquisition_era_name' in infodict.keys():
+                extrainfos = infodict
+        summary['acquisition_era_name'] = extrainfos['acquisition_era_name']
+        summary['datatype'] = extrainfos['datatype']
+        return summary
