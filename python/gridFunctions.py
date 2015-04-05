@@ -6,6 +6,28 @@ import sys
 import subprocess
 import time
 
+## Get list of files and directories in dCap folder
+# @type directory: string
+# @param directory: The dCap folder without /pnfs/physik.rwth-aachen.de/cms/store/user/
+def uberls(directory):
+    cmd_readdcache = ["uberftp","grid-ftp.physik.rwth-aachen.de",r"ls /pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (directory)]
+    try:
+        p = subprocess.Popen(cmd_readdcache,stdout=subprocess.PIPE)
+        (stringdcache,stringdcache_err) = p.communicate()
+        dcachelistraw = stringdcache.split("\n")
+    except:
+        # try again after 10 seconds if first try failed
+        time.sleep(10)
+        p = subprocess.Popen(cmd_readdcache,stdout=subprocess.PIPE)
+        (stringdcache,stringdcache_err) = p.communicate()
+        dcachelistraw = stringdcache.split("\n")
+    filelist = []
+    for line in dcachelistraw :
+        infos = line.split()
+        if len(infos)!=9: continue
+        filelist.append("dcap://grid-dcap.physik.rwth-aachen.de/pnfs/physik.rwth-aachen.de/cms/store/user/{0}/{1}".format(directory, infos[8]))
+    return filelist
+
 ## Get list of files with certain file extension in dCap folder recursively
 # @type dir: string
 # @param dir: The dCap folder without /pnfs/physik.rwth-aachen.de/cms/store/user/
