@@ -41,6 +41,15 @@ class CrabController():
             
         if logger is not None:
             self.logger = logger.getChild("CrabController")
+            #~ ch = logging.FileHandler('frog.log', mode='a', encoding=None, delay=False)
+            #~ ch.setLevel(logging.DEBUG)
+            # create formatter
+            #~ formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
+            
+            # add formatter to ch
+            #~ ch.setFormatter(formatter)
+            #~ self.logger.addHandler(ch)
+                
         else:
             #~ raise(Exception)
             # add instance logger as logger to root
@@ -49,19 +58,21 @@ class CrabController():
             # we assume that the default logging is not configured
             # if handler is present
             if len(logging.getLogger().handlers) < 1 :
-                logging.basicConfig( level=logging._levelNames[ 'DEBUG' ])
-                
-                # create console handler and set level to debug
-                ch = logging.StreamHandler()
+                #~ logging.basicConfig( level=logging._levelNames[ 'DEBUG' ])
+                #~ 
+                #~ # create console handler and set level to debug
+                #~ ch = logging.StreamHandler()
+                ch = logging.FileHandler('crabController.log', mode='a', encoding=None, delay=False)
                 ch.setLevel(logging.DEBUG)
-                # create formatter
+                #~ # create formatter
                 formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
-                
-                # add formatter to ch
+                #~ 
+                #~ # add formatter to ch
                 ch.setFormatter(formatter)
-                
-                # add ch to logger
-                logging.getLogger().addHandler(ch)
+                #~ 
+                #~ # add ch to logger
+                #~ self.logging = logging.getLogger()
+                self.logger.addHandler(ch)
                 
     ## Check if crab can write to specified site
     #
@@ -128,6 +139,7 @@ class CrabController():
             p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
             (stringlist,string_err) = p.communicate()
             self.logger.info("crab resumbit called for task %s"%name)
+            self.logger.info('cout: \n %s' % stringlist)
     
     ## Returns the hn name for a user with valid proxy
     #
@@ -173,6 +185,14 @@ class CrabController():
             try:
                 # split output in lines and rverse order
                 stdout = stdout.splitlines()
+                
+                if 'Try to do "rm -rf ~/.crab3"' in '\n'.join(stdout):
+                    self.logger.error("~/.crab3 malformed. Forg tries to fix it")
+                    cmd = ["rm -rf ~/.crab3"]
+                    p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
+                    (stdout_mal,stderr_mal) = p.communicate()
+                    return self.status(name)
+                    
                 for line in stdout:
                     if line.strip().startswith("Task status:"):
                         state = line.split(":")[1].strip() 
@@ -188,11 +208,17 @@ class CrabController():
                 import ast
                 try:
                     statusDict = ast.literal_eval(statusJSON)
+                    self.logger.info("Finished status state %s for %s " % (state, name))
                     return state,statusDict
                 except:
                     self.logger.error("Can not parse Crab request JSON output")
                     return "NOSTATE",{}
             except:
+                if 'Cannot find .requestcache file' in stdout[0]:
+                    self.logger.error("No requestcache, Task not submitted ?")
+                    return "REQUESTCACHE",{}
+
+                
                 self.logger.error( "Error: current working directory %s"%self.workingArea)
                 self.logger.error('Error parsing crab status json output, please check cout below ')
                 self.logger.error(stdout)
@@ -263,15 +289,12 @@ class CrabTask:
         self.name = taskname
         self.uuid = uuid.uuid4()
         #~ self.lock = multiprocessing.Lock()       
-        if crabController is None:
-            self.controller =  CrabController()
-        else:
-            self.controller =  crabController
         self.jobs = {}
         self.localDir = localDir
         self.outlfn = outlfn
         self.StorageFileList = StorageFileList
         self.isUpdating = False
+        self.taskId = -1
         #variables for statistics
         self.nJobs = 0
         self.state = "NOSTATE"
@@ -284,31 +307,49 @@ class CrabTask:
         self.nFailed    = 0
         self.nFinished    = 0
         self.nComplete    = 0
-        
+        self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
         #start with first updates
         if initUpdate:
             self.update()
             self.updateJobStats()
-            
+    
+    ## Function to resubmit failed jobs in tasks
+    #
+    # @param self: CrabTask The object pointer.
+    def resubmit_failed( self ):
+        failedJobIds = []
+        controller =  CrabController()
+        for jobkey in crabTask.jobs.keys():
+            job = task.jobs[jobkey]
+            if job['State'] == 'failed':
+                failedJobIds.append( job['JobIds'][-1] )
+        controller.resubmit( self.name, joblist = failedJobIds )
+        self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
+
     ## Function to update Task in associated Jobs
     #
-    # @type self: CrabTask
-    # @param self: The object pointer.        
+    # @param self: CrabTask The object pointer.        
     def update(self):
         #~ self.lock.acquire()
         self.isUpdating = True
-        self.state = "UPDATING"
-        self.state , self.jobs = self.controller.status(self.name) 
+        controller =  CrabController()
+        #~ self.controller.logger.info('starting update')
+        #~ self.state = "UPDATING"
+        #~ self.state , self.jobs = self.controller.status(self.name) 
+        self.state , self.jobs = controller.status(self.name) 
         self.nJobs = len(self.jobs.keys())
         self.updateJobStats()
         self.isUpdating = False
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
-        #~ if "COMPLETE" in self.state:
-            #~ if nComplete == nJobs:
-                #~ self.state = "DONE"
-            #~ else:
-                #~ self.state = "COMPLETE"
+        if "COMPLETE" in self.state:
+            if self.nComplete == self.nJobs:
+                self.state = "DONE"
+            else:
+                self.state = "COMPLETE"
         #~ self.lock.release()
+        
+    def test_print(self):
+        return self.uuid
     ## Function to update JobStatistics
     #
     # @type self: CrabTask

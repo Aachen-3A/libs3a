@@ -79,7 +79,6 @@ class aix3adb:
     def insertMCSample(self, sample):
         s = self.getAuthServerProxy()
         f = s.insertMCSample(sample.__dict__)
-        print f
         return MCSample(f)
     @tryServerAuth
     def insertDataSample(self, sample):
@@ -95,21 +94,21 @@ class aix3adb:
         return DataSkim(s.insertDataSkim(skim.__dict__))
     # edits
     @tryServerAuth
-    def editMCSample(self, name, sample):
+    def editMCSample(self, sample):
         s = self.getAuthServerProxy()
-        return s.editMCSample(name, sample)
+        return MCSample(s.editMCSample(sample))
     @tryServerAuth
-    def editDataSample(self, name, sample):
+    def editDataSample(self, sample):
         s = self.getAuthServerProxy()
-        return s.editDataSample(name, sample)
+        return DataSample(s.editDataSample(sample))
     @tryServerAuth
-    def editMCSkim(self, skimid, skim):
+    def editMCSkim(self, skim):
         s = self.getAuthServerProxy()
-        return s.editMCSkim(skimid, skim)
+        return MCSkim(s.editMCSkim(skim))
     @tryServerAuth
-    def editDataSkim(self, skimid, skim):
+    def editDataSkim(self, skim):
         s = self.getAuthServerProxy()
-        return s.editDataSkim(skimid, skim)
+        return DataSkim(s.editDataSkim(skim))
     # gets
     def getMCSample(self, name):
         s = xmlrpclib.ServerProxy(self.readurl)
@@ -139,14 +138,14 @@ class aix3adb:
         s = xmlrpclib.ServerProxy(self.readpurl)
         result = s.getDataSkimAndSampleBySkim(skimid)
         return DataSkim(result['skim']), DataSample(result['sample'])
-    def getMCSkimAndSample(self, name=None, skimid=None):
-        if not name is None:
-            skim, sample = self.getMCLatestSkimAndSampleBySample(name)
-            if not skimid is None:
-                if int(skim.id) != skimid:
-                    raise Exception("Skimid and sample name do not match.")
-        elif not skimid is None:
+    def getMCSkimAndSample(self, skimid=None, name=None):
+        if skimid is not None:
             skim, sample = self.getMCSkimAndSampleBySkim(skimid)
+            if name is not None:
+                if name != sample.name:
+                    raise Exception("Skimid "+str(skimid)+" and sample name "+str(name)+" do not match.")
+        elif name is not None:
+            skim, sample = self.getMCLatestSkimAndSampleBySample(name)
         else:
             raise Exception("No arguments provided.")
         return skim, sample

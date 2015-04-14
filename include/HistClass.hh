@@ -232,6 +232,23 @@ namespace HistClass {
         effs[Form("eff_%s", name)] = tmpeff;
     }
 
+    /*! \brief Function to create one 2D Efficiency container in the eff map
+     *
+     * \param[in] name Name of the Efficiency container that should be created
+     * \param[in] nbinsx Number of bins on the x-axis
+     * \param[in] xlow Lower edge of the x-axis
+     * \param[in] xup Upper edge of the x-axis
+     * \param[in] nbinsy Number of bins on the y-axis
+     * \param[in] ylow Lower edge of the y-axis
+     * \param[in] yup Upper edge of the y-axis
+     * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
+     * \param[in] ytitle Optinal title of the y-axis (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void CreateEff(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, Int_t nbinsy, Double_t ylow, Double_t yup, const char* xtitle = "", const char* ytitle = "") {
+        TEfficiency * tmpeff = new TEfficiency(Form("eff_%s", name), Form("%s;%s;%s;%s", name, xtitle, ytitle, "#epsilon"), nbinsx, xlow, xup, nbinsy, ylow, yup);
+        effs[Form("eff_%s", name)] = tmpeff;
+    }
+
     /*! \brief Function to fill an event in a 1D histogram of the map
      *
      * This function fills one value with one weight for one event in one
@@ -373,6 +390,18 @@ namespace HistClass {
         effs[dummy]->Fill(passed, valuex);
     }
 
+    /*! \brief Function to fill an event in a 2D efficiency container of the map
+     *
+     * \param[in] name Name of the histogram which should be filled
+     * \param[in] valuex x-value that should be filled
+     * \param[in] valuey y-value that should be filled
+     * \param[in] passed Boolean if the event passed or not
+     */
+    SUPPRESS_NOT_USED_WARN static void FillEff(const char * name, double valuex, double valuey, bool passed) {
+        std::string dummy = Form("eff_%s", name);
+        effs[dummy]->Fill(passed, valuex, valuey);
+    }
+
     /*! \brief Function to write one 1D histogram of the map
      *
      * \param[in] n_histo Number of the histogram that should be written
@@ -468,7 +497,7 @@ namespace HistClass {
      * and returns the resulting substrings as a vector.
      * \param[in] &s String that should be split
      * \param[in] delim Delimiter where the string should be split
-     * \return[out] elems Vector in which the substrings were pushed
+     * \param[out] elems Vector in which the substrings were pushed
     */
     SUPPRESS_NOT_USED_WARN std::vector<std::string> split(const std::string &s, char delim) {
         std::vector<std::string> elems;
@@ -708,7 +737,7 @@ namespace HistClass {
     /*! \brief Function to get one 1D histogram from the map without number
      *
      * \param[in] name Name of the histogram that should be returned
-     * \returns histo Returned histogram
+     * \param[out] histo Returned histogram
      */
     SUPPRESS_NOT_USED_WARN static TH1D* ReturnHist(const char * name) {
         std::string dummy = "";
@@ -733,6 +762,24 @@ namespace HistClass {
         }
     }
 
+    /*! \brief Function to give one 2D histogram from the map alphanumeric bin labels without number
+     *
+     * \param[in] name Name of the histogram that should get bin names
+     * \param[in] n_bins_x Number of x-bins that should be renamed
+     * \param[in] x_bin_names Array with the names that the x-bins should get
+     * \param[in] n_bins_y Number of y-bins that should be renamed
+     * \param[in] y_bin_names Array with the names that the y-bins should get
+     */
+    SUPPRESS_NOT_USED_WARN static void NameBins(const char * name, const uint n_bins_x, TString* x_bin_names, const uint n_bins_y, TString* y_bin_names) {
+        std::string dummy = Form("h2_%s", name);
+        for (uint i = 0; i < n_bins_x; i++) {
+            histo2[dummy]->GetXaxis()->SetBinLabel(i+1, x_bin_names[i]);
+        }
+        for (uint i = 0; i < n_bins_y; i++) {
+            histo2[dummy]->GetYaxis()->SetBinLabel(i+1, y_bin_names[i]);
+        }
+    }
+
     /*! \brief Function to give one 1D histogram from the map alphanumeric bin labels
      *
      * \param[in] n_histo Number of the histogram that should get bin names
@@ -746,6 +793,30 @@ namespace HistClass {
             for (uint i = 0; i < n_bins; i++) {
                 histo[dummy]->GetXaxis()->SetBinLabel(i+1, d_mydisc[i]);
             }
+        }
+    }
+
+    /*! \brief Function to clean up the memory usage of the HistClass
+     *
+     */
+    SUPPRESS_NOT_USED_WARN static void CleanUp() {
+        for (std::map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, THnSparseD * >::iterator it = histon.begin(); it != histon.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, TNtupleD * >::iterator it = ttupple.begin(); it != ttupple.end(); ++it) {
+            delete it->second;
+        }
+        for (std::map<std::string, TTree * >::iterator it = trees.begin(); it != trees.end(); ++it) {
+            delete it->second;
         }
     }
 }  // namespace HistClass
