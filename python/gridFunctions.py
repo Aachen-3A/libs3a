@@ -32,7 +32,7 @@ def uberls(directory):
 # @type dir: string
 # @param dir: The dCap folder without /pnfs/physik.rwth-aachen.de/cms/store/user/
 # @type mem_limit: int
-# @param mem_limit: Maximum summed filesize before files are splitted in sublists [default:500000000] 
+# @param mem_limit: Maximum summed filesize before files are splitted in sublists [default:500000000]
 def getdcachelist(dir , Tag , mem_limit = 500000000, fileXtension= '.pxlio'):
     # try to run ls -r query with uberftp in specified folder
     cmd_readdcache = ["uberftp","grid-ftp.physik.rwth-aachen.de",r"ls -r /pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (dir)]
@@ -42,13 +42,14 @@ def getdcachelist(dir , Tag , mem_limit = 500000000, fileXtension= '.pxlio'):
         dcachelistraw = stringdcache.split("\n")
         # filter list of returned files in subfolders for files with specified file extension
         dcachelistraw = filter(lambda line:fileXtension in line in line, dcachelistraw)
+        dcachelistraw = filter(lambda line:Tag in line in line, dcachelistraw)
     except:
         # try again after 10 seconds if first try failed
         time.sleep(10)
         p = subprocess.Popen(cmd_readdcache,stdout=subprocess.PIPE)
         (stringdcache,stringdcache_err) = p.communicate()
         dcachelistraw = stringdcache.split("\n")
-        dcachelistraw = filter(lambda line:fileXtension in line in line, dcachelistraw)
+        dcachelistraw = filter(lambda line:Tag in line in line, dcachelistraw)
 
     filelistlist = []
 
@@ -66,15 +67,14 @@ def getdcachelist(dir , Tag , mem_limit = 500000000, fileXtension= '.pxlio'):
             filelistlist.append([])
             memory = 0
             l+=1
-        if ".pxlio" in tmpstring or ".root" in tmpstring:
-            filelistlist[-1].append(("dcap://grid-dcap.physik.rwth-aachen.de/%s" %(tmpstring.split()[7])).replace("//pnfs","/pnfs"))
+        filelistlist[-1].append(("dcap://grid-dcap.physik.rwth-aachen.de/%s" %(tmpstring.split()[7])).replace("//pnfs","/pnfs"))
     if len(filelistlist[-1]) == 0:
       filelistlist.pop()
     return filelistlist
 
 ## Returns the life time left. for a proxy.
 #
-#@return int time left for the proxy 
+#@return int time left for the proxy
 def timeLeftVomsProxy():
     proc = subprocess.Popen( ['voms-proxy-info', '-timeleft' ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
     output = proc.communicate()[0]
@@ -82,7 +82,7 @@ def timeLeftVomsProxy():
         return False
     else:
         return int( output )
-        
+
 ## Checks if the proxy is valid longer than time
 #
 #@type time: int
@@ -94,7 +94,7 @@ def checkVomsProxy( time=86400 ):
 
 ## Creates a new vom proxy
 #
-# This function creates a new 
+# This function creates a new
 #@type voms: string
 #@param voms: the voms group used to set up the server [default:cms:/cms/dcms]
 #@type passphrase: string
