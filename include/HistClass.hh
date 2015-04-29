@@ -232,6 +232,19 @@ namespace HistClass {
         effs[Form("eff_%s", name)] = tmpeff;
     }
 
+    /*! \brief Function to create one 1D Efficiency container in the eff map from two histograms
+     *
+     * \param[in] name Name of the Efficiency container that should be created
+     * \param[in] hist_all Histogram of all events
+     * \param[in] hist_pass Histogram of all passed events
+     * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void CreateEff(const char* name, TH1D* hist_all, TH1D* hist_pass) {
+        TEfficiency * tmpeff = new TEfficiency(*hist_pass, *hist_all);
+        tmpeff -> SetName(Form("eff_%s", name));
+        effs[Form("eff_%s", name)] = tmpeff;
+    }
+
     /*! \brief Function to create one 2D Efficiency container in the eff map
      *
      * \param[in] name Name of the Efficiency container that should be created
