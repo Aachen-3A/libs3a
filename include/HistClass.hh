@@ -13,6 +13,7 @@
 #include <stdarg.h>
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 #include "TH1F.h"
@@ -33,12 +34,12 @@
 #endif
 
 namespace HistClass {
-    static std::map<std::string, TH1D * > histo; /*!< Map of a string and a TH1D histogram, for easy 1D histogram handling. */
-    static std::map<std::string, TH2D * > histo2; /*!< Map of a string and a TH2D histogram, for easy 2D histogram handling. */
-    static std::map<std::string, THnSparseD * > histon; /*!< Map of a string and a THnSparseD histogram, for easy nSparse handling. */
-    static std::map<std::string, TNtupleD * > ttupple; /*!< Map of a string and a TNtupleD histogram, for easy Ntuple handling. */
-    static std::map<std::string, TTree * > trees; /*!< Map of a string and a TTree histogram, for easy tree handling. */
-    static std::map<std::string, TEfficiency * > effs; /*!< Map of a string and a TEfficiency container. */
+    static std::unordered_map<std::string, TH1D * > histo; /*!< Map of a string and a TH1D histogram, for easy 1D histogram handling. */
+    static std::unordered_map<std::string, TH2D * > histo2; /*!< Map of a string and a TH2D histogram, for easy 2D histogram handling. */
+    static std::unordered_map<std::string, THnSparseD * > histon; /*!< Map of a string and a THnSparseD histogram, for easy nSparse handling. */
+    static std::unordered_map<std::string, TNtupleD * > ttupple; /*!< Map of a string and a TNtupleD histogram, for easy Ntuple handling. */
+    static std::unordered_map<std::string, TTree * > trees; /*!< Map of a string and a TTree histogram, for easy tree handling. */
+    static std::unordered_map<std::string, TEfficiency * > effs; /*!< Map of a string and a TEfficiency container. */
 
     /*! \brief Function to create a number of 1D histograms in the histo map
      *
@@ -273,7 +274,7 @@ namespace HistClass {
      * \param[in] weight Weight of the event that should be filled
      */
     static void Fill(Int_t n_histo, const char * name, double value, double weight) {
-        std::map<std::string, TH1D * >::iterator it = histo.find(Form("h1_%d_%s", n_histo, name));
+        std::unordered_map<std::string, TH1D * >::iterator it = histo.find(Form("h1_%d_%s", n_histo, name));
         if (it != histo.end()) {
             it->second->Fill(value, weight);
         } else {
@@ -302,7 +303,7 @@ namespace HistClass {
      * \param[in] weight Weight of the event that should be filled
      */
     SUPPRESS_NOT_USED_WARN static void Fill(const char * name, double value, double weight) {
-        std::map<std::string, TH1D * >::iterator it;
+        std::unordered_map<std::string, TH1D * >::iterator it;
         if (strcmp(name, "h_counters") == 0) {
                 it = histo.find(Form("%s", name));
         } else {
@@ -340,7 +341,7 @@ namespace HistClass {
      * \param[in] weight Weight of the event that should be filled
      */
     static void Fill(Int_t n_histo, const char * name, double valuex, double valuey, double weight) {
-        std::map<std::string, TH2D * >::iterator it = histo2.find(Form("h2_%d_%s", n_histo, name));
+        std::unordered_map<std::string, TH2D * >::iterator it = histo2.find(Form("h2_%d_%s", n_histo, name));
         if (it != histo2.end()) {
             it->second->Fill(valuex, valuey, weight);
         } else {
@@ -354,12 +355,12 @@ namespace HistClass {
      * nSparse. The function also checks if the nSparse exists
      * in the map, otherwise it will print an error message.
      * \param[in] name Name of the n which should be filled
-     * \param[in] n 
+     * \param[in] n
      * \param[in] ...
      * \todo complete the function
      */
     SUPPRESS_NOT_USED_WARN static void FillSparse(const char * name, int n, ...) {
-        std::map<std::string, THnSparseD * >::iterator it = histon.find(Form("hn_%s", name));
+        std::unordered_map<std::string, THnSparseD * >::iterator it = histon.find(Form("hn_%s", name));
         if (it != histon.end()) {
             std::vector <double> v;
             va_list vl;
@@ -442,8 +443,8 @@ namespace HistClass {
      * \param[in] name Optional string that all histogram names that should be written contain (DEFAULT = "")
      */
     SUPPRESS_NOT_USED_WARN static void WriteAll(const char * name = "") {
-        std::map<std::string, TH1D * >::iterator it;
-        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+        std::unordered_map<std::string, TH1D * >::iterator it;
+        for (std::unordered_map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
             } else if (strcmp(name, "") == 0) {
@@ -460,8 +461,8 @@ namespace HistClass {
      * \param[in] name Optional string that all histogram names that should be written contain (DEFAULT = "")
      */
     SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name = "") {
-        std::map<std::string, TH2D * >::iterator it;
-        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+        std::unordered_map<std::string, TH2D * >::iterator it;
+        for (std::unordered_map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
             } else if (strcmp(name, "") == 0) {
@@ -530,8 +531,8 @@ namespace HistClass {
     SUPPRESS_NOT_USED_WARN static void WriteAll(const char * name, const char * contains_i) {
         const std::string contains(contains_i);
         std::vector<std::string> i_cont = split(contains, ':');
-        std::map<std::string, TH1D * >::iterator it;
-        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+        std::unordered_map<std::string, TH1D * >::iterator it;
+        for (std::unordered_map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
             if (std::string::npos != it->first.find(name)) {
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
@@ -561,8 +562,8 @@ namespace HistClass {
     SUPPRESS_NOT_USED_WARN static void WriteAll2(const char * name, const char * contains_i) {
         const std::string contains(contains_i);
         std::vector<std::string> i_cont = split(contains, ':');
-        std::map<std::string, TH2D * >::iterator it;
-        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+        std::unordered_map<std::string, TH2D * >::iterator it;
+        for (std::unordered_map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
             if (std::string::npos != it->first.find(name)) {
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
@@ -596,8 +597,8 @@ namespace HistClass {
         const std::string vetos(vetos_i);
         std::vector<std::string> i_cont = split(contains, ':');
         std::vector<std::string> i_veto = split(vetos, ':');
-        std::map<std::string, TH1D * >::iterator it;
-        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+        std::unordered_map<std::string, TH1D * >::iterator it;
+        for (std::unordered_map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
             if (std::string::npos != it->first.find(name)) {
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
@@ -637,8 +638,8 @@ namespace HistClass {
         const std::string vetos(vetos_i);
         std::vector<std::string> i_cont = split(contains, ':');
         std::vector<std::string> i_veto = split(vetos, ':');
-        std::map<std::string, TH2D * >::iterator it;
-        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+        std::unordered_map<std::string, TH2D * >::iterator it;
+        for (std::unordered_map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
             if (std::string::npos != it->first.find(name)) {
                 bool do_write = false;
                 for (uint i = 0; i < i_cont.size(); i++) {
@@ -670,14 +671,14 @@ namespace HistClass {
      * \param[in] name Optional string that all TTrees or TNtupleDs names that should be written contain (DEFAULT = "")
      */
     SUPPRESS_NOT_USED_WARN static void WriteAllTrees(const char * name = "") {
-        for (std::map<std::string, TNtupleD * >::iterator it = ttupple.begin(); it != ttupple.end(); ++it) {
+        for (std::unordered_map<std::string, TNtupleD * >::iterator it = ttupple.begin(); it != ttupple.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
             } else if (strcmp(name, "") == 0) {
                 it->second -> Write();
             }
         }
-        for (std::map<std::string, TTree * >::iterator it = trees.begin(); it != trees.end(); ++it) {
+        for (std::unordered_map<std::string, TTree * >::iterator it = trees.begin(); it != trees.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
             } else if (strcmp(name, "") == 0) {
@@ -694,8 +695,8 @@ namespace HistClass {
      * \param[in] name Optional string that all nSparses names that should be written contain (DEFAULT = "")
      */
     SUPPRESS_NOT_USED_WARN static void WriteN(const char * name = "") {
-        std::map<std::string, THnSparseD * >::iterator it;
-        for (std::map<std::string, THnSparseD * >::iterator it = histon.begin(); it != histon.end(); ++it) {
+        std::unordered_map<std::string, THnSparseD * >::iterator it;
+        for (std::unordered_map<std::string, THnSparseD * >::iterator it = histon.begin(); it != histon.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
             } else if (strcmp(name, "") == 0) {
@@ -721,8 +722,8 @@ namespace HistClass {
      * \param[in] name Optional string that all efficiency containers names that should be written contain (DEFAULT = "")
      */
     SUPPRESS_NOT_USED_WARN static void WriteAllEff(const char * name = "") {
-        std::map<std::string, TEfficiency * >::iterator it;
-        for (std::map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
+        std::unordered_map<std::string, TEfficiency * >::iterator it;
+        for (std::unordered_map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
             } else if (strcmp(name, "") == 0) {
@@ -813,22 +814,22 @@ namespace HistClass {
      *
      */
     SUPPRESS_NOT_USED_WARN static void CleanUp() {
-        for (std::map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
+        for (std::unordered_map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
             delete it->second;
         }
-        for (std::map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
+        for (std::unordered_map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
             delete it->second;
         }
-        for (std::map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
+        for (std::unordered_map<std::string, TH2D * >::iterator it = histo2.begin(); it != histo2.end(); ++it) {
             delete it->second;
         }
-        for (std::map<std::string, THnSparseD * >::iterator it = histon.begin(); it != histon.end(); ++it) {
+        for (std::unordered_map<std::string, THnSparseD * >::iterator it = histon.begin(); it != histon.end(); ++it) {
             delete it->second;
         }
-        for (std::map<std::string, TNtupleD * >::iterator it = ttupple.begin(); it != ttupple.end(); ++it) {
+        for (std::unordered_map<std::string, TNtupleD * >::iterator it = ttupple.begin(); it != ttupple.end(); ++it) {
             delete it->second;
         }
-        for (std::map<std::string, TTree * >::iterator it = trees.begin(); it != trees.end(); ++it) {
+        for (std::unordered_map<std::string, TTree * >::iterator it = trees.begin(); it != trees.end(); ++it) {
             delete it->second;
         }
     }
