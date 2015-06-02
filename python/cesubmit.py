@@ -85,7 +85,7 @@ class Job:
             'outputsandboxbasedesturi="gsiftp://localhost";\n'
             )
         standardinput = ["./prologue.sh"]
-        if self.task.uploadexecutable: 
+        if self.task.uploadexecutable:
             standardinput.append(self.executable)
         jdl += 'InputSandbox = { "' + ('", "'.join(standardinput+self.inputfiles+self.task.inputfiles)) + '"};\n'
         stds=["out.txt", "err.txt"]
@@ -285,13 +285,29 @@ class Task:
             for job in jobs:
                 worker(job)
 
+    def blockTask(self):
+        lockFile=open(self.directory+".lock","w")
+        lockFile.write("")
+        lockFile.close()
+
+    def releaseTask(self):
+        os.remove(self.directory+".lock")
+
+    def isBlocked(self):
+        return os.path.exists(self.directory+".lock")
+
     def resubmit(self, nodeids, processes=0):
+        if self.isBlocked():
+            return
+        self.blockTask()
         if len(nodeids)==0: return
         log.debug('Resubmit (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, resubmitWorker)
         self.frontEndStatus = "SUBMITTED"
         self.save()
         self.cleanUp()
+        releaseTask()
+
     def kill(self, nodeids, processes=0):
         log.debug('Kill (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, killWorker)
@@ -408,6 +424,9 @@ class Task:
             njobs+=len(jobids)
         return njobs
     def getStatus(self):
+        if self.isBlocked():
+            return self.frontEndStatus
+        self.blockTask()
         log.debug('Get status of task %s',self.name)
         numberOfJobs = self._getStatusMultiple()
         oldfestatus = self.frontEndStatus
@@ -428,9 +447,13 @@ class Task:
         elif purged: self.frontEndStatus="PURGED"
         if numberOfJobs > 0 or oldfestatus != self.frontEndStatus:
             self.save()
+        self.releaseTask()
         return self.frontEndStatus
 
     def getOutput(self, connections=1):
+        if self.isBlocked():
+            return
+        self.blockTask()
         jobs = [job for job in self.jobs if job.status=="DONE-OK" and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
         if not jobs: return
         jobpackages = list(chunks(jobs, 100))
@@ -456,6 +479,7 @@ class Task:
                         job.frontEndStatus = "FAILED2RETRIEVE"
                         log.warning('Failed to retrieve job %s', job.jobid)
         self.save()
+        self.releaseTask()
 
     def jobStatusNumbers(self):
         jobStatusNumbers=defaultdict(int)
@@ -491,7 +515,7 @@ class Task:
                     shutil.move(checkdir, os.path.join(self.directory, "bak"))
 
 
-        
+
 def parseGetOutput(stdout):
     successfuljobidlist=[]
     for line in stdout.splitlines():

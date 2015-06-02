@@ -1,6 +1,9 @@
 #!/bin/env python
 
-
+import gzip
+import os
+#import hashlib as hashlib
+import hashlib
 import matplotlib.pyplot as plt
 from numpy import sign,pi
 import ROOT
@@ -43,13 +46,19 @@ class Particle(object):
     #def __init__(self,pdgid,px,py,pz,energy):
         u"""Constuctor call with line from lhe file"""
         if type(pdgId)==unicode:
+
+            pdgId=pdgId.replace(u"b'",u"").replace(u"\\n'",u"")
             ls=pdgId.split()
             #standard lhe input:
             if len(ls)==13:
                 self.pdgId,self.status,self.mother, self.color,self.momentum,self.lifetime,self.spin=abs(int(ls[0])),int(ls[1]),[int(ls[2]),int(ls[3])],[int(ls[4]),int(ls[5])],[float(ls[6]),float(ls[7]),float(ls[8]),float(ls[9]),float(ls[10])],float(ls[11]),float(ls[12])
+            #if len(ls)==14:
+                #self.pdgId,self.status,self.mother, self.color,self.momentum,self.lifetime,self.spin=abs(int(ls[1])),int(ls[2]),[int(ls[3]),int(ls[4])],[int(ls[5]),int(ls[6])],[float(ls[7]),float(ls[8]),float(ls[9]),float(ls[10]),float(ls[11])],float(ls[12]),float(ls[13])
             #pdg and 4vector input
             elif len(ls)==5:
                 self.pdgId,self.momentum=int(ls[0]),[float(ls[1]),float(ls[2]),float(ls[3]),float(ls[4])]
+            elif len(ls)==6:
+                self=None
         else:
             self.pdgId=pdgId
             self.momentum=[px,py,pz,energy]
@@ -82,7 +91,9 @@ class EventFile(object):
         self.linecounter=0
         for line in self.fp:
             self.linecounter+=1
-            if line.strip()==u"<event>":
+            if type(line)!=unicode:
+                line=unicode(line)
+            if u"<event>" in line.strip():
                 self.beginevent=True
                 break
     def __iter__(self):
@@ -93,18 +104,28 @@ class EventFile(object):
             if line==None:
                 raise StopIteration
                 return
-            if line.strip()==u"<event>":
+            if type(line)!=unicode:
+                line=unicode(line)
+            if line.strip()==u"<event>" or u"<event>" in line:
                 self.beginevent=True
                 break
         event=[]
         for line in self.fp:
             self.linecounter+=1
+            if type(line)!=unicode:
+                line=unicode(line)
             if line[0]==u"#":
                 continue
-            if line.strip()==u"</event>":
+            if line.strip()==u"</event>" or u"</event>" in line:
+                self.beginevent=False
                 break
             try:
+                if len(line.split())==7:
+                    continue
                 particle=Particle(line)
+                if hasattr(particle,u"status"):
+                    if particle.status==-1:
+                        continue
             except (ValueError, IndexError):
                 import sys
                 print sys.exc_info()
@@ -118,7 +139,8 @@ class EventFile(object):
 
 ##plotter class
 class Plot(object):
-    def __init__(self):
+    def __init__(self,show=False):
+        self.show=show
 
         self.particles=[]
         #colors try to use pdgids with the exeptions:
@@ -126,12 +148,25 @@ class Plot(object):
         # met=0
         self.styles={
                     11:{u"color":u"blue",u"label":u"e",u"linestyle":u"solid"},
-                    13:{u"color":u"lightgreen",u"label":u"$\mu$",u"linestyle":u"solid"},
-                    15:{u"color":u"orange",u"label":u"$\tau$",u"linestyle":u"solid"},
+                    13:{u"color":u"lightgreen",u"label":u"$\\mu$",u"linestyle":u"solid"},
+                    15:{u"color":u"orange",u"label":u"$\\tau$",u"linestyle":u"solid"},
                     0:{u"color":u"red",u"label":u"$E_T^{miss}$",u"linestyle":u"dashed"},
                     1:{u"color":u"darkgreen",u"label":u"jet",u"linestyle":u"dashdot"},
                     22:{u"color":u"lightblue",u"label":u"$\gamma$",u"linestyle":u"dotted"},
+                    #gen infos:
+                    12:{u"color":u"red",u"label":u"$\\nu_{e}$",u"linestyle":u"dashed"},
+                    14:{u"color":u"red",u"label":u"$\\nu_{\\mu}$",u"linestyle":u"dashed"},
+                    16:{u"color":u"red",u"label":u"$\\nu_{\\tau}$",u"linestyle":u"dashed"},
+                    2:{u"color":u"darkgreen",u"label":u"d",u"linestyle":u"dashdot"},
+                    3:{u"color":u"darkgreen",u"label":u"c",u"linestyle":u"dashdot"},
+                    4:{u"color":u"darkgreen",u"label":u"s",u"linestyle":u"dashdot"},
+                    5:{u"color":u"darkgreen",u"label":u"t",u"linestyle":u"dashdot"},
+                    6:{u"color":u"darkgreen",u"label":u"b",u"linestyle":u"dashdot"},
+                    21:{u"color":u"darkgreen",u"label":u"g",u"linestyle":u"dashdot"},
+                    24:{u"color":u"darkblue",u"label":u"w",u"linestyle":u"dashdot"},
                     }
+        if not os.path.exists("events/"):
+            os.mkdir("events/")
 
 
 
@@ -145,7 +180,6 @@ class Plot(object):
                 self.particles.append(Particle(particle[0],particle[1],particle[2],particle[3],particle[4]))
 
     def drawPolar(self):
-        import hashlib
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111, polar=True)
 
@@ -159,7 +193,7 @@ class Plot(object):
             if p.pdgId in self.styles:
                 style=self.styles[p.pdgId]
             else:
-                style={u"color":u"grey",u"label":u"p",u"linestyle":u"dotted"}
+                style={u"color":u"grey",u"label":unicode(p.pdgId),u"linestyle":u"dotted"}
             self.ax.annotate(u"",
                   xy=(p.phi, p.pt), xycoords=u'data',
                   xytext=(0., 0.), textcoords=u'data',
@@ -173,7 +207,10 @@ class Plot(object):
         self.ax.set_ylim(ymin=0.,ymax=1.2*ptmax)
         pstr=[str(i) for i in self.particles]
         pstr=" ".join(pstr)
-        plt.savefig(u"event"+hashlib.sha1(pstr).hexdigest()+".png",dpi=300, facecolor = "w",transparent=True)
+
+        plt.savefig(u"events/event_polar_"+hashlib.sha1(pstr).hexdigest()+".png",dpi=300, facecolor = "w",transparent=True)
+        if self.show:
+            plt.show()
 
     def draw(self):
         self.fig = plt.figure()
@@ -186,7 +223,7 @@ class Plot(object):
             if p.pdgId in self.styles:
                 style=self.styles[p.pdgId]
             else:
-                style={u"color":u"grey",u"label":u"p",u"linestyle":u"dotted"}
+                style={u"color":u"grey",u"label":unicode(p.pdgId),u"linestyle":u"dotted"}
             self.ax.annotate(u"",
                   xy=(p.px, p.py), xycoords=u'data',
                   xytext=(0., 0.), textcoords=u'data',
@@ -199,8 +236,11 @@ class Plot(object):
         self.ax.set_ylim(ymin=xlim[0]*1.2,ymax=xlim[1]*1.2)
         self.ax.set_xlabel(u'$p_{x}$ GeV')
         self.ax.set_ylabel(u'$p_{y}$ GeV')
-        plt.show()
-        #self.clear()
+        pstr=[str(i) for i in self.particles]
+        pstr=" ".join(pstr)
+        plt.savefig(u"events/event_"+hashlib.sha1(pstr).hexdigest()+".png",dpi=300, facecolor = "w",transparent=True)
+        if self.show:
+            plt.show()
 
     def draw3d(self):
         self.fig = plt.figure()
@@ -214,7 +254,7 @@ class Plot(object):
                 style=self.styles[p.pdgId]
             else:
                 style={u"color":u"grey",u"label":u"p",u"linestyle":u"dotted"}
-            a = Arrow3D([0,p.px],[0,p.py],[0,p.pz], mutation_scale=20, lw=1, arrowstyle=u"-|>", **style)
+            a = Arrow3D([0,p.pz],[0,p.py],[0,p.px], mutation_scale=20, lw=1, arrowstyle=u"-|>", **style)
             self.ax.add_artist(a)
             xlim=min(xlim[0],-abs(p.px),-abs(p.py),-abs(p.pz)),max(xlim[1],abs(p.px),abs(p.py),abs(p.pz))
             self.ax.text(p.px+ sign(p.px)*  xlim[1]*offset, p.py+sign(p.py)*xlim[1]*offset, p.pz+sign(p.pz)*xlim[1]*offset, u"{:s}: $p_T$={:.2f} GeV".format(style[u"label"],p.pt))
@@ -222,11 +262,14 @@ class Plot(object):
         self.ax.set_xlim(xmin=xlim[0]*1.2,xmax=xlim[1]*1.2)
         self.ax.set_ylim(ymin=xlim[0]*1.2,ymax=xlim[1]*1.2)
         self.ax.set_zlim(zmin=xlim[0]*1.2,zmax=xlim[1]*1.2)
-        self.ax.set_xlabel(u'$p_{x}$ GeV')
+        self.ax.set_zlabel(u'$p_{x}$ GeV')
         self.ax.set_ylabel(u'$p_{y}$ GeV')
-        self.ax.set_zlabel(u'$p_{z}$ GeV')
-        plt.show()
-        #self.clear()
+        self.ax.set_xlabel(u'$p_{z}$ GeV')
+        pstr=[str(i) for i in self.particles]
+        pstr=" ".join(pstr)
+        plt.savefig(u"events/event_3d_"+hashlib.sha1(pstr).hexdigest()+".png",dpi=300, facecolor = "w",transparent=True)
+        if self.show:
+            plt.show()
 
     def clear(self):
         self.particles=[]
