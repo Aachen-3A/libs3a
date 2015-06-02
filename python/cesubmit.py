@@ -300,7 +300,9 @@ class Task:
         if self.isBlocked():
             return
         self.blockTask()
-        if len(nodeids)==0: return
+        if len(nodeids)==0:
+            releaseTask()
+            return
         log.debug('Resubmit (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, resubmitWorker)
         self.frontEndStatus = "SUBMITTED"
@@ -455,7 +457,9 @@ class Task:
             return
         self.blockTask()
         jobs = [job for job in self.jobs if job.status=="DONE-OK" and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        if not jobs: return
+        if not jobs:
+            releaseTask()
+            return
         jobpackages = list(chunks(jobs, 100))
         log.info('Get output of %s jobs of task %s',str(len(jobs)), self.name)
         for jobpackage in jobpackages:
