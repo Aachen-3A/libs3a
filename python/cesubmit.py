@@ -286,15 +286,15 @@ class Task:
                 worker(job)
 
     def blockTask(self):
-        lockFile=open(self.directory+".lock","w")
+        lockFile=open(self.directory+"/.lock","w")
         lockFile.write("")
         lockFile.close()
 
     def releaseTask(self):
-        os.remove(self.directory+".lock")
+        os.remove(self.directory+"/.lock")
 
     def isBlocked(self):
-        return os.path.exists(self.directory+".lock")
+        return os.path.exists(self.directory+"/.lock")
 
     def resubmit(self, nodeids, processes=0):
         if self.isBlocked():
