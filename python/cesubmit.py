@@ -12,11 +12,17 @@ import glob
 import re
 import datetime
 #logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
+
 #log = multiprocessing.get_logger()
 
 def submitWorker(job):
     job.submit()
+    return job
+
+def runWorker(job):
+    job.runLocal()
     return job
 
 def resubmitWorker(job):
@@ -139,6 +145,64 @@ class Job:
             break
         os.chdir(startdir)
         return process.returncode, stdout
+
+    def runLocal(self):
+        #import stat
+        from string import Template
+        startdir = os.getcwd()
+        self.task.directory=self.task.directory.replace("bak/","")
+        if startdir!=self.task.directory:
+            os.chdir(self.task.directory)
+        jobFileName="job_local_%d"%self.nodeid
+        #if not os.path.exists(jobFileName):
+        os.mkdir(jobFileName)
+        #else:
+            #try:
+                #os.mkdir(os.path.join(self.directory,"bak"))
+            #except OSError:
+                #pass
+            #try:
+                #shutil.move(jobFileName, os.path.join(self.directory, "bak"))
+            #except OSError:
+                #pass
+        jdl_file = open(self.jdlfilename, 'r')
+        inputfiles=[]
+        for line in jdl_file:
+            if "InputSandbox" in line:
+                line=line.strip()
+                line=line.split("=")[1]
+                line=line.replace("};","").replace("{","").replace('"',"").replace('./',"").replace(" ","")
+                inputfiles=line.split(",")
+        for file in inputfiles:
+            shutil.copy(file,jobFileName)
+        os.chdir(jobFileName)
+        for file in glob.glob("*.sh"):
+            os.system("chmod u+x %s"%file)
+            #st = os.stat(file)
+            #os.chmod(file, st.st_mode | stat.S_IEXEC)
+        d = dict(
+                VO_CMS_SW_DIR='/cvmfs/cms.cern.ch/'
+            )
+        file=open("prologue.sh","r")
+        text=file.read()
+        file.close()
+        newText=Template(text).safe_substitute(d)
+        fileNew=open("prologue.sh","w+")
+        fileNew.write(newText)
+        fileNew.close()
+
+        localargs=(' '.join(["./prologue.sh","./"+os.path.basename(self.executable)] + self.arguments))
+        localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
+        errFile=open("err.txt","w")
+        outFile=open("out.txt","w")
+        process = subprocess.Popen(localargs, stdout=outFile, stderr=errFile, shell=True )
+        #stdout, stderr = process.communicate()
+        process.communicate()
+        outFile.close()
+        errFile.close()
+        self.jobid=jobFileName
+
+
     def getStatus(self):
         if self.frontEndStatus == "RETRIEVED" or self.frontEndStatus == "PURGED" or self.jobid is None:
             return
@@ -286,12 +350,13 @@ class Task:
                 worker(job)
 
     def blockTask(self):
-        lockFile=open(self.directory+"/.lock","w")
-        lockFile.write("")
-        lockFile.close()
+        open(self.directory+"/.lock","a").close()
 
     def releaseTask(self):
-        os.remove(self.directory+"/.lock")
+        try:
+            os.remove(self.directory+"/.lock")
+        except:
+            return
 
     def isBlocked(self):
         return os.path.exists(self.directory+"/.lock")
@@ -301,14 +366,22 @@ class Task:
             return
         self.blockTask()
         if len(nodeids)==0:
-            releaseTask()
+            self.releaseTask()
             return
         log.debug('Resubmit (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, resubmitWorker)
         self.frontEndStatus = "SUBMITTED"
         self.save()
         self.cleanUp()
-        releaseTask()
+        self.releaseTask()
+
+    def resubmitLocal(self, nodeids, processes=0):
+        log.debug('Finish up local (some) jobs of task %s',self.name)
+        self._dosubmit(nodeids, processes, runWorker)
+        self.frontEndStatus = "Local"
+        self.save()
+        self.cleanUp()
+        self.releaseTask()
 
     def kill(self, nodeids, processes=0):
         log.debug('Kill (some) jobs of task %s',self.name)
@@ -458,7 +531,7 @@ class Task:
         self.blockTask()
         jobs = [job for job in self.jobs if job.status=="DONE-OK" and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
         if not jobs:
-            releaseTask()
+            self.releaseTask()
             return
         jobpackages = list(chunks(jobs, 100))
         log.info('Get output of %s jobs of task %s',str(len(jobs)), self.name)
