@@ -3,7 +3,7 @@ import time
 import sys
 import os
 import subprocess
-import pickle
+import cPickle
 import shutil
 from collections import defaultdict
 import multiprocessing
@@ -137,11 +137,11 @@ class Job:
                 self.error = stdout
                 break
             self.frontEndStatus = "SENT"
-            log.info('Submission successful.')
+            log.debug('Submission successful.')
             for line in stdout.splitlines():
                 if "https://" in line:
                     self.jobid = line.strip()
-                    log.info("Submitted job "+self.jobid)
+                    log.debug("Submitted job "+self.jobid)
             break
         os.chdir(startdir)
         return process.returncode, stdout
@@ -269,7 +269,7 @@ class Task:
     @classmethod
     def load(cls, directory):
         f = open(os.path.join(directory, "task.pkl"),'rb')
-        obj = pickle.load(f)
+        obj = cPickle.load(f)
         f.close()
         obj.directory = os.path.abspath(directory)
         obj.mode = "OPEN"
@@ -297,7 +297,7 @@ class Task:
     def save(self):
         log.debug('Save task %s',self.name)
         f = open(os.path.join(self.directory, "task.pkl"), 'wb')
-        pickle.dump(self, f)
+        cPickle.dump(self, f)
         f.close()
         f = open(os.path.join(self.directory, "jobids.txt"), 'w')
         for job in self.jobs:
@@ -310,7 +310,7 @@ class Task:
         job.task = self
         self.jobs.append(job)
     def submit(self, processes=0):
-        log.debug('Submit task %s',self.name)
+        log.info('Submit task %s',self.name)
         if len(self.jobs)==0:
             log.error('No jobs in task %s',self.name)
             return
@@ -330,7 +330,6 @@ class Task:
         self._dosubmit(range(len(self.jobs)), processes, submitWorker)
         self.frontEndStatus="SUBMITTED"
         os.chdir(startdir)
-        #print self.jobs[0].__dict__
         self.save()
     def _dosubmit(self, nodeids, processes, worker):
         jobs = [j for j in self.jobs if j.nodeid in nodeids]
@@ -368,7 +367,7 @@ class Task:
         if len(nodeids)==0:
             self.releaseTask()
             return
-        log.debug('Resubmit (some) jobs of task %s',self.name)
+        log.info('Resubmit (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, resubmitWorker)
         self.frontEndStatus = "SUBMITTED"
         self.save()
@@ -546,7 +545,7 @@ class Task:
                 log.info(stderr)
             else:
                 succesfulljobids = parseGetOutput(stdout)
-                log.info('Tried to retrieved %s jobs', str(len(succesfulljobids)))
+                log.info('Retrieved %s jobs for %s', str(len(succesfulljobids)),self.name)
                 for job in jobpackage:
                     if job.jobid in succesfulljobids:
                         job.purge()
