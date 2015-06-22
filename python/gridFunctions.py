@@ -33,9 +33,9 @@ def uberls(directory):
 # @param dir: The dCap folder without /pnfs/physik.rwth-aachen.de/cms/store/user/
 # @type mem_limit: int
 # @param mem_limit: Maximum summed filesize before files are splitted in sublists [default:500000000]
-def getdcachelist(dir , Tag , mem_limit = 500000000, fileXtension= '.pxlio'):
+def getdcachelist(dir , Tag='' , mem_limit = 500000000, fileXtension= '.pxlio'):
     # try to run ls -r query with uberftp in specified folder
-    cmd_readdcache = ["uberftp","grid-ftp.physik.rwth-aachen.de",r"ls -r /pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (dir)]
+    cmd_readdcache = ["uberftp","grid-ftp.physik.rwth-aachen.de", r"ls -r /pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (dir)]
     try:
         p = subprocess.Popen(cmd_readdcache,stdout=subprocess.PIPE)
         (stringdcache,stringdcache_err) = p.communicate()
@@ -49,6 +49,7 @@ def getdcachelist(dir , Tag , mem_limit = 500000000, fileXtension= '.pxlio'):
         p = subprocess.Popen(cmd_readdcache,stdout=subprocess.PIPE)
         (stringdcache,stringdcache_err) = p.communicate()
         dcachelistraw = stringdcache.split("\n")
+        dcachelistraw = filter(lambda line:fileXtension in line in line, dcachelistraw)
         dcachelistraw = filter(lambda line:Tag in line in line, dcachelistraw)
 
     filelistlist = []
