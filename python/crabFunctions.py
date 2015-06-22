@@ -10,7 +10,7 @@ import subprocess
 import logging
 import datetime
 import uuid
-
+from  httplib import HTTPException
 from multiprocessing import Process, Queue
 from CRABAPI.RawCommand import crabCommand
 from CRABClient.ClientUtilities import getLoggers
@@ -111,16 +111,13 @@ class CrabController():
     # @type joblist list of strings
     # @param joblist The crab3 request name, a.k.a the sample name
     def resubmit(self,name,joblist = None):
-        if str.startswith(name, "crab_ "):
-            crabfolder = 'crab resubmit %s'%name
-        else:
-            crabfolder = "crab resubmit crab_%s "%name
         if self.dry_run:
             self.logger.info('Dry-run: Created config file. ')
         if joblist is not None:
             jobstring ="%s"%','.join(joblist)
         else:
-            res = crabCommand('resubmit','--wait', config =  name)
+            res = self.callCrabCommand(('resubmit','--wait', os.path.join(self.workingArea,self._prepareFoldername(name)) ))
+            self.logger.info("crab resumbit called for task %s"%name)
         return res
     ## Returns the hn name for a user with valid proxy
     #
@@ -147,12 +144,10 @@ class CrabController():
         if self.dry_run:
             self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
         else:
-            #~ try:
-            #res = crabCommand('--quiet','status', dir = 'crab_%s' % name)
-            res = self.callCrabCommand( ('status',  'crab_%s' % name) )
-            return res['status'], res['jobs']
             try:
-                pass
+                res = self.callCrabCommand( ('status', '--long', 'crab_%s' % name) )
+                #~ print res
+                return res['status'], res['jobs']
             except:
                 self.logger.error("Can not run crab status request")
                 return "NOSTATE",{}
@@ -168,6 +163,21 @@ class CrabController():
         res = self.crab_q.get()
         p.join()
         return res
+
+    ## Call crab getlog
+    #
+    # @param self: The object pointer.
+    # @type name string
+    def getlog(self, name):
+        foldername = self._prepareFoldername( name)
+        try:
+            #res = crabCommand('--quiet','status', dir = 'crab_%s' % name)
+            res = self.callCrabCommand( ('getlog',  '%s' % foldername) )
+            return res['success'], res['failed']
+        except:
+            self.logger.error("Error calling crab getlog for %s" %foldername)
+            return {}, {}
+
     ## Return list of all crab folders in workin area (default cwd)
     #
     # @param self The object pointer
@@ -177,6 +187,16 @@ class CrabController():
         results = []
         dirlist = [ x for x in os.listdir( self.workingArea ) if (x.startswith('crab_') and os.path.isdir( os.path.join(self.workingArea,x) ) )]
         return dirlist
+
+    ## Add crab_ to Foldername if needed
+    #
+    # @param getlog(self, name)
+    def _prepareFoldername(self, name):
+        if name.startswith("crab_"):
+            crabfolder = '%s'%name
+        else:
+            crabfolder = "crab_%s "%name
+        return crabfolder.strip()
     ## Populates an existing optparse parser or returns a new one with options for crab functions
     #
     # This functions populates a previously created (or new) instance of a
@@ -231,7 +251,11 @@ class CrabController():
 # Running them in a new process is a workaround, see
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3FAQ#Multiple_submission_fails_with_a
 def crabCommandProcess(q,crabCommandArgs):
-    res = crabCommand(*crabCommandArgs)
+    # give crab3 the chance for one server glitch
+    try:
+        res = crabCommand(*crabCommandArgs)
+    except HTTPException:
+        res = crabCommand(*crabCommandArgs)
     q.put( res )
 
 ## Class for a single CrabRequest
