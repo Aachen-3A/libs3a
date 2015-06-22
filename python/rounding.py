@@ -37,6 +37,13 @@ class rounding:
         else:
             return '${0}\pm{1}$'.format(a, b)
 
+    def latexValueSignificantly(self, n, error):
+        a, b, expo = self.sdr(n, error)
+        if expo != 0:
+            return '${0}\cdot10^{{{1}}}$'.format(a, expo )
+        else:
+            return '{0}'.format(a)
+
     def latexValueUpDownError( self, n, up, down ):
         a, b, c, expo = self.sdr( n, up, down )
         if expo != 0:
@@ -78,7 +85,9 @@ class rounding:
         roundto=int(x-expo-self.sigdigits+1)
         for f in numbers:
             g=f/(10**expo)
-            if roundto<0:
+            if g==0:
+                s="0"
+            elif roundto<0:
                 s=("{0:."+str(int(-roundto))+"f}").format(g)
             else:
                 s=str(int(round(g,-roundto)))

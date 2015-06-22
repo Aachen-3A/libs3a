@@ -1,7 +1,7 @@
-#>/bin/env python
+#!/bin/env python
 import sys
 import cesubmit
-from listFiles import getdcachelist
+from gridfunctions import getdcachelist
 import binConfig_example as binConfig
 import checkEnvironment
 from datetime import datetime

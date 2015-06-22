@@ -3,7 +3,7 @@ import time
 import sys
 import os
 import subprocess
-import pickle
+import cPickle
 import shutil
 from collections import defaultdict
 import multiprocessing
@@ -12,11 +12,17 @@ import glob
 import re
 import datetime
 #logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
+
 #log = multiprocessing.get_logger()
 
 def submitWorker(job):
     job.submit()
+    return job
+
+def runWorker(job):
+    job.runLocal()
     return job
 
 def resubmitWorker(job):
@@ -85,7 +91,7 @@ class Job:
             'outputsandboxbasedesturi="gsiftp://localhost";\n'
             )
         standardinput = ["./prologue.sh"]
-        if self.task.uploadexecutable: 
+        if self.task.uploadexecutable:
             standardinput.append(self.executable)
         jdl += 'InputSandbox = { "' + ('", "'.join(standardinput+self.inputfiles+self.task.inputfiles)) + '"};\n'
         stds=["out.txt", "err.txt"]
@@ -131,14 +137,72 @@ class Job:
                 self.error = stdout
                 break
             self.frontEndStatus = "SENT"
-            log.info('Submission successful.')
+            log.debug('Submission successful.')
             for line in stdout.splitlines():
                 if "https://" in line:
                     self.jobid = line.strip()
-                    log.info("Submitted job "+self.jobid)
+                    log.debug("Submitted job "+self.jobid)
             break
         os.chdir(startdir)
         return process.returncode, stdout
+
+    def runLocal(self):
+        #import stat
+        from string import Template
+        startdir = os.getcwd()
+        self.task.directory=self.task.directory.replace("bak/","")
+        if startdir!=self.task.directory:
+            os.chdir(self.task.directory)
+        jobFileName="job_local_%d"%self.nodeid
+        #if not os.path.exists(jobFileName):
+        os.mkdir(jobFileName)
+        #else:
+            #try:
+                #os.mkdir(os.path.join(self.directory,"bak"))
+            #except OSError:
+                #pass
+            #try:
+                #shutil.move(jobFileName, os.path.join(self.directory, "bak"))
+            #except OSError:
+                #pass
+        jdl_file = open(self.jdlfilename, 'r')
+        inputfiles=[]
+        for line in jdl_file:
+            if "InputSandbox" in line:
+                line=line.strip()
+                line=line.split("=")[1]
+                line=line.replace("};","").replace("{","").replace('"',"").replace('./',"").replace(" ","")
+                inputfiles=line.split(",")
+        for file in inputfiles:
+            shutil.copy(file,jobFileName)
+        os.chdir(jobFileName)
+        for file in glob.glob("*.sh"):
+            os.system("chmod u+x %s"%file)
+            #st = os.stat(file)
+            #os.chmod(file, st.st_mode | stat.S_IEXEC)
+        d = dict(
+                VO_CMS_SW_DIR='/cvmfs/cms.cern.ch/'
+            )
+        file=open("prologue.sh","r")
+        text=file.read()
+        file.close()
+        newText=Template(text).safe_substitute(d)
+        fileNew=open("prologue.sh","w+")
+        fileNew.write(newText)
+        fileNew.close()
+
+        localargs=(' '.join(["./prologue.sh","./"+os.path.basename(self.executable)] + self.arguments))
+        localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
+        errFile=open("err.txt","w")
+        outFile=open("out.txt","w")
+        process = subprocess.Popen(localargs, stdout=outFile, stderr=errFile, shell=True )
+        #stdout, stderr = process.communicate()
+        process.communicate()
+        outFile.close()
+        errFile.close()
+        self.jobid=jobFileName
+
+
     def getStatus(self):
         if self.frontEndStatus == "RETRIEVED" or self.frontEndStatus == "PURGED" or self.jobid is None:
             return
@@ -205,7 +269,7 @@ class Task:
     @classmethod
     def load(cls, directory):
         f = open(os.path.join(directory, "task.pkl"),'rb')
-        obj = pickle.load(f)
+        obj = cPickle.load(f)
         f.close()
         obj.directory = os.path.abspath(directory)
         obj.mode = "OPEN"
@@ -233,7 +297,7 @@ class Task:
     def save(self):
         log.debug('Save task %s',self.name)
         f = open(os.path.join(self.directory, "task.pkl"), 'wb')
-        pickle.dump(self, f)
+        cPickle.dump(self, f)
         f.close()
         f = open(os.path.join(self.directory, "jobids.txt"), 'w')
         for job in self.jobs:
@@ -246,7 +310,7 @@ class Task:
         job.task = self
         self.jobs.append(job)
     def submit(self, processes=0):
-        log.debug('Submit task %s',self.name)
+        log.info('Submit task %s',self.name)
         if len(self.jobs)==0:
             log.error('No jobs in task %s',self.name)
             return
@@ -266,7 +330,6 @@ class Task:
         self._dosubmit(range(len(self.jobs)), processes, submitWorker)
         self.frontEndStatus="SUBMITTED"
         os.chdir(startdir)
-        #print self.jobs[0].__dict__
         self.save()
     def _dosubmit(self, nodeids, processes, worker):
         jobs = [j for j in self.jobs if j.nodeid in nodeids]
@@ -285,13 +348,40 @@ class Task:
             for job in jobs:
                 worker(job)
 
+    def blockTask(self):
+        open(self.directory+"/.lock","a").close()
+
+    def releaseTask(self):
+        try:
+            os.remove(self.directory+"/.lock")
+        except:
+            return
+
+    def isBlocked(self):
+        return os.path.exists(self.directory+"/.lock")
+
     def resubmit(self, nodeids, processes=0):
-        if len(nodeids)==0: return
-        log.debug('Resubmit (some) jobs of task %s',self.name)
+        if self.isBlocked():
+            return
+        self.blockTask()
+        if len(nodeids)==0:
+            self.releaseTask()
+            return
+        log.info('Resubmit (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, resubmitWorker)
         self.frontEndStatus = "SUBMITTED"
         self.save()
         self.cleanUp()
+        self.releaseTask()
+
+    def resubmitLocal(self, nodeids, processes=0):
+        log.debug('Finish up local (some) jobs of task %s',self.name)
+        self._dosubmit(nodeids, processes, runWorker)
+        self.frontEndStatus = "Local"
+        self.save()
+        self.cleanUp()
+        self.releaseTask()
+
     def kill(self, nodeids, processes=0):
         log.debug('Kill (some) jobs of task %s',self.name)
         self._dosubmit(nodeids, processes, killWorker)
@@ -408,6 +498,9 @@ class Task:
             njobs+=len(jobids)
         return njobs
     def getStatus(self):
+        if self.isBlocked():
+            return self.frontEndStatus
+        self.blockTask()
         log.debug('Get status of task %s',self.name)
         numberOfJobs = self._getStatusMultiple()
         oldfestatus = self.frontEndStatus
@@ -428,11 +521,17 @@ class Task:
         elif purged: self.frontEndStatus="PURGED"
         if numberOfJobs > 0 or oldfestatus != self.frontEndStatus:
             self.save()
+        self.releaseTask()
         return self.frontEndStatus
 
     def getOutput(self, connections=1):
+        if self.isBlocked():
+            return
+        self.blockTask()
         jobs = [job for job in self.jobs if job.status=="DONE-OK" and job.frontEndStatus not in ["RETRIEVED", "PURGED"]]
-        if not jobs: return
+        if not jobs:
+            self.releaseTask()
+            return
         jobpackages = list(chunks(jobs, 100))
         log.info('Get output of %s jobs of task %s',str(len(jobs)), self.name)
         for jobpackage in jobpackages:
@@ -446,7 +545,7 @@ class Task:
                 log.info(stderr)
             else:
                 succesfulljobids = parseGetOutput(stdout)
-                log.info('Tried to retrieved %s jobs', str(len(succesfulljobids)))
+                log.info('Retrieved %s jobs for %s', str(len(succesfulljobids)),self.name)
                 for job in jobpackage:
                     if job.jobid in succesfulljobids:
                         job.purge()
@@ -456,6 +555,7 @@ class Task:
                         job.frontEndStatus = "FAILED2RETRIEVE"
                         log.warning('Failed to retrieve job %s', job.jobid)
         self.save()
+        self.releaseTask()
 
     def jobStatusNumbers(self):
         jobStatusNumbers=defaultdict(int)
@@ -491,7 +591,7 @@ class Task:
                     shutil.move(checkdir, os.path.join(self.directory, "bak"))
 
 
-        
+
 def parseGetOutput(stdout):
     successfuljobidlist=[]
     for line in stdout.splitlines():

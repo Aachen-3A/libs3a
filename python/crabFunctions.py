@@ -10,21 +10,24 @@ import subprocess
 import logging
 import datetime
 import uuid
-
-import multiprocessing
-
+from  httplib import HTTPException
+from multiprocessing import Process, Queue
+from CRABAPI.RawCommand import crabCommand
+from CRABClient.ClientUtilities import getLoggers
+getLoggers(50)
 ## The CrabController class
 #
 # This class can be used to manage Analyses using crab3
 
 class CrabController():
-    
+
     ## The constructor.
     # @type self: CrabController
     # @param self: The object pointer.
     # @type self: A logging logger instance
     # @param self: A previously defined logger. Crab log messages will use this logger as their parent logger.
-    def __init__(self, logger = None , workingArea = None, voGroup = None, username = None):
+    def __init__(self, debug=0, logger = None , workingArea = None, voGroup = None, username = None):
+        self.debug = debug
         if workingArea is not None:
             self.workingArea = workingArea
         else:
@@ -38,42 +41,25 @@ class CrabController():
             self.username = username
         else:
             self.username = None
-            
+
         if logger is not None:
             self.logger = logger.getChild("CrabController")
-            #~ ch = logging.FileHandler('frog.log', mode='a', encoding=None, delay=False)
-            #~ ch.setLevel(logging.DEBUG)
-            # create formatter
-            #~ formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
-            
-            # add formatter to ch
-            #~ ch.setFormatter(formatter)
-            #~ self.logger.addHandler(ch)
-                
         else:
-            #~ raise(Exception)
             # add instance logger as logger to root
             self.logger = logging.getLogger("CrabController")
             # check if handlers are present for root logger
             # we assume that the default logging is not configured
             # if handler is present
             if len(logging.getLogger().handlers) < 1 :
-                #~ logging.basicConfig( level=logging._levelNames[ 'DEBUG' ])
-                #~ 
-                #~ # create console handler and set level to debug
-                #~ ch = logging.StreamHandler()
                 ch = logging.FileHandler('crabController.log', mode='a', encoding=None, delay=False)
                 ch.setLevel(logging.DEBUG)
-                #~ # create formatter
+                # create formatter
                 formatter = logging.Formatter( '%(asctime)s - %(name)s - %(levelname)s - %(message)s' )
-                #~ 
-                #~ # add formatter to ch
+                # add formatter to ch
                 ch.setFormatter(formatter)
-                #~ 
-                #~ # add ch to logger
-                #~ self.logging = logging.getLogger()
                 self.logger.addHandler(ch)
-                
+
+        self.crab_q = Queue()
     ## Check if crab can write to specified site
     #
     # @type self: CrabController
@@ -83,41 +69,39 @@ class CrabController():
     # @type path string
     # @param path lfn path to check write permission in. see twiki WorkBookCRAB3Tutorial
     # @return boolean which is True if user can write to site and False otherwise
-    def checkwrite(self,site='T2_DE_RWTH',path='noPath'):    
-        cmd = ['crab checkwrite --site %s --voGroup=%s'% ( site, self.voGroup ) ]
-        if not 'noPath' in path:
-            cmd[0] +=' --lfn=%s'%(path)
-
+    def checkwrite(self,site='T2_DE_RWTH',path='noPath'):
         if self.username is None: self.checkusername()
-        self.logger.info( "Checking if user can write to /store/user/%s on site %s with voGroup %s"%(self.username, site, self.voGroup) ) 
-
-        p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
-        (stringlist,string_err) = p.communicate()
-        if not "Able to write in /store/user/%s on site %s"%(self.username,site)  in stringlist:
-            self.logger.error( "The crab checkwrite command failed for site: %s"%site )
-            self.logger.debug( stringlist )
-            self.logger.debug( string_err )
+        try:
+            self.logger.info( "Checking if user can write to /store/user/%s on site %s with voGroup %s"%(self.username,site , self.voGroup) )
+            if not 'noPath' in path:
+                res = crabCommand('checkwrite','--site',site,'--voGroup',self.voGroup,'--lfn', path)
+            else:
+                res = crabCommand('checkwrite','--site',site,'--voGroup',self.voGroup)
+            if res['status'] == 'SUCCESS':
+                self.logger.info("Checkwrite was sucessfully called.")
+                return True
+            else:
+                self.logger.error( "The crab checkwrite command failed for site: %s"%site )
+                return False
+        except:
+            self.logger.error( 'Unable to perform crab checkwrite')
             return False
-        else:
-            self.logger.info("Checkwrite was sucessfully called.")
-            return True
-    
+
     ## Check if crab can write to specified site
     #
-    # @type self: CrabController
     # @param self: The object pointer.
     # @type name string
-    # @param name The crab3 request name, a.k.a the sample name
+    # @param name The crab3 config file name
     def submit(self,name):
-        cmd = "crab submit --voGroup=%s %s"%( self.voGroup ,name)
         if self.dry_run:
-            self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
+            res = self.callCrabCommand(('submit', '--dryrun', name))
+            self.logger.info('Dry-run: You may check the created config and sandbox')
         else:
-            p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
-            (stringlist,string_err) = p.communicate()
+            res = self.callCrabCommand(('submit','--wait' , name))
             self.logger.info("crab sumbit called for task %s"%name)
-
-
+            if self.debug > 1:
+                self.logger.info(str(res))
+        return res
     ## Resubmit all failed tasks in job or specified list of jobs in task
     #
     # @type self: CrabController
@@ -127,20 +111,14 @@ class CrabController():
     # @type joblist list of strings
     # @param joblist The crab3 request name, a.k.a the sample name
     def resubmit(self,name,joblist = None):
-        if str.startswith(name, "crab_ "):
-            cmd = 'crab resubmit %s'%name
-        else:
-            cmd = "crab resubmit crab_%s "%name
-        if joblist is not None:
-            cmd+="--jobids %s"%','.join(joblist)
         if self.dry_run:
-            self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
+            self.logger.info('Dry-run: Created config file. ')
+        if joblist is not None:
+            jobstring ="%s"%','.join(joblist)
         else:
-            p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
-            (stringlist,string_err) = p.communicate()
+            res = self.callCrabCommand(('resubmit','--wait', os.path.join(self.workingArea,self._prepareFoldername(name)) ))
             self.logger.info("crab resumbit called for task %s"%name)
-            self.logger.info('cout: \n %s' % stringlist)
-    
+        return res
     ## Returns the hn name for a user with valid proxy
     #
     # @type self: CrabController
@@ -148,18 +126,14 @@ class CrabController():
     # @returns users hypernews name
     def checkusername(self):
         #depreceated string: cmd = 'crab checkHNname --voGroup=dcms'
-        cmd = 'crab checkusername --voGroup=dcms'
-        p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
-        (string_out,string_err) = p.communicate()
-        string_out = string_out.split("\n")
-        for line in string_out:
-            # depreceated string: if "Your CMS HyperNews username is" in line:
-            if "Username is" in line:
-                hnname = line.split(":")[1].strip()
-                self.username = hnname
-                return hnname
-        return "noHNname"
-    
+        #~ cmd = 'crab checkusername --voGroup=dcms'
+        res = crabCommand('checkusername')
+        try:
+            self.username = res['username']
+            return res['username']
+        except:
+            return "noHNname"
+
     ## Check crab status
     #
     # @type self: CrabController
@@ -167,63 +141,62 @@ class CrabController():
     # @type name string
     # @param name The crab3 request name, a.k.a the sample name
     def status(self,name):
-        cmd = 'crab status crab_%s --long --json'%name
         if self.dry_run:
             self.logger.info('Dry-run: Created config file. crab command would have been: %s'%cmd)
         else:
             try:
-                p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
-                (stdout,stderr) = p.communicate()
+                res = self.callCrabCommand( ('status', '--long', 'crab_%s' % name) )
+                #~ print res
+                return res['status'], res['jobs']
             except:
-                self.logger.error("error running crab status subprocess for %s"%name)
-                sys.exit(1)
-            
-            #~ self.logger.info(stdout)
-            self.logger.info("crab status called for task %s"%name)
-            self.logger.info('crab status crab_%s --long --json'%name)
-            #try to fetch the JSON output fro stdout
-            try:
-                # split output in lines and rverse order
-                stdout = stdout.splitlines()
-                
-                if 'Try to do "rm -rf ~/.crab3"' in '\n'.join(stdout):
-                    self.logger.error("~/.crab3 malformed. Forg tries to fix it")
-                    cmd = ["rm -rf ~/.crab3"]
-                    p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE,cwd=r"%s"%self.workingArea,shell=True)
-                    (stdout_mal,stderr_mal) = p.communicate()
-                    return self.status(name)
-                    
-                for line in stdout:
-                    if line.strip().startswith("Task status:"):
-                        state = line.split(":")[1].strip() 
-                stdout.reverse()
-                # get the json output from stdout    
-                rawjson = stdout[1]
-                # parse json strin into python json object
-                import json
-                jsondump = json.dumps(rawjson)
-                del rawjson
-                statusJSON = json.loads(jsondump)
-                del jsondump
-                import ast
-                try:
-                    statusDict = ast.literal_eval(statusJSON)
-                    self.logger.info("Finished status state %s for %s " % (state, name))
-                    return state,statusDict
-                except:
-                    self.logger.error("Can not parse Crab request JSON output")
-                    return "NOSTATE",{}
-            except:
-                if 'Cannot find .requestcache file' in stdout[0]:
-                    self.logger.error("No requestcache, Task not submitted ?")
-                    return "REQUESTCACHE",{}
+                self.logger.error("Can not run crab status request")
+                return "NOSTATE",{}
 
-                
-                self.logger.error( "Error: current working directory %s"%self.workingArea)
-                self.logger.error('Error parsing crab status json output, please check cout below ')
-                self.logger.error(stdout)
-                sys.exit(1)
-    
+    ## Call crab command in a new process and return result dict
+    #
+    # @param self The object pointer
+    # @param crabArgs A list of arguments for crab beginning with the command
+    def callCrabCommand( self, crabArgs ):
+        crabCommandProcessArgs = (self.crab_q, crabArgs)
+        p = Process(target=crabCommandProcess, args=(crabCommandProcessArgs))
+        p.start()
+        res = self.crab_q.get()
+        p.join()
+        return res
+
+    ## Call crab getlog
+    #
+    # @param self: The object pointer.
+    # @type name string
+    def getlog(self, name):
+        foldername = self._prepareFoldername( name)
+        try:
+            #res = crabCommand('--quiet','status', dir = 'crab_%s' % name)
+            res = self.callCrabCommand( ('getlog',  '%s' % foldername) )
+            return res['success'], res['failed']
+        except:
+            self.logger.error("Error calling crab getlog for %s" %foldername)
+            return {}, {}
+
+    ## Return list of all crab folders in workin area (default cwd)
+    #
+    # @param self The object pointer
+    #
+    @property
+    def crabFolders(self):
+        results = []
+        dirlist = [ x for x in os.listdir( self.workingArea ) if (x.startswith('crab_') and os.path.isdir( os.path.join(self.workingArea,x) ) )]
+        return dirlist
+
+    ## Add crab_ to Foldername if needed
+    #
+    # @param getlog(self, name)
+    def _prepareFoldername(self, name):
+        if name.startswith("crab_"):
+            crabfolder = '%s'%name
+        else:
+            crabfolder = "crab_%s "%name
+        return crabfolder.strip()
     ## Populates an existing optparse parser or returns a new one with options for crab functions
     #
     # This functions populates a previously created (or new) instance of a
@@ -234,49 +207,62 @@ class CrabController():
     # - options where previous definitions should be overriden
     # @type Optparse parser instance
     # @param parser A previously created parser oject which should be extenden [default: new instance]
-    # @return A new or extenden optparse parser instance    
+    # @return A new or extenden optparse parser instance
     def commandlineOptions(self,parser = optparse.OptionParser( 'usage: %prog' )):
         # we first need to call parse_args with a dummy string at the beginning to
         # check for existing options later
         (currentoptions, args ) = parser.parse_args([" "])
-        
+
         # The following block shows how variables should be added, where
         # conflicts are possible if the option is overridden by this function
         # they raise a value error
         #try:
         #    parser.add_option( '--someOption',metavar='DIR',default=None,
-        #                       help='Dummy option for future integration') 
+        #                       help='Dummy option for future integration')
         #except OptionConflictError as e:
         #    conditionalLog(crablog,"There are conflicts extending the optparse options object",'error')
         #    conditionalLog(crablog,e.strerror,'error')
-          
+
         # options where it is checked if they exists and new options are added
         # otherwise
         if not hasattr(currentoptions, 'dry_run'):
-            parser.add_option( '--dry-run', action='store_true', default=False, 
+            parser.add_option( '--dry-run', action='store_true', default=False,
                             help='Do everything except calling CRAB or registering samples to the database.' )
         if not hasattr(currentoptions, 'workingArea'):
-            parser.add_option( '--workingArea',metavar='DIR',default=os.getcwd(),help='The area (full or relative path) where to create the CRAB project directory. ' 
+            parser.add_option( '--workingArea',metavar='DIR',default=os.getcwd(),help='The area (full or relative path) where to create the CRAB project directory. '
                                  'If the area doesn\'t exist, CRAB will try to create it using the mkdir command' \
                                 ' (without -p option). Defaults to the current working directory.'       )
-    
-            
+
+
         # Some options can be added without expected trouble with other parser
         # parts, simply because it is quite fixed what they represent.
         # those variables should be added here and will throw no exception if
         # they already exist in the parser
         #parser.set_conflict_handler('resolve')
         #parser.add_option( '--someOption',metavar='DIR',default=None,
-        #                       help='Dummy option for future integration') 
-            
+        #                       help='Dummy option for future integration')
+
         return parser
 
+## Function to run crab command in a new process
+#
+# Some CRAB commands (e.g. submit) create broken cmssw process objects
+# when they are created in multiple calls of crabCommand via CRAB API
+# Running them in a new process is a workaround, see
+# https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3FAQ#Multiple_submission_fails_with_a
+def crabCommandProcess(q,crabCommandArgs):
+    # give crab3 the chance for one server glitch
+    try:
+        res = crabCommand(*crabCommandArgs)
+    except HTTPException:
+        res = crabCommand(*crabCommandArgs)
+    q.put( res )
 
 ## Class for a single CrabRequest
 #
 # This class represents one crab3 task/request
 class CrabTask:
-    
+
     ## The object constructor
     #
     # @type self: CrabTask
@@ -288,7 +274,7 @@ class CrabTask:
     def __init__(self, taskname , crabController = None , initUpdate = True, localDir = "", outlfn = "" , StorageFileList = [] ):
         self.name = taskname
         self.uuid = uuid.uuid4()
-        #~ self.lock = multiprocessing.Lock()       
+        #~ self.lock = multiprocessing.Lock()
         self.jobs = {}
         self.localDir = localDir
         self.outlfn = outlfn
@@ -299,7 +285,7 @@ class CrabTask:
         self.nJobs = 0
         self.state = "NOSTATE"
         self.maxjobnumber = 0
-        self.nUnsubmitted   = 0 
+        self.nUnsubmitted   = 0
         self.nIdle = 0
         self.nRunning = 0
         self.nTransferring    = 0
@@ -312,7 +298,7 @@ class CrabTask:
         if initUpdate:
             self.update()
             self.updateJobStats()
-    
+
     ## Function to resubmit failed jobs in tasks
     #
     # @param self: CrabTask The object pointer.
@@ -328,15 +314,13 @@ class CrabTask:
 
     ## Function to update Task in associated Jobs
     #
-    # @param self: CrabTask The object pointer.        
+    # @param self: CrabTask The object pointer.
     def update(self):
         #~ self.lock.acquire()
         self.isUpdating = True
         controller =  CrabController()
-        #~ self.controller.logger.info('starting update')
-        #~ self.state = "UPDATING"
-        #~ self.state , self.jobs = self.controller.status(self.name) 
-        self.state , self.jobs = controller.status(self.name) 
+        self.state = "UPDATING"
+        self.state , self.jobs = controller.status(self.name)
         self.nJobs = len(self.jobs.keys())
         self.updateJobStats()
         self.isUpdating = False
@@ -347,27 +331,27 @@ class CrabTask:
             else:
                 self.state = "COMPLETE"
         #~ self.lock.release()
-        
+
     def test_print(self):
         return self.uuid
     ## Function to update JobStatistics
     #
     # @type self: CrabTask
-    # @param self: The object pointer.           
+    # @param self: The object pointer.
     # @type dCacheFilelist: list of strings
-    # @param dCacheFilelist: A list of files on the dCache           
+    # @param dCacheFilelist: A list of files on the dCache
     def updateJobStats(self,dCacheFileList = None):
         jobKeys = sorted(self.jobs.keys())
         try:
             intJobkeys = [int(x) for x in jobKeys]
         except:
-            print "error parsing job numers to int" 
-        
+            print "error parsing job numers to int"
+
         #maxjobnumber = max(intJobkeys)
-        
+
         stateDict = {'unsubmitted':0,'idle':0,'running':0,'transferring':0,'cooloff':0,'failed':0,'finished':0}
         nComplete = 0
-    
+
         # loop through jobs
         for key in jobKeys:
             job = self.jobs[key]
@@ -380,17 +364,17 @@ class CrabTask:
                         outputFilename = "%s_%s"%( sample, key)
                         if 'finished' in statekey and any(outputFilename in s for s in dCacheFileList):
                             nComplete +=1
-        
+
         for state in stateDict:
             attrname = "n" + state.capitalize()
             setattr(self, attrname, stateDict[state])
-        self.nComplete = nComplete    
+        self.nComplete = nComplete
 
 ## Class holds job statistics for several Crab tasks
 #
 # This class saves and updates statistics from a given list of CrabTask objects.
 class TaskStats:
-       
+
     ## The object constructor
     #
     # @type self: TaskStats
@@ -402,34 +386,34 @@ class TaskStats:
             self.updateStats(tasklist)
         else:
             self.clearStats()
-            
+
     ## This function updates the statistics for a given tasklist
     #
     # @type self: TaskStats
     # @param self: The object pointer.
     # @type tasklist: List of CrabTask objects
-    # @param tasklist: List of CrabTasks for which statistics should be calculated        
+    # @param tasklist: List of CrabTasks for which statistics should be calculated
     def updateStats(self,tasklist):
         self.clearStats()
         self.nTasks = len(tasklist)
         for task in tasklist:
             if not task.isUpdating:
                 self.nUnsubmitted   += task.nUnsubmitted
-                self.nIdle += task.nIdle 
+                self.nIdle += task.nIdle
                 self.nRunning += task.nRunning
-                self.nTransferring    += task.nTransferring 
+                self.nTransferring    += task.nTransferring
                 self.nCooloff    += task.nCooloff
                 self.nFailed    += task.nFailed
                 self.nFinished    += task.nFinished
                 self.nComplete    += task.nComplete
-            
+
     ## This function sets all counts to zero
     #
     # @type self: TaskStats
-    # @param self: The object pointer. 
+    # @param self: The object pointer.
     def clearStats(self):
         self.nTasks = 0
-        self.nUnsubmitted   = 0 
+        self.nUnsubmitted   = 0
         self.nIdle = 0
         self.nRunning = 0
         self.nTransferring    = 0
