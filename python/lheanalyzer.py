@@ -22,6 +22,20 @@ class Particle:
     def getTLorentzVector(self):
         """Returns the ROOT TLorentzVector of the particle"""
         return ROOT.TLorentzVector(self.momentum[0],self.momentum[1],self.momentum[2],self.momentum[3])
+    def add(self,p):
+        self.energy+=p.energy
+        self.px+=p.px
+        self.py+=p.py
+        self.pz+=p.pz
+        for i in range(4):
+            self.momentum[i]+=p.momentum[i]
+        self.mass = self.momentum[4]
+        self.pt = (self.px**2+self.py**2)**0.5
+        self.tLorentzVector = self.getTLorentzVector()
+        self.eta = self.tLorentzVector.Eta()
+        self.phi = self.tLorentzVector.Phi()
+    def __repr__(self):
+        return "ID:%f  pt:%f  eta:%f  phi:%f  e:%f  m:%f"%(self.pdgId,self.pt,self.eta,self.phi,self.energy,self.mass)
     px = property(lambda self: self.momentum[0])
     py = property(lambda self: self.momentum[1])
     pz = property(lambda self: self.momentum[2])
@@ -37,7 +51,10 @@ class Event:
     def __init__(self,initstr):
         """Constuctor call with line from lhe file"""
         ls=initstr.split()
-        self.nParticles,self.processId,self.weight,self.scale,self.QEDCoupling,self.QCDCoupling=int(ls[0]),int(ls[1]),float(ls[2]),float(ls[3]),float(ls[4]),float(ls[5])
+        try:
+            self.nParticles,self.processId,self.weight,self.scale,self.QEDCoupling,self.QCDCoupling=int(ls[0]),int(ls[1]),float(ls[2]),float(ls[3]),float(ls[4]),float(ls[5])
+        except:
+            self.nParticles,self.processId,self.weight,self.scale,self.QEDCoupling,self.QCDCoupling=int(ls[0]),int(ls[1]),float(ls[2]),float(ls[3]),0.,0.
         self.particles=[]
     def addParticle(self,particle):
         """adds a particle to the event"""
@@ -87,6 +104,7 @@ class LHEAnalysis:
             try:
                 self.processes.append(Process(line))
             except (ValueError, IndexError):
+                print sys.exc_info()[0]
                 raise LHEFileFormatError(self.lhefile.filename,self.lhefile.lineCounter)
 
     def __iter__(self):
@@ -97,7 +115,7 @@ class LHEAnalysis:
             if line==None:
                 raise StopIteration
                 return
-            if line.strip()=="<event>": 
+            if line.strip()=="<event>":
                 beginevent=True
                 break
         if beginevent is False:
@@ -112,6 +130,8 @@ class LHEAnalysis:
             try:
                 particle=Particle(line)
             except (ValueError, IndexError):
+                import sys
+                print sys.exc_info()
                 raise LHEFileFormatError(self.lhefile.filename,self.lhefile.lineCounter)
             event.addParticle(particle)
         return event
@@ -131,10 +151,16 @@ class LorentzVector:
         self.pz+=p.pz
     def invariantMass(self):
         return (self.energy**2-self.px**2-self.py**2-self.pz**2)**0.5
+    pt = property(lambda self: (self.px**2+self.py**2)**0.5)
 
 
 def invariantMass(p0,*particles):
     l0=LorentzVector(p0.momentum)
+    if l0.pt==0 or particles[0].pt==0:
+
+        print l0
+        print particles
+        raw_input("kjnk")
     for p in particles:
         l0.add(LorentzVector(p.momentum))
     return l0.invariantMass()
@@ -143,5 +169,19 @@ def invariantMass(p0,*particles):
 def transverseMass(p0,p1):
     l0=p0.tLorentzVector
     l1=p1.tLorentzVector
-    return (l0.Et()**2+l1.Et()**2-2*l0.Et()*l1.Et()*cos(l0.DeltaPhi(l1)))**0.5
+    if l0.Pt()==0 or l1.Pt()==0:
+        l0.Print()
+        l1.Print()
+        raw_input("kjnk")
+
+    return (l0.Pt()**2+l1.Pt()**2-2*l0.Pt()*l1.Pt()*cos(l0.DeltaPhi(l1)))**0.5
+
+def deltaR(p0,p1):
+    l0=p0.tLorentzVector
+    l1=p1.tLorentzVector
+    if l0.Pt()==0 or l1.Pt()==0:
+        l0.Print()
+        l1.Print()
+        raw_input("kjnk")
+    return l0.DeltaR(l1)
 

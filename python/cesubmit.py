@@ -191,10 +191,11 @@ class Job:
         fileNew.write(newText)
         fileNew.close()
 
-        localargs=(' '.join(["./prologue.sh","./"+os.path.basename(self.executable)] + self.arguments))
+        localargs=(' '.join(["./prologue.sh","%d"%self.nodeid,"./"+os.path.basename(self.executable)] + self.arguments))
         localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
         errFile=open("err.txt","w")
         outFile=open("out.txt","w")
+        #print "run "+localargs
         process = subprocess.Popen(localargs, stdout=outFile, stderr=errFile, shell=True )
         #stdout, stderr = process.communicate()
         process.communicate()
@@ -309,7 +310,7 @@ class Task:
     def addJob(self, job):
         job.task = self
         self.jobs.append(job)
-    def submit(self, processes=0):
+    def submit(self, processes=0, local=False):
         log.info('Submit task %s',self.name)
         if len(self.jobs)==0:
             log.error('No jobs in task %s',self.name)
@@ -327,7 +328,10 @@ class Task:
             self.jobs[i].nodeid = i
             self.jobs[i].writeJdl()
         #multiprocessing
-        self._dosubmit(range(len(self.jobs)), processes, submitWorker)
+        if not local:
+            self._dosubmit(range(len(self.jobs)), processes, submitWorker)
+        else:
+            self._dosubmit(range(len(self.jobs)), processes, runWorker)
         self.frontEndStatus="SUBMITTED"
         os.chdir(startdir)
         self.save()
@@ -442,6 +446,7 @@ class Task:
         +'echo Current directory $PWD\n'
         +'echo Directory content:\n'
         +'ls\n'
+        +'echo $@\n'
         +'chmod u+x $1\n'
         +'echo Executing $@\n'
         +'echo ================= Start output =================\n'

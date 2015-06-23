@@ -22,6 +22,7 @@
 #include "TString.h"
 #include "TNtupleD.h"
 #include "TEfficiency.h"
+#include "TProfile.h"
 #include "boost/format.hpp"
 
 /** To avoid compiler problems, we tell gcc to ignore any unused function error
@@ -40,6 +41,7 @@ namespace HistClass {
     static std::unordered_map<std::string, TNtupleD * > ttupple; /*!< Map of a string and a TNtupleD histogram, for easy Ntuple handling. */
     static std::unordered_map<std::string, TTree * > trees; /*!< Map of a string and a TTree histogram, for easy tree handling. */
     static std::unordered_map<std::string, TEfficiency * > effs; /*!< Map of a string and a TEfficiency container. */
+    static std::unordered_map<std::string, TProfile * > prof; /*!< Map of a string and a TEfficiency container. */
 
     /*! \brief Function to create a number of 1D histograms in the histo map
      *
@@ -263,6 +265,21 @@ namespace HistClass {
         effs[Form("eff_%s", name)] = tmpeff;
     }
 
+
+    /*! \brief Function to create one 1D Profile container in the eff map
+     *
+     * \param[in] name Name of the Profile container that should be created
+     * \param[in] nbinsx Number of bins on the x-axis
+     * \param[in] xlow Lower edge of the x-axis
+     * \param[in] xup Upper edge of the x-axis
+     * \param[in] xtitle Optinal title of the x-axis (DEFAULT = "")
+     * \param[in] ytitle Optinal title of the y-axis (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void CreateProf(const char* name, Int_t nbinsx, Double_t xlow, Double_t xup, const char* xtitle = "", const char* ytitle = "") {
+        TProfile * tmpprof = new TProfile(Form("prof_%s", name), Form("%s;%s;%s", name, xtitle, ytitle), nbinsx, xlow, xup);
+        prof[Form("prof_%s", name)] = tmpprof;
+    }
+
     /*! \brief Function to fill an event in a 1D histogram of the map
      *
      * This function fills one value with one weight for one event in one
@@ -316,6 +333,29 @@ namespace HistClass {
             std::cerr << "(Fill) No hist: " << Form("h1_%s", name) << " in map " << std::endl;
         }
     }
+    /*! \brief Function to fill an event in a 1D histogram of the map without histo number
+     *
+     * This function fills one value with one weight for one event in one
+     * specific histogram. The function also checks if the histogram exists
+     * in the map, otherwise it will print an error message.
+     * \param[in] name Name of the histogram which should be filled
+     * \param[in] value Value that should be filled
+     * \param[in] weight Weight of the event that should be filled
+     */
+    SUPPRESS_NOT_USED_WARN static void FillStr(const char * name, const char * value, double weight) {
+        std::unordered_map<std::string, TH1D * >::iterator it;
+        if (strcmp(name, "h_counters") == 0) {
+                it = histo.find(Form("%s", name));
+        } else {
+                it = histo.find(Form("h1_%s", name));
+        }
+
+        if (it != histo.end()) {
+            it->second->Fill(value, weight);
+        } else {
+            std::cerr << "(Fill) No hist: " << Form("h1_%s", name) << " in map " << std::endl;
+        }
+    }
 
     /*! \brief Function to fill an event in a 2D histogram of the map
      *
@@ -325,8 +365,12 @@ namespace HistClass {
      * \param[in] weight Weight of the event that should be filled
      */
     SUPPRESS_NOT_USED_WARN static void Fill(const char * name, double valuex, double valuey, double weight) {
-        std::string dummy = Form("h2_%s", name);
-        histo2[dummy]->Fill(valuex, valuey, weight);
+        auto it =histo2.find(Form("h2_%s", name));
+        if(it != histo2.end()){
+            it->second->Fill(valuex, valuey, weight);
+        }else{
+            std::cerr << "(Fill) No h2: " << name << " in map " << std::endl;
+        }
     }
 
     /*! \brief Function to fill an event in a 2D histogram of the map
@@ -400,8 +444,12 @@ namespace HistClass {
      * \param[in] passed Boolean if the event passed or not
      */
     SUPPRESS_NOT_USED_WARN static void FillEff(const char * name, double valuex, bool passed) {
-        std::string dummy = Form("eff_%s", name);
-        effs[dummy]->Fill(passed, valuex);
+        auto it =effs.find(Form("eff_%s", name));
+        if(it != effs.end()){
+            it->second->Fill(passed, valuex);
+        }else{
+            std::cerr << "(Fill) No eff: " << name << " in map " << std::endl;
+        }
     }
 
     /*! \brief Function to fill an event in a 2D efficiency container of the map
@@ -412,8 +460,29 @@ namespace HistClass {
      * \param[in] passed Boolean if the event passed or not
      */
     SUPPRESS_NOT_USED_WARN static void FillEff(const char * name, double valuex, double valuey, bool passed) {
-        std::string dummy = Form("eff_%s", name);
-        effs[dummy]->Fill(passed, valuex, valuey);
+        auto it =effs.find(Form("eff_%s", name));
+        if(it != effs.end()){
+            it->second->Fill(passed, valuex, valuey);
+        }else{
+            std::cerr << "(Fill) No eff: " << name << " in map " << std::endl;
+        }
+    }
+
+    /*! \brief Function to fill an event in a 1D profile container of the map
+     *
+     * \param[in] name Name of the histogram which should be filled
+     * \param[in] valuex x-value that should be filled
+     * \param[in] valuey y-value that should be filled
+     * \param[in] passed Boolean if the event passed or not
+     */
+    SUPPRESS_NOT_USED_WARN static void Profile(const char * name, double valuex, double valuey) {
+        std::string dummy = Form("prof_%s", name);
+        std::unordered_map<std::string, TProfile * >::iterator it = prof.find(dummy);
+        if (it != prof.end()) {
+             it->second->Fill(valuex, valuey);
+        } else {
+            std::cerr << "(Fill) No prof: " << name << " in map " << std::endl;
+        }
     }
 
     /*! \brief Function to write one 1D histogram of the map
@@ -724,6 +793,24 @@ namespace HistClass {
     SUPPRESS_NOT_USED_WARN static void WriteAllEff(const char * name = "") {
         std::unordered_map<std::string, TEfficiency * >::iterator it;
         for (std::unordered_map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
+            if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
+                it->second -> Write();
+            } else if (strcmp(name, "") == 0) {
+                it->second -> Write();
+            }
+        }
+    }
+
+    /*! \brief Function to write many profile containers of the map
+     *
+     * This function writes all profile containers of the map with the
+     * default options, otherwise it writes all profile containers that
+     * contain the given string in there name.
+     * \param[in] name Optional string that all profile containers names that should be written contain (DEFAULT = "")
+     */
+    SUPPRESS_NOT_USED_WARN static void WriteAllProf(const char * name = "") {
+        std::unordered_map<std::string, TProfile * >::iterator it;
+        for (std::unordered_map<std::string, TProfile * >::iterator it = prof.begin(); it != prof.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
             } else if (strcmp(name, "") == 0) {

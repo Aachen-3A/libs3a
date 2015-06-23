@@ -26,6 +26,8 @@ class Aix3adbBaseElement:
             if key=="error":
                 raise Aix3adbException(dictionary[key])
             setattr(self, key, dictionary[key])
+    def __repr__(self):
+        return "%s(%r)" % (self.__class__, self.__dict__)
 
 class MCSample(Aix3adbBaseElement):
     pass
