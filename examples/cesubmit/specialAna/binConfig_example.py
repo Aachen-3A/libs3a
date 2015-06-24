@@ -1,4 +1,4 @@
 import os
-cpFiles=["bin","ConfigFiles","lib"]
+cpFiles=["bin/music","ConfigFiles","specialAna"]
 PathtoExecutable=os.getenv( 'MUSIC_BASE' )
 outDir="/user/USER/out"

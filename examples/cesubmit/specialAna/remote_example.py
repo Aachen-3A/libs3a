@@ -1,18 +1,18 @@
 #!/bin/env python
-import sys
+
 import cesubmit
-from gridfunctions import getdcachelist
+from gridFunctions import getdcachelist
 import binConfig_example as binConfig
 import checkEnvironment
 from datetime import datetime
-import optparse,os,time,cPickle,subprocess,shutil
+import optparse,os,time,cPickle,subprocess,shutil,sys
 import logging
 log = logging.getLogger( 'remote' )
 
 def getFilesfromFile(cfgFile):
     sampleList={}
     file = open(cfgFile,'r')
-    user,tag,sample,config=["","","",""]
+    user,tag,sample,config,mainFolder=["","","","",""]
 
     known_folders=dict()
     if not os.path.exists("data"):
@@ -31,16 +31,21 @@ def getFilesfromFile(cfgFile):
         if "config=" in line:
             config=line.split("=")[1].strip()
             continue
+        if "mainFolder=" in line:
+            mainFolder=line.split("=")[1].strip()
+            continue
         if line[0]=="#" or len(line.split())==0:
             continue
         sample=line.strip()
         log.debug( " ".join([user,tag,sample,config]))
-        folder="/%s/MUSiC/%s/%s" % (user,tag,sample)
-        if folder in known_folders:
+        if mainFolder=="":
+            mainFolder="MUSiC"
+        folder="/%s/%s/%s/%s" % (user,mainFolder,tag,sample)
+        if folder in known_folders and len(known_folders[folder])>0:
             file_lists=known_folders[folder]
         else:
             time.sleep(4)
-            file_lists = getdcachelist( folder,sample )
+            file_lists = getdcachelist( folder, sample,mem_limit = 2000000000 )
             outfile = open( "data/fileList.pkl", 'a+b' )
             cPickle.dump( {folder:file_lists}, outfile, -1 )
             outfile.close()
@@ -83,19 +88,20 @@ def makeExe(user):
     echo Copying pack...
     #Try 10 times to copy the pack file with help of srmcp.
     success=false
-    for i in {1..10}; do
-       if srmcp gsiftp://grid-se113.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/program.tar.gz file:///.; then
+    for i in {1..2}; do
+       if srmcp gsiftp://grid-se114.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/program.tar.gz file:///.; then
           success=true
           break
        fi
     done
     if ! $success; then
-       echo Copying of pack file \\\'gsiftp://grid-se113.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/program.tar.gz\\\' failed! 1>&2
+       echo Copying of pack file \\\'gsiftp://grid-se114.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/program.tar.gz\\\' failed! 1>&2
        echo Did you forget to \\\'remix --copy\\\'? 1>&2
     fi
 
 
     tar xzvf program.tar.gz
+    export PXLANA=$PWD
     export MUSIC_BASE=$PWD
     export LD_LIBRARY_PATH=$PWD/extra_libs:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH=$LHAPATHREPLACE/lib:$LD_LIBRARY_PATH
@@ -128,9 +134,15 @@ def prepare_teli(options):
     log.info("Copy file to dache..")
     cpFiles=binConfig.cpFiles
     PathtoExecutable=binConfig.PathtoExecutable
-    tempdir = tempfile.mkdtemp( prefix='televisionExe-' )
+    os.makedirs(options.Output+"/Exe")
+    #tempdir = tempfile.mkdtemp( prefix='televisionExe-' )
+    tempdir = options.Output+"/Exe"
     for i in cpFiles:
-        command="cp -r %s/%s %s"%(PathtoExecutable,i,tempdir)
+        if os.path.isdir("%s/%s"%(PathtoExecutable,i)):
+            command='rsync -av --exclude ".*/" %s/%s %s'%(PathtoExecutable,i,tempdir)
+        else:
+            os.makedirs("%s/%s"%(tempdir,i.split("/")[0]))
+            command="cp -r %s/%s %s/%s"%(PathtoExecutable,i,tempdir,i.split("/")[0])
         retcode, output2=TimedCall.retry(3,300,command.split(" "))
         if retcode!=0:
             log.error("Could not create a local copy check arguments!!")
@@ -148,10 +160,11 @@ def prepare_teli(options):
     cmd2 = "file:///%s/program.tar.gz"% (tempdir)
     cmd3 = "%sprogram.tar.gz"% (path)
     command = [cmd1,cmd2,cmd3]
-    command2 = ["uberftp","grid-ftp.physik.rwth-aachen.de",r"rm /pnfs/physik.rwth-aachen.de/cms/store/user/%s/MUSiC/share/program.tar.gz"%(user)]
+    command2 = ["uberftp","grid-ftp",r"rm /pnfs/physik.rwth-aachen.de/cms/store/user/%s/MUSiC/share/program.tar.gz"%(user)]
     counter=0
     log.debug( " ".join(command2))
     log.debug(" ".join(command))
+    retcode,retcode2=0,0
     while counter<3:
         retcode2, output2=TimedCall.retry( 3, 600, command2 )
         retcode, output=TimedCall.retry( 3, 600, command )
@@ -183,8 +196,10 @@ def main():
                             help = 'which user on dcache [default = %s]'%(os.getenv( 'LOGNAME' )))
     parser.add_option( '-o', '--Output', default = '%s'%(binConfig.outDir).replace("USER",os.getlogin())+"/TAG", metavar = 'DIRECTORY',
                             help = 'Define the output directory. [default = %default]')
-    parser.add_option( '-f', '--force', default = "force the output to overwrite", metavar = 'DIRECTORY',
-                            help = 'Define the output directory. [default = %default]')
+    parser.add_option( '-f', '--force',action = 'store_true', default = False,
+                            help = 'Force the output folder to be overwritten. [default = %default]')
+    parser.add_option( '-l', '--local',action = 'store_true', default = False,
+                            help = 'run localy over the files [default = %default]')
     parser.add_option( '--debug', metavar = 'LEVEL', default = 'INFO',
                        help= 'Set the debug level. Allowed values: ERROR, WARNING, INFO, DEBUG. [default = %default]' )
     parser.add_option( '-t', '--Tag', default = "output%s_%s_%s_%s_%s"%(date_time.year,
@@ -203,10 +218,14 @@ def main():
     format = '%(levelname)s from %(name)s at %(asctime)s: %(message)s'
     date = '%F %H:%M:%S'
     logging.basicConfig( level = logging._levelNames[ options.debug ], format = format, datefmt = date )
-
+    log.info("Welcome to the wonders of color!")
 
     try:
-       cmssw_version, cmssw_base, scram_arch = checkEnvironment.checkEnvironment()
+        values=checkEnvironment.checkEnvironment()
+        if len(values)==3:
+            cmssw_version, cmssw_base, scram_arch = values
+        else:
+            music_base, cmssw_version, cmssw_base, scram_arch = values
     except EnvironmentError, err:
         log.error( err )
         log.info( 'Exiting...' )
@@ -214,21 +233,30 @@ def main():
 
 
     cfgFile = args[ 0 ]
+    if os.path.exists(options.Output) and not options.force:
+        log.error("The outpath "+options.Output+" already exists pick a new one or use --force")
+        sys.exit(3)
+    else:
+        os.makedirs(options.Output)
     sampleList=getFilesfromFile(cfgFile)
     prepare_teli(options)
     makeExe(options.user)
 
     thisdir=os.getcwd()
-    if os.path.exists(options.Output) or not options.force:
-        log.error("The outpath "+options.Output+" already exists pick a new one or use --force")
-        sys.exit(3)
-    else:
-        os.makedirs(options.Output)
+
     shutil.copyfile(thisdir+"/runtemp.sh",options.Output+"/runtemp.sh")
     os.remove(thisdir+"/runtemp.sh")
 
+
+    n_jobs=0
     for sample in sampleList:
-        task=cesubmit.Task(sample,options.Output+"/"+sample,scramArch='slc6_amd64_gcc481', cmsswVersion='CMSSW_7_0_7_patch1')
+        n_jobs+=len(sampleList[sample][0])
+    #raw_input("There will be %d jobs in total"%n_jobs)
+    print("There will be %d jobs in total"%n_jobs)
+
+    sbumittedjobs=0
+    for sample in sampleList:
+        task=cesubmit.Task(sample,options.Output+"/"+sample,scramArch=scram_arch, cmsswVersion=cmssw_version)
 
         task.executable=options.Output+"/runtemp.sh"
         task.inputfiles=[]
@@ -237,19 +265,20 @@ def main():
         #usage: bin/music [--DumpECHistos] [--NoSpecialAna] [--NoCcControl] [--NoCcEventClass] [-h] [-o value] [-N value] [-x value] [-p value] [--debug value] [-M value] a1...
 
 
-        standardArg=["--NoCcControl", "--NoCcEventClass","--ECMerger","2","-o","MusicOutDir",sampleList[sample][1]]
-        print "down under"
+        standardArg=["-o","MusicOutDir",sampleList[sample][1]]
         for f in sampleList[sample][0]:
-            print f
             job=cesubmit.Job()
             job.arguments=standardArg+f
             task.addJob(job)
-        log.info("start submitting")
-        task.submit(6)
+        #log.info("start submitting "+sample+" "+str(len(sampleList[sample][0])) )
+        log.info("start submitting %s %d  %d/%d"%(sample,len(sampleList[sample][0]),sbumittedjobs,n_jobs) )
+        sbumittedjobs+=len(sampleList[sample][0])
+
+        task.submit(processes=8,local=options.local)
 
 
     log.info("Thanks for zapping in, bye bye")
-    log.info("The out files will be in "+options.Output)
+    log.info("The out files will be in "+options.Output+"/*")
 
 
 
