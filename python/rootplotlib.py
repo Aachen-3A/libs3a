@@ -18,6 +18,14 @@ def pvaluetozvalue(p, sided=2):
     else:
         raise Exception("sided must be either 1 or 2")
 
+def doubleDict2LatexTable(doubledict):
+    rows = [key1 for key1 in doubledict]
+    cols = [key2 for key2 in doubledict[doubledict.keys()[0]]]
+    lines = " & ".join([""]+cols)+"\\\\\n"
+    for key1 in rows:
+        lines+=" & ".join([key1]+[str(doubledict[key1][key2]) for key2 in cols])+"\\\\\n"
+    return lines
+
 def Latex(pad=None):
     if pad is None:
         for i in range(1000):
