@@ -28,6 +28,12 @@ def uberls(directory):
         filelist.append("dcap://grid-dcap.physik.rwth-aachen.de/pnfs/physik.rwth-aachen.de/cms/store/user/{0}/{1}".format(directory, infos[8]))
     return filelist
 
+def cp(source, target):
+    cmd = ["globus-url-copy", "-r", "-v", "-fast", "-p", "6","gsiftp://grid-ftp/pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (source), "gsiftp://grid-ftp/pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (target)]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    (stdout, stderr) = p.communicate()
+    return
+
 ## Get list of files with certain file extension in dCap folder recursively
 # @type dir: string
 # @param dir: The dCap folder without /pnfs/physik.rwth-aachen.de/cms/store/user/
