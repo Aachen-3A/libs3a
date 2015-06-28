@@ -42,12 +42,12 @@ class DataSkim(Aix3adbBaseElement):
 class aix3adb:
     def __init__(self, cookiefilepath='aix3adb-ssocookie.txt'):
         self.cookiefile = os.path.abspath(cookiefilepath)
-        self.authurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php'
-        self.readurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc/x3adb_read.php'
-        self.domain  = 'olschew.web.cern.ch'
-        #self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc_auth/x3adb_write.php'
-        #self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb/xmlrpc/x3adb_read.php'
-        #self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
+        #self.authurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc_auth/x3adb_write.php'
+        #self.readurl = 'https://olschew.web.cern.ch/olschew/x3adb/xmlrpc/x3adb_read.php'
+        #self.domain  = 'olschew.web.cern.ch'
+        self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb2/xmlrpc_auth/x3adb_write.php'
+        self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb2/xmlrpc/x3adb_read.php'
+        self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
     def authorize(self, username=None, trykerberos=3):
         print "Calling kinit, please enter your CERN password"
         call = ['kinit']
