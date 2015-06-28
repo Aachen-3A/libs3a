@@ -109,6 +109,23 @@ class aix3adb:
     def editDataSkim(self, skim):
         s = self.getAuthServerProxy()
         return DataSkim(s.editDataSkim(skim))
+    # deletes
+    @tryServerAuth
+    def deleteMCSampleByName(self, name):
+        s = self.getAuthServerProxy()
+        return s.deleteMCSample(name)["info"]
+    @tryServerAuth
+    def deleteDataSampleByName(self, name):
+        s = self.getAuthServerProxy()
+        return s.deleteDataSample(name)["info"]
+    @tryServerAuth
+    def deleteMCSkimById(self, skimid):
+        s = self.getAuthServerProxy()
+        return s.deleteMCSkim(skimid)["info"]
+    @tryServerAuth
+    def deleteDataSkimById(self, skimid):
+        s = self.getAuthServerProxy()
+        return s.editDataSkim(skimid)["info"]
     # gets
     def getMCSample(self, name):
         s = xmlrpclib.ServerProxy(self.readurl)
