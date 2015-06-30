@@ -41,8 +41,10 @@ def getCernUserName():
 
 def createAndUploadGridPack(localfiles, uploadurl, tarfile="gridpacktemp.tar.gz", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
     # create pack file
-    command = ['tar', "zcvf", tarfile, localfiles]
-    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    command = ['tar', "zcvf", tarfile]
+    command.extend(localfiles)
+    print command
+    process = subprocess.Popen(command, stdout=subprocess.PIPE,env=os.environ.copy())
     stdout, stderr = process.communicate()
     if process.returncode!=0:
         raise Exception ("Could not create tar file for grid pack: "+stdout+"\n"+stderr)
@@ -53,8 +55,23 @@ def uploadGridPack(tarfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aa
     replacedict["createdate"]=datetime.datetime.now().strftime('%Y-%m-%d')
     replacedict["createdatetime"]=datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     replacedict['username']=getCernUserName()
-    # upload pack file
+
     resultuploadurl=uploadurl.format(**replacedict)
+    
+    #check for an existing gridpack
+    cmd = ["srmls",(uploadsite).format(**replacedict)+resultuploadurl]
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    process.communicate()
+    if process.returncode == 0:
+    	print "File %s exists on dcache!" % ((uploadsite).format(**replacedict)+resultuploadurl)
+     	print 'Remove? [Y/N]'
+     	input = raw_input('-->')
+     	if input == 'y' or input == 'Y':
+     		deleteCommand = ["srmrm",(uploadsite).format(**replacedict)+resultuploadurl]
+     		process = subprocess.Popen(deleteCommand, stdout=subprocess.PIPE)
+     		process.communicate()
+    
+    # upload pack file
     command = ["srmcp", "file:///"+tarfile, (uploadsite).format(**replacedict)+resultuploadurl ]
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
     stdout, stderr = process.communicate()
@@ -441,7 +458,7 @@ class Task:
         'env\n'
         +'echo Current directory $PWD\n'
         +'echo Directory content:\n'
-        +'ls\n'
+        +'ls -R\n'
         +'chmod u+x $1\n'
         +'echo Executing $@\n'
         +'echo ================= Start output =================\n'
