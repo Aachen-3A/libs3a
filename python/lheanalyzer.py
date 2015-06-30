@@ -123,7 +123,7 @@ class LHEAnalysis:
         initline=self.lhefile.next()
         event=Event(initline)
         for line in self.lhefile:
-            if line.strip()=="</event>":
+            if line.strip()=="</event>" or "<" in line.strip():
                 break
             if 'wgt' in line:
                 continue
