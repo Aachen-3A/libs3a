@@ -516,8 +516,10 @@ namespace HistClass {
         for (std::unordered_map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
+                it = histo.erase(it);
             } else if (strcmp(name, "") == 0) {
                 it->second -> Write();
+                it = histo.erase(it);
             }
         }
     }

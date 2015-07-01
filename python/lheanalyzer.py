@@ -35,7 +35,7 @@ class Particle:
         self.eta = self.tLorentzVector.Eta()
         self.phi = self.tLorentzVector.Phi()
     def __repr__(self):
-        return "ID:%f  pt:%f  eta:%f  phi:%f  e:%f  m:%f"%(self.pdgId,self.pt,self.eta,self.phi,self.energy,self.mass)
+        return "ID:%f  pt:%f  eta:%f  phi:%f  e:%f  m:%f status:%d"%(self.pdgId,self.pt,self.eta,self.phi,self.energy,self.mass,self.status)
     px = property(lambda self: self.momentum[0])
     py = property(lambda self: self.momentum[1])
     pz = property(lambda self: self.momentum[2])
