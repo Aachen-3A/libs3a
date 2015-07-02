@@ -213,9 +213,9 @@ namespace HistClass {
      * \param[in] m Map of the name and variable that should be matched to each branch
      * \param[in] name Name of the TTree that should be created
      */
-    SUPPRESS_NOT_USED_WARN static void CreateTree(std::map< std::string , float > *m, const char * name) {
+    SUPPRESS_NOT_USED_WARN static void CreateTree(std::unordered_map< std::string , float > *m, const char * name) {
         trees[name] = new TTree(name, name);
-        for (std::map< std::string , float >::iterator it = m->begin(); it != m->end(); it++) {
+        for (std::unordered_map< std::string , float >::iterator it = m->begin(); it != m->end(); it++) {
                 trees[name]->Branch(it->first.c_str(), &(it->second), Form("%s/F", it->first.c_str()));
         }
     }
@@ -341,7 +341,7 @@ namespace HistClass {
      * \param[in] weight Weight of the event that should be filled
      */
     SUPPRESS_NOT_USED_WARN static void Fill(Int_t n_histo, const char * name, double valuex, double valuey, double weight) {
-        std::map<std::string, TH2D * >::iterator it = histo2.find(Form("h2_%d_%s", n_histo, name));
+        std::unordered_map<std::string, TH2D * >::iterator it = histo2.find(Form("h2_%d_%s", n_histo, name));
         if (it != histo2.end()) {
             it->second->Fill(valuex, valuey, weight);
         } else {
