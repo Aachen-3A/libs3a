@@ -42,8 +42,10 @@ def getCernUserName():
 def createAndUploadGridPack(localfiles, uploadurl, tarfile="gridpacktemp.tar.gz", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
     # create pack file
     command = ['tar', "zcvf", tarfile]
-    command.extend(localfiles)
-    print command
+    if type(localfiles) == list:
+    	command.extend(localfiles)
+    else:
+    	command.append(localfiles)
     process = subprocess.Popen(command, stdout=subprocess.PIPE,env=os.environ.copy())
     stdout, stderr = process.communicate()
     if process.returncode!=0:
