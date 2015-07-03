@@ -278,7 +278,7 @@ class Task:
         if not 'ceId' in obj.__dict__:
             obj.ceId = 'grid-ce.physik.rwth-aachen.de:8443/cream-pbs-cms'
         return obj
-    def __init__(self, name, directory = None, mode="RECREATE", scramArch='slc5_amd64_gcc462', cmsswVersion='CMSSW_5_3_14', ceId='grid-ce.physik.rwth-aachen.de:8443/cream-pbs-cms'):
+    def __init__(self, name, directory = None, mode="RECREATE", scramArch=True, cmsswVersion=None, ceId='grid-ce.physik.rwth-aachen.de:8443/cream-pbs-cms'):
         self.name = name
         self.directory=directory
         if self.directory is None:
@@ -287,8 +287,14 @@ class Task:
         self.jdlfilename = name+".jdl"
         self.inputfiles, self.outputfiles, self.jobs, self.executable = [], [], [], None
         self.mode = mode
-        self.scramArch = scramArch
-        self.cmsswVersion = cmsswVersion
+        if scramArch is True:
+            self.scramArch = os.environ.get('SCRAM_ARCH')
+        else:
+            self.scramArch = scramArch
+        if cmsswVersion is True:
+            self.cmsswVersion = os.environ.get('CMSSW_VERSION')
+        else:
+            self.cmsswVersion = cmsswVersion
         self.ceId = ceId
         self.jobs = []
         self.frontEndStatus=""
