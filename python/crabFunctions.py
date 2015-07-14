@@ -13,8 +13,11 @@ import uuid
 from  httplib import HTTPException
 from multiprocessing import Process, Queue
 from CRABAPI.RawCommand import crabCommand
-from CRABClient.ClientUtilities import getLoggers
-getLoggers(50)
+from CRABClient.UserUtilities import getConsoleLogLevel, setConsoleLogLevel, LOGLEVEL_MUTE
+
+setConsoleLogLevel(LOGLEVEL_MUTE)
+
+
 ## The CrabController class
 #
 # This class can be used to manage Analyses using crab3
