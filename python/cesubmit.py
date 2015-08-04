@@ -101,7 +101,10 @@ class Job:
             status="None"
         return status
     def writeJdl(self):
+
         if self.executable is None: self.executable = self.task.executable
+        self.executable = os.path.abspath( self.executable )
+        self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         jdl = (
             '[Type = "Job";\n'
             'VirtualOrganisation = "cms";\n'
@@ -343,6 +346,7 @@ class Task:
         self.jobs.append(job)
     def submit(self, processes=0, local=False):
         log.info('Submit task %s',self.name)
+        self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         if len(self.jobs)==0:
             log.error('No jobs in task %s',self.name)
             return
