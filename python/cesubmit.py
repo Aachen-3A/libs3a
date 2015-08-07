@@ -32,12 +32,18 @@ def resubmitWorker(job):
 def killWorker(job):
     job.kill()
     return job
+
 def getCernUserName():
     try:
         username = os.environ["CERNUSERNAME"]
         return username
     except:
-        raise Exception("CERN user name could not be obtained. Please specify your CERN user name using the environment variable $CERNUSERNAME.")
+        try:
+            from crabFunctions import CrabController
+            crab = CrabController()
+            return crab.checkusername()
+        except:
+            raise Exception("CERN user name could not be obtained. Please specify your CERN user name using the environment variable $CERNUSERNAME.")
 
 def createAndUploadGridPack(localfiles, uploadurl, tarfile="gridpacktemp.tar.gz", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
     # create pack file
@@ -98,7 +104,10 @@ class Job:
             status="None"
         return status
     def writeJdl(self):
+
         if self.executable is None: self.executable = self.task.executable
+        self.executable = os.path.abspath( self.executable )
+        self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         jdl = (
             '[Type = "Job";\n'
             'VirtualOrganisation = "cms";\n'
@@ -340,6 +349,7 @@ class Task:
         self.jobs.append(job)
     def submit(self, processes=0, local=False):
         log.info('Submit task %s',self.name)
+        self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         if len(self.jobs)==0:
             log.error('No jobs in task %s',self.name)
             return

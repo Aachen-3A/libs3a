@@ -73,6 +73,14 @@ class aix3adb:
         customtransport.setcookies(self.cookiefile, self.domain)
         s = xmlrpclib.ServerProxy(self.authurl, customtransport)
         return s
+    def getMCMaxSkimID(self):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.getMCMaxSkimID( )
+        return MCSkim(result['skim']).id
+    def getDataMaxSkimID(self):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.getDataMaxSkimID( )
+        return DataSkim(result['skim']).id
     # inserts
     @tryServerAuth
     def insertMCSample(self, sample):
@@ -272,3 +280,15 @@ def transport(uri):
         return cookiesafetransport()
     else:
         return cookietransport()
+
+# helper function to directly retrieve a dblink object
+def createDBlink(user, readOnly= True):
+
+    # Create a database object.
+    dblink = aix3adb()
+
+    # Authorize to database.
+    log.info( "Connecting to database: 'http://cern.ch/aix3adb'" )
+    if not readOnly: dblink.authorize(username = user)
+    log.info( 'Authorized to database.' )
+    return dblink
