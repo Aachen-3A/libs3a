@@ -52,7 +52,7 @@ def createAndUploadGridPack(localfiles, uploadurl, tarfile="gridpacktemp.tar.gz"
         raise Exception ("Could not create tar file for grid pack: "+stdout+"\n"+stderr)
     return uploadGridPack(tarfile, uploadurl, uploadsite)
 
-def uploadGridPack(tarfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
+def uploadGridPack(tarfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/", force=False):
     replacedict=dict()
     replacedict["createdate"]=datetime.datetime.now().strftime('%Y-%m-%d')
     replacedict["createdatetime"]=datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -65,10 +65,13 @@ def uploadGridPack(tarfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aa
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process.communicate()
     if process.returncode == 0:
-        print "File %s exists on dcache!" % ((uploadsite).format(**replacedict)+resultuploadurl)
-        print 'Remove? [Y/N]'
-        input = raw_input('-->')
-        if input == 'y' or input == 'Y':
+        if not force:
+            print "File %s exists on dcache!" % ((uploadsite).format(**replacedict)+resultuploadurl)
+            print 'Remove? [Y/N]'
+            input = raw_input('-->')
+            if input == 'y' or input == 'Y':
+                force = True
+        if force:
             deleteCommand = ["srmrm",(uploadsite).format(**replacedict)+resultuploadurl]
             process = subprocess.Popen(deleteCommand, stdout=subprocess.PIPE)
             process.communicate()
