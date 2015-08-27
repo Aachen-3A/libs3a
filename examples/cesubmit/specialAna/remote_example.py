@@ -18,10 +18,12 @@ def getFilesfromFile(cfgFile):
     if not os.path.exists("data"):
         os.mkdir("data")
 
-    if os.path.exists("data/fileList.pkl"):
-        known_folders=readDcachePickle("data/fileList.pkl")
+    #if os.path.exists("data/fileList.pkl"):
+        #known_folders=readDcachePickle("data/fileList.pkl")
 
     for line in file:
+        if line[0]=="#" or len(line.split())==0:
+            continue
         if "tag=" in line:
             tag=line.split("=")[1].strip()
             continue
@@ -34,19 +36,29 @@ def getFilesfromFile(cfgFile):
         if "mainFolder=" in line:
             mainFolder=line.split("=")[1].strip()
             continue
-        if line[0]=="#" or len(line.split())==0:
-            continue
         sample=line.strip()
         log.debug( " ".join([user,tag,sample,config]))
         if mainFolder=="":
             mainFolder="MUSiC"
         folder="/%s/%s/%s/%s" % (user,mainFolder,tag,sample)
-        if folder in known_folders and len(known_folders[folder])>0:
-            file_lists=known_folders[folder]
+        sampleFolder=folder.replace("/","")
+        sampleFolder+=".pkl"
+        if os.path.exists("data/"+sampleFolder):
+            known_folders=readDcachePickle("data/"+sampleFolder)
+            file_lists_1=known_folders[folder]
+            file_lists=[]
+            for j in file_lists_1:
+                file_lists.append([ i.replace("dcap://grid-dcap.physik.rwth-aachen.de/pnfs","/pnfs") for i in j])
+
         else:
             time.sleep(4)
-            file_lists = getdcachelist( folder, sample,mem_limit = 2000000000 )
-            outfile = open( "data/fileList.pkl", 'a+b' )
+            if "Data" in sample:
+                file_lists_1 = getdcachelist( folder, sample,mem_limit = 500000000 )
+            else:
+                file_lists_1 = getdcachelist( folder, sample,mem_limit = 2000000000 )
+            for j in file_lists_1:
+                file_lists.append([ i.replace("dcap://grid-dcap.physik.rwth-aachen.de/pnfs","/pnfs") for i in j])
+            outfile = open( "data/"+sampleFolder, 'a+b' )
             cPickle.dump( {folder:file_lists}, outfile, -1 )
             outfile.close()
 
@@ -82,25 +94,15 @@ def readDcachePickle(file):
     except:
         raise
 
-def makeExe(user):
+def makeExe(user,options):
     from string import Template
     exe="""
     echo Copying pack...
     #Try 10 times to copy the pack file with help of srmcp.
     success=false
-    for i in {1..2}; do
-       if srmcp gsiftp://grid-se114.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/program.tar.gz file:///.; then
-          success=true
-          break
-       fi
-    done
-    if ! $success; then
-       echo Copying of pack file \\\'gsiftp://grid-se114.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/program.tar.gz\\\' failed! 1>&2
-       echo Did you forget to \\\'remix --copy\\\'? 1>&2
-    fi
+    cp /pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/$PROGRAM .
 
-
-    tar xzvf program.tar.gz
+    tar xzvf $PROGRAM
     export PXLANA=$PWD
     export MUSIC_BASE=$PWD
     export LD_LIBRARY_PATH=$PWD/extra_libs:$LD_LIBRARY_PATH
@@ -113,7 +115,9 @@ def makeExe(user):
     echo "$@"
     bin/music "$@"
 
-    tar czf MusicOutDir.tar.gz MusicOutDir"""
+    tar czf MusicOutDir.tar.gz MusicOutDir
+    """
+
 
 
     #this should be done as a fuction parameter
@@ -122,6 +126,7 @@ def makeExe(user):
             PROGAM="MUSiC",
             LHAPATHREPLACE="/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/lhapdf6/6.1.4/",
             LHAPATHREPLACE2="/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/lhapdf6/6.1.4/share/LHAPDF/PDFsets",
+            PROGRAM=options.program
         )
     exe=Template(exe).safe_substitute(d)
     exeFile=open("runtemp.sh","w+")
@@ -145,22 +150,22 @@ def prepare_teli(options):
             command="cp -r %s/%s %s/%s"%(PathtoExecutable,i,tempdir,i.split("/")[0])
         retcode, output2=TimedCall.retry(3,300,command.split(" "))
         if retcode!=0:
-            log.error("Could not create a local copy check arguments!!")
+            log.error("Could not create a local copy check arguments!!\n %s"%(command))
             sys.exit(1)
     thidir=os.getcwd()
     os.chdir( tempdir )
 
-    retcode, output2=TimedCall.retry(3,300,['tar', 'czf' , 'program.tar.gz']+os.listdir(tempdir) )
+    retcode, output2=TimedCall.retry(3,300,['tar', 'czf' , options.program]+os.listdir(tempdir) )
     if retcode!=0:
         log.error("Could not create a local copy check arguments!!")
         sys.exit(1)
     user = options.user
     path = "srm://grid-srm.physik.rwth-aachen.de:8443/pnfs/physik.rwth-aachen.de/cms/store/user/%s/MUSiC/share/"%(user)
     cmd1 = "lcg-cp"
-    cmd2 = "file:///%s/program.tar.gz"% (tempdir)
-    cmd3 = "%sprogram.tar.gz"% (path)
+    cmd2 = "file:///%s/%s"% (tempdir,options.program)
+    cmd3 = "%s%s"% (path,options.program)
     command = [cmd1,cmd2,cmd3]
-    command2 = ["uberftp","grid-ftp",r"rm /pnfs/physik.rwth-aachen.de/cms/store/user/%s/MUSiC/share/program.tar.gz"%(user)]
+    command2 = ["uberftp","grid-ftp",r"rm /pnfs/physik.rwth-aachen.de/cms/store/user/%s/MUSiC/share/%s"%(user,options.program)]
     counter=0
     log.debug( " ".join(command2))
     log.debug(" ".join(command))
@@ -183,7 +188,7 @@ def prepare_teli(options):
         log.info(output2)
         log.info(output)
         sys.exit(1)
-    log.info("File "+tempdir+"/program.tar.gz  copied to dcache")
+    log.info("File "+tempdir+"/%s  copied to dcache"%(options.program))
     os.chdir(thidir)
 
 
@@ -196,6 +201,8 @@ def main():
                             help = 'which user on dcache [default = %s]'%(os.getenv( 'LOGNAME' )))
     parser.add_option( '-o', '--Output', default = '%s'%(binConfig.outDir).replace("USER",os.getlogin())+"/TAG", metavar = 'DIRECTORY',
                             help = 'Define the output directory. [default = %default]')
+    parser.add_option( '-p', '--program', default = "program.tar.gz", metavar = 'program',
+                            help = 'Define name of the program on the dcache [default = %default]')
     parser.add_option( '-f', '--force',action = 'store_true', default = False,
                             help = 'Force the output folder to be overwritten. [default = %default]')
     parser.add_option( '-l', '--local',action = 'store_true', default = False,
@@ -240,11 +247,12 @@ def main():
         os.makedirs(options.Output)
     sampleList=getFilesfromFile(cfgFile)
     prepare_teli(options)
-    makeExe(options.user)
+    makeExe(options.user,options)
 
     thisdir=os.getcwd()
 
     shutil.copyfile(thisdir+"/runtemp.sh",options.Output+"/runtemp.sh")
+    shutil.copyfile(os.path.join(thisdir,cfgFile),os.path.join(options.Output,cfgFile))
     os.remove(thisdir+"/runtemp.sh")
 
 
