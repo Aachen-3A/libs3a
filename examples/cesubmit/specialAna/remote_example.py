@@ -52,6 +52,7 @@ def getFilesfromFile(cfgFile):
 
         else:
             time.sleep(4)
+            file_lists=[]
             if "Data" in sample:
                 file_lists_1 = getdcachelist( folder, sample,mem_limit = 500000000 )
             else:

@@ -223,7 +223,11 @@ class Job:
         fileNew.close()
 
         localargs=(' '.join(["./prologue.sh","%d"%self.nodeid,"./"+os.path.basename(self.executable)] + self.arguments))
-        localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
+        if "grid-dcap." in localargs:
+            localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
+        else:
+            localargs=localargs.replace("/pnfs","dcap://grid-dcap-extern.physik.rwth-aachen.de/pnfs")
+
         errFile=open("err.txt","w")
         outFile=open("out.txt","w")
         #print "run "+localargs
