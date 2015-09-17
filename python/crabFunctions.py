@@ -14,6 +14,7 @@ from  httplib import HTTPException
 from multiprocessing import Process, Queue
 from CRABAPI.RawCommand import crabCommand
 from CRABClient.UserUtilities import getConsoleLogLevel, setConsoleLogLevel, LOGLEVEL_MUTE
+from CRABClient.ClientExceptions import CachefileNotFoundException
 
 setConsoleLogLevel(LOGLEVEL_MUTE)
 
@@ -149,11 +150,19 @@ class CrabController():
         else:
             try:
                 res = self.callCrabCommand( ('status', '--long', 'crab_%s' % name) )
-                #~ print res
-                return res['status'], res['jobs']
-            except:
+                #print res
+                if 'taskFailureMsg' in res and 'jobs' in res:
+                    return res['status'], res['jobs'], res['taskFailureMsg']
+                elif 'jobs' in res and 'taskFailureMsg' not in res:
+                    return res['status'], res['jobs'],None
+                elif 'jobs' not in res and 'taskFailureMsg' in res:
+                    return res['status'], {},res['taskFailureMsg']
+                else:
+                     return res['status'],{},None
+            except Exception as e:
+                print e
                 self.logger.error("Can not run crab status request")
-                return "NOSTATE",{}
+                return "NOSTATE",{},None
 
     ## Call crab command in a new process and return result dict
     #
@@ -259,6 +268,12 @@ def crabCommandProcess(q,crabCommandArgs):
         res = crabCommand(*crabCommandArgs)
     except HTTPException:
         res = crabCommand(*crabCommandArgs)
+    except CachefileNotFoundException as e:
+        print "crab error ---------------"
+        print e
+        print "end error ---------------"
+        print crabCommandArgs
+        res={ 'status':"CachefileNotFound",'jobs':{}}
     q.put( res )
 
 ## Class for a single CrabRequest
@@ -296,6 +311,7 @@ class CrabTask:
         self.nFailed    = 0
         self.nFinished    = 0
         self.nComplete    = 0
+        self.failureReason = None
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
         #start with first updates
         if initUpdate:
@@ -323,7 +339,12 @@ class CrabTask:
         self.isUpdating = True
         controller =  CrabController()
         self.state = "UPDATING"
-        self.state , self.jobs = controller.status(self.name)
+        self.state , self.jobs,self.failureReason = controller.status(self.name)
+        if self.state=="FAILED":
+            import time
+            #try it once more
+            time.sleep(2)
+            self.state , self.jobs,self.failureReason = controller.status(self.name)
         self.nJobs = len(self.jobs.keys())
         self.updateJobStats()
         self.isUpdating = False
