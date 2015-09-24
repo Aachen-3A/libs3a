@@ -110,7 +110,7 @@ class Job:
         self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         jdl = (
             '[Type = "Job";\n'
-            'VirtualOrganisation = "cms";\n'
+            'VirtualOrganisation = "dcms";\n'
             'AllowZippedISB = true;\n'
             #'Requirements = (RegExp("rwth-aachen.de", other.GlueCEUniqueId)) && (RegExp("cream", other.GlueCEUniqueId)) && !(RegExp("short", other.GlueCEUniqueId));\n'
             'ShallowRetryCount = 10;\n'
@@ -237,6 +237,7 @@ class Job:
         outFile.close()
         errFile.close()
         self.jobid=jobFileName
+        return
 
 
     def getStatus(self):
@@ -546,6 +547,7 @@ class Task:
         return njobs
     def getStatus(self):
         if self.isBlocked():
+            print self.name, " blocked ignore (if you want to update rm .lock)"
             return self.frontEndStatus
         self.blockTask()
         log.debug('Get status of task %s',self.name)
