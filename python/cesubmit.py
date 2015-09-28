@@ -126,6 +126,8 @@ class Job:
             standardinput.append(self.executable)
         jdl += 'InputSandbox = { "' + ('", "'.join(standardinput+self.inputfiles+self.task.inputfiles)) + '"};\n'
         stds=["out.txt", "err.txt"]
+        if not isinstance(self.outputfiles,list) or not isinstance(self.task.outputfiles,list):
+            raise Exception("You passed a non list object as outputfile argument! Make a list!")
         jdl += 'OutputSandbox = { "' + ('", "'.join(stds+self.outputfiles+self.task.outputfiles)) + '"};\n'
         jdl += 'Arguments = "' + (' '.join([str(self.nodeid), "./"+os.path.basename(self.executable)] + self.arguments)) + '";\n'
         jdl += "]"
