@@ -264,16 +264,29 @@ class CrabController():
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3FAQ#Multiple_submission_fails_with_a
 def crabCommandProcess(q,crabCommandArgs):
     # give crab3 the chance for one server glitch
-    try:
-        res = crabCommand(*crabCommandArgs)
-    except HTTPException:
-        res = crabCommand(*crabCommandArgs)
-    except CachefileNotFoundException as e:
-        print "crab error ---------------"
-        print e
-        print "end error ---------------"
-        print crabCommandArgs
-        res={ 'status':"CachefileNotFound",'jobs':{}}
+    i=0
+    while True:
+        i+=1
+        try:
+            res = crabCommand(*crabCommandArgs)
+            break
+        except HTTPException as e:
+            print "crab error ---------------"
+            print e
+            print "end error ---------------"
+            print "will try again!"
+            import time
+            time.sleep(5)
+        except CachefileNotFoundException as e:
+            print "crab error ---------------"
+            print e
+            print "end error ---------------"
+            print crabCommandArgs
+            res={ 'status':"CachefileNotFound",'jobs':{}}
+            break
+        if i>5:
+            res={ 'status':"FuckYou",'jobs':{}}
+            break
     q.put( res )
 
 ## Class for a single CrabRequest
