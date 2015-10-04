@@ -115,6 +115,7 @@ def getdcachelist(dir , Tag='' , mem_limit = 500000000, fileXtension= '.pxlio'):
         filelistlist[-1].append(("dcap://grid-dcap.physik.rwth-aachen.de/%s" %(tmpstring.split()[7])).replace("//pnfs","/pnfs"))
     if len(filelistlist[-1]) == 0:
       filelistlist.pop()
+    filelistlist=filter(lambda x: len(x)>0, filelistlist)
     return filelistlist
 
 ## Returns the life time left. for a proxy.

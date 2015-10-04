@@ -110,7 +110,7 @@ class Job:
         self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         jdl = (
             '[Type = "Job";\n'
-            'VirtualOrganisation = "cms";\n'
+            'VirtualOrganisation = "dcms";\n'
             'AllowZippedISB = true;\n'
             #'Requirements = (RegExp("rwth-aachen.de", other.GlueCEUniqueId)) && (RegExp("cream", other.GlueCEUniqueId)) && !(RegExp("short", other.GlueCEUniqueId));\n'
             'ShallowRetryCount = 10;\n'
@@ -126,6 +126,8 @@ class Job:
             standardinput.append(self.executable)
         jdl += 'InputSandbox = { "' + ('", "'.join(standardinput+self.inputfiles+self.task.inputfiles)) + '"};\n'
         stds=["out.txt", "err.txt"]
+        if not isinstance(self.outputfiles,list) or not isinstance(self.task.outputfiles,list):
+            raise Exception("You passed a non list object as outputfile argument! Make a list!")
         jdl += 'OutputSandbox = { "' + ('", "'.join(stds+self.outputfiles+self.task.outputfiles)) + '"};\n'
         jdl += 'Arguments = "' + (' '.join([str(self.nodeid), "./"+os.path.basename(self.executable)] + self.arguments)) + '";\n'
         jdl += "]"
@@ -223,7 +225,11 @@ class Job:
         fileNew.close()
 
         localargs=(' '.join(["./prologue.sh","%d"%self.nodeid,"./"+os.path.basename(self.executable)] + self.arguments))
-        localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
+        if "grid-dcap." in localargs:
+            localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
+        else:
+            localargs=localargs.replace("/pnfs","dcap://grid-dcap-extern.physik.rwth-aachen.de/pnfs")
+
         errFile=open("err.txt","w")
         outFile=open("out.txt","w")
         #print "run "+localargs
@@ -233,6 +239,7 @@ class Job:
         outFile.close()
         errFile.close()
         self.jobid=jobFileName
+        return
 
 
     def getStatus(self):
@@ -295,6 +302,9 @@ class Job:
     @property
     def outputSubDirectory(self):
         return str(self.jobid).replace("https://","").replace(":","_").replace("/","_")
+    @property
+    def jid(self):
+        return str(self.jobid).split("/")[-1]
 
 
 class Task:
@@ -542,6 +552,7 @@ class Task:
         return njobs
     def getStatus(self):
         if self.isBlocked():
+            print self.name, " blocked ignore (if you want to update rm .lock)"
             return self.frontEndStatus
         self.blockTask()
         log.debug('Get status of task %s',self.name)

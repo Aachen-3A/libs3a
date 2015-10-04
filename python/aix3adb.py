@@ -4,7 +4,6 @@ import subprocess
 import cookielib
 import urlparse
 import os
-
 log = logging.getLogger( 'aix3adb' )
 
 def tryServerAuth(funct):
@@ -42,18 +41,24 @@ class DataSkim(Aix3adbBaseElement):
     pass
 
 class aix3adb:
-    def __init__(self, cookiefilepath='aix3adb-ssocookie.txt'):
+    def __init__(self, cookiefilepath='aix3adb-ssocookie.txt', passphrase = None):
         self.cookiefile = os.path.abspath(cookiefilepath)
         self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb2/xmlrpc_auth/x3adb_write.php'
         self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb2/xmlrpc/x3adb_read.php'
         self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
+        self.passphrase = passphrase
     def authorize(self, username=None, trykerberos=3):
         print "Calling kinit, please enter your CERN password"
         call = ['kinit']
         if username is not None:
             call.append(username + "@CERN.CH")
         for i in range(trykerberos):
-            x = subprocess.call(call)
+            if not self.passphrase:
+                x = subprocess.call(call)
+            else:
+                p = subprocess.Popen( call, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+                stdout = p.communicate(input=self.passphrase+'\n')[0]
+                x = p.returncode
             log.info("Result of kinit: " + str(x))
             if x == 0: break
             print "kinit failed. Please try again."
@@ -282,10 +287,10 @@ def transport(uri):
         return cookietransport()
 
 # helper function to directly retrieve a dblink object
-def createDBlink(user, readOnly= True):
+def createDBlink(user, readOnly= True, passphrase = None):
 
     # Create a database object.
-    dblink = aix3adb()
+    dblink = aix3adb( passphrase = passphrase )
 
     # Authorize to database.
     log.info( "Connecting to database: 'http://cern.ch/aix3adb'" )
