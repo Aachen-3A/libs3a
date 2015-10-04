@@ -295,6 +295,9 @@ class Job:
     @property
     def outputSubDirectory(self):
         return str(self.jobid).replace("https://","").replace(":","_").replace("/","_")
+    @property
+    def jid(self):
+        return str(self.jobid).split("/")[-1]
 
 
 class Task:
