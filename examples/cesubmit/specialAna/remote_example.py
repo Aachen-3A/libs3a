@@ -48,17 +48,19 @@ def getFilesfromFile(cfgFile):
             file_lists_1=known_folders[folder]
             file_lists=[]
             for j in file_lists_1:
-                file_lists.append([ i.replace("dcap://grid-dcap.physik.rwth-aachen.de/pnfs","/pnfs") for i in j])
+                #file_lists.append([ i.replace("dcap://grid-dcap.physik.rwth-aachen.de/pnfs","/pnfs") for i in j])
+                file_lists.append([ i for i in j])
 
         else:
             time.sleep(4)
             file_lists=[]
             if "Data" in sample:
-                file_lists_1 = getdcachelist( folder, sample,mem_limit = 500000000 )
+                file_lists_1 = getdcachelist( folder, sample,mem_limit = 1000000000 )
             else:
-                file_lists_1 = getdcachelist( folder, sample,mem_limit = 2000000000 )
+                file_lists_1 = getdcachelist( folder, sample,mem_limit = 4000000000 )
             for j in file_lists_1:
-                file_lists.append([ i.replace("dcap://grid-dcap.physik.rwth-aachen.de/pnfs","/pnfs") for i in j])
+                #file_lists.append([ i.replace("dcap://grid-dcap.physik.rwth-aachen.de/pnfs","/pnfs") for i in j])
+                file_lists.append([ i for i in j])
             outfile = open( "data/"+sampleFolder, 'a+b' )
             cPickle.dump( {folder:file_lists}, outfile, -1 )
             outfile.close()
@@ -66,7 +68,8 @@ def getFilesfromFile(cfgFile):
         if len(file_lists)>0:
             sampleList.update({sample:[file_lists,config]})
         else:
-            raise IOError( 'No sample in List for folder '+sample )
+            print sample
+            #raise IOError( 'No sample in List for folder '+sample )
     return sampleList
 
 def readDcachePickle(file):
@@ -101,11 +104,29 @@ def makeExe(user,options):
     echo Copying pack...
     #Try 10 times to copy the pack file with help of srmcp.
     success=false
-    cp /pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/$PROGRAM .
+    #cp /pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/$PROGRAM .
+
+
+
+    success=false
+    #if ! `cp /pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/$PROGRAM .`; then
+    if ! `srmcp gsiftp://grid-se114.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/$PROGRAM file:///.`; then
+        for i in {1..2}; do
+           if srmcp gsiftp://grid-se114.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share/$PROGRAM file:///.; then
+              success=true
+              break
+           fi
+        done
+        if ! $success; then
+           echo Copying of pack file \\\'gsiftp://grid-se114.physik.rwth-aachen.de:2811/pnfs/physik.rwth-aachen.de/cms/store/user/$USER/$PROGAM/share$PROGRAM\\\' failed! 1>&2
+           echo Did you forget to \\\'remix --copy\\\'? 1>&2
+        fi
+    fi
 
     tar xzvf $PROGRAM
     export PXLANA=$PWD
     export MUSIC_BASE=$PWD
+    export MYPXLANA=specialAna
     export LD_LIBRARY_PATH=$PWD/extra_libs:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH=$LHAPATHREPLACE/lib:$LD_LIBRARY_PATH
     #echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
@@ -144,8 +165,8 @@ def prepare_teli(options):
     #tempdir = tempfile.mkdtemp( prefix='televisionExe-' )
     tempdir = options.Output+"/Exe"
     for i in cpFiles:
-        if os.path.isdir("%s/%s"%(PathtoExecutable,i)):
-            command='rsync -av --exclude ".*/" %s/%s %s'%(PathtoExecutable,i,tempdir)
+        if os.path.isdir("%s"%(os.path.join(PathtoExecutable,i))):
+            command='rsync -av --exclude ".*/" --exclude=".git" --exclude="*.o" %s/%s %s'%(PathtoExecutable,i,tempdir)
         else:
             os.makedirs("%s/%s"%(tempdir,i.split("/")[0]))
             command="cp -r %s/%s %s/%s"%(PathtoExecutable,i,tempdir,i.split("/")[0])
@@ -160,6 +181,11 @@ def prepare_teli(options):
     if retcode!=0:
         log.error("Could not create a local copy check arguments!!")
         sys.exit(1)
+
+    retcode, output2=TimedCall.retry(3,300,['md5sum' , options.program])
+
+
+
     user = options.user
     path = "srm://grid-srm.physik.rwth-aachen.de:8443/pnfs/physik.rwth-aachen.de/cms/store/user/%s/MUSiC/share/"%(user)
     cmd1 = "lcg-cp"
@@ -229,11 +255,7 @@ def main():
     log.info("Welcome to the wonders of color!")
 
     try:
-        values=checkEnvironment.checkEnvironment()
-        if len(values)==3:
-            cmssw_version, cmssw_base, scram_arch = values
-        else:
-            music_base, cmssw_version, cmssw_base, scram_arch = values
+       pxlana_base ,cmssw_version, cmssw_base, scram_arch = checkEnvironment.checkEnvironment()
     except EnvironmentError, err:
         log.error( err )
         log.info( 'Exiting...' )
@@ -282,8 +304,10 @@ def main():
         #log.info("start submitting "+sample+" "+str(len(sampleList[sample][0])) )
         log.info("start submitting %s %d  %d/%d"%(sample,len(sampleList[sample][0]),sbumittedjobs,n_jobs) )
         sbumittedjobs+=len(sampleList[sample][0])
-
-        task.submit(processes=8,local=options.local)
+        numberOfJobs=8
+        if options.local:
+            numberOfJobs=30
+        task.submit(processes=numberOfJobs,local=options.local)
 
 
     log.info("Thanks for zapping in, bye bye")
