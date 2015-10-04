@@ -458,7 +458,7 @@ class CursesMultiHandler(logging.Handler):
     def receive(self):
         while True:
             try:
-                record = self.queue.get_nowait()
+                record = self.queue.get()
                 self._handler.emit(record)
             except (KeyboardInterrupt, SystemExit):
                 raise

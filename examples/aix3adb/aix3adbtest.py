@@ -9,9 +9,16 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
 
 def main():
     pp = pprint.PrettyPrinter(indent=4)
+    dblink=aix3adb.aix3adb()
     # Ein Datenbank-Objekt erstellen
-    dblink=aix3adb.aix3adbAuth(username="olschew")
-
+    skim, sample = dblink.getMCLatestSkimAndSampleByDatasetpath("/DarkMatter_MonoZToLL_A_Mx-50_Mv-50_gDMgQ-1_TuneCUETP8M1_13TeV-madgraph/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM")
+    print skim.__dict__
+    liste = len(dblink.searchDataSkimsAndSamples({"owner":"serdweg",'id':'>80'},dict()))
+    print liste
+    #dblink=aix3adb.aix3adbAuth(username="olschew")
+    
+    #dblink.searchMCSkimsAndSamples
+    raise Exception()
     # Insert a sample
     print "Insert a sample"
     sample0 = aix3adb.MCSample()

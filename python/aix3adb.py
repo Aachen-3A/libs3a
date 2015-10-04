@@ -4,7 +4,6 @@ import subprocess
 import cookielib
 import urlparse
 import os
-
 log = logging.getLogger( 'aix3adb' )
 
 def tryServerAuth(funct):
@@ -42,24 +41,30 @@ class DataSkim(Aix3adbBaseElement):
     pass
 
 class aix3adb:
-    def __init__(self, cookiefilepath='aix3adb-ssocookie.txt'):
+    def __init__(self, cookiefilepath='aix3adb-ssocookie.txt', passphrase = None):
         self.cookiefile = os.path.abspath(cookiefilepath)
         self.authurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb2/xmlrpc_auth/x3adb_write.php'
         self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb2/xmlrpc/x3adb_read.php'
         self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
+        self.passphrase = passphrase
     def authorize(self, username=None, trykerberos=3):
         print "Calling kinit, please enter your CERN password"
         call = ['kinit']
         if username is not None:
             call.append(username + "@CERN.CH")
         for i in range(trykerberos):
-            x = subprocess.call(call)
+            if not self.passphrase:
+                x = subprocess.call(call)
+            else:
+                p = subprocess.Popen( call, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.STDOUT)
+                stdout = p.communicate(input=self.passphrase+'\n')[0]
+                x = p.returncode
             log.info("Result of kinit: " + str(x))
             if x == 0: break
             print "kinit failed. Please try again."
         self.obtainSSOCookies()
     def obtainSSOCookies(self):
-        call = ['env', '-i', 'cern-get-sso-cookie', '--krb', '--url', self.authurl, '--reprocess', '--outfile', self.cookiefile]
+        call = ['env', '-i', '/home/home1/institut_3a/olschewski/public/cernsso/cern-get-sso-cookie', '--krb', '--url', self.authurl, '--reprocess', '--outfile', self.cookiefile]
         x = subprocess.call(call)
         if x > 0:
             log.error("Failed to retrieve a cookie, authentication not possible")
@@ -73,6 +78,14 @@ class aix3adb:
         customtransport.setcookies(self.cookiefile, self.domain)
         s = xmlrpclib.ServerProxy(self.authurl, customtransport)
         return s
+    def getMCMaxSkimID(self):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.getMCMaxSkimID( )
+        return MCSkim(result['skim']).id
+    def getDataMaxSkimID(self):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.getDataMaxSkimID( )
+        return DataSkim(result['skim']).id
     # inserts
     @tryServerAuth
     def insertMCSample(self, sample):
@@ -159,7 +172,7 @@ class aix3adb:
         result = s.getMCSkimAndSampleBySkim(skimid)
         return MCSkim(result['skim']), MCSample(result['sample'])
     def getDataSkimAndSampleBySkim(self, skimid):
-        s = xmlrpclib.ServerProxy(self.readpurl)
+        s = xmlrpclib.ServerProxy(self.readurl)
         result = s.getDataSkimAndSampleBySkim(skimid)
         return DataSkim(result['skim']), DataSample(result['sample'])
     def getMCSkimAndSample(self, skimid=None, name=None):
@@ -173,6 +186,19 @@ class aix3adb:
         else:
             raise Exception("No arguments provided.")
         return skim, sample
+    #search
+    def searchMCSkimsAndSamples(self, skimCriteria, sampleCriteria, start=0, limit=20):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.searchMCSkimsAndSamples(skimCriteria, sampleCriteria, start, limit)
+        if "error" in result:
+            raise Aix3adbException(result["error"])
+        return [(MCSkim(x['skim']), MCSample(x['sample'])) for x in result]
+    def searchDataSkimsAndSamples(self, skimCriteria, sampleCriteria, start=0, limit=20):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.searchDataSkimsAndSamples(skimCriteria, sampleCriteria, start, limit)
+        if "error" in result:
+            raise Aix3adbException(result["error"])
+        return [(DataSkim(x['skim']), DataSample(x['sample'])) for x in result]
 
 
 class aix3adbAuth(aix3adb):
@@ -272,3 +298,15 @@ def transport(uri):
         return cookiesafetransport()
     else:
         return cookietransport()
+
+# helper function to directly retrieve a dblink object
+def createDBlink(user, readOnly= True, passphrase = None):
+
+    # Create a database object.
+    dblink = aix3adb( passphrase = passphrase )
+
+    # Authorize to database.
+    log.info( "Connecting to database: 'http://cern.ch/aix3adb'" )
+    if not readOnly: dblink.authorize(username = user)
+    log.info( 'Authorized to database.' )
+    return dblink

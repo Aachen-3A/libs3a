@@ -28,11 +28,49 @@ def uberls(directory):
         filelist.append("dcap://grid-dcap.physik.rwth-aachen.de/pnfs/physik.rwth-aachen.de/cms/store/user/{0}/{1}".format(directory, infos[8]))
     return filelist
 
+## Copy a file to the dCache
+# @type source: string
+# @param source: The local path to the file name
+# @type target: string
+# @param target: The dCap folder without /pnfs/physik.rwth-aachen.de/cms/store/user/
 def cp(source, target):
     cmd = ["globus-url-copy", "-r", "-v", "-fast", "-p", "6","gsiftp://grid-ftp/pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (source), "gsiftp://grid-ftp/pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (target)]
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=stdout)
     (stdout, stderr) = p.communicate()
     return
+
+class FileNotFound(Exception):
+    pass
+## Get a dictionary of detailed file information of a remote file
+# @type source: string
+# @param source: The dCap file path without /pnfs/physik.rwth-aachen.de/cms/store/user/
+def fileinfos(source):
+    cmd = ["srmls", "-l", "srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/%s" % (source)]
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    (stdout, stderr) = p.communicate()
+    infos=dict()
+    if "SRM_INVALID_PATH" in stderr and "does not exist" in stderr:
+        raise FileNotFound
+    for line in stdout.splitlines()[1:]:
+        kv = line.split(":",1)
+        try:
+            key=kv[0].strip("- ")
+            value=kv[1].strip()
+            infos[key]=value
+        except IndexError:
+            pass
+    return infos
+
+## Get the adler32 hash value of a dCache file
+# @type source: string
+# @param source: The dCap file path without /pnfs/physik.rwth-aachen.de/cms/store/user/
+def adler32(source):
+    infos=fileinfos(source)
+    try:
+        if infos["Checksum type"]!="adler32": return None
+    except KeyError:
+        return None
+    return infos["Checksum value"]
 
 ## Get list of files with certain file extension in dCap folder recursively
 # @type dir: string
@@ -77,6 +115,7 @@ def getdcachelist(dir , Tag='' , mem_limit = 500000000, fileXtension= '.pxlio'):
         filelistlist[-1].append(("dcap://grid-dcap.physik.rwth-aachen.de/%s" %(tmpstring.split()[7])).replace("//pnfs","/pnfs"))
     if len(filelistlist[-1]) == 0:
       filelistlist.pop()
+    filelistlist=filter(lambda x: len(x)>0, filelistlist)
     return filelistlist
 
 ## Returns the life time left. for a proxy.

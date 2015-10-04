@@ -333,6 +333,7 @@ namespace HistClass {
             std::cerr << "(Fill) No hist: " << Form("h1_%s", name) << " in map " << std::endl;
         }
     }
+
     /*! \brief Function to fill an event in a 1D histogram of the map without histo number
      *
      * This function fills one value with one weight for one event in one
@@ -355,6 +356,19 @@ namespace HistClass {
         } else {
             std::cerr << "(Fill) No hist: " << Form("h1_%s", name) << " in map " << std::endl;
         }
+    }
+
+    /*! \brief Function to fill an event in a 1D histogram of the map without histo number
+     *
+     * This function fills one value with one weight for one event in one
+     * specific histogram. The function also checks if the histogram exists
+     * in the map, otherwise it will print an error message.
+     * \param[in] name Name of the histogram which should be filled
+     * \param[in] value Value that should be filled
+     * \param[in] weight Weight of the event that should be filled
+     */
+    SUPPRESS_NOT_USED_WARN static void FillStr(Int_t n_histo, const char * name, const char * value, double weight) {
+        FillStr(Form("%d_%s",n_histo, name), value,  weight);
     }
 
     /*! \brief Function to fill an event in a 2D histogram of the map
@@ -516,10 +530,8 @@ namespace HistClass {
         for (std::unordered_map<std::string, TH1D * >::iterator it = histo.begin(); it != histo.end(); ++it) {
             if (strcmp(name, "") != 0 && std::string::npos != it->first.find(name)) {
                 it->second -> Write();
-                it = histo.erase(it);
             } else if (strcmp(name, "") == 0) {
                 it->second -> Write();
-                it = histo.erase(it);
             }
         }
     }

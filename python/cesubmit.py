@@ -32,47 +32,56 @@ def resubmitWorker(job):
 def killWorker(job):
     job.kill()
     return job
+
 def getCernUserName():
     try:
         username = os.environ["CERNUSERNAME"]
         return username
     except:
-        raise Exception("CERN user name could not be obtained. Please specify your CERN user name using the environment variable $CERNUSERNAME.")
+        try:
+            from crabFunctions import CrabController
+            crab = CrabController()
+            return crab.checkusername()
+        except:
+            raise Exception("CERN user name could not be obtained. Please specify your CERN user name using the environment variable $CERNUSERNAME.")
 
 def createAndUploadGridPack(localfiles, uploadurl, tarfile="gridpacktemp.tar.gz", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
     # create pack file
     command = ['tar', "zcvf", tarfile]
     if type(localfiles) == list:
-    	command.extend(localfiles)
+        command.extend(localfiles)
     else:
-    	command.append(localfiles)
+        command.append(localfiles)
     process = subprocess.Popen(command, stdout=subprocess.PIPE,env=os.environ.copy())
     stdout, stderr = process.communicate()
     if process.returncode!=0:
         raise Exception ("Could not create tar file for grid pack: "+stdout+"\n"+stderr)
     return uploadGridPack(tarfile, uploadurl, uploadsite)
 
-def uploadGridPack(tarfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
+def uploadGridPack(tarfile, uploadurl, uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/", force=False):
     replacedict=dict()
     replacedict["createdate"]=datetime.datetime.now().strftime('%Y-%m-%d')
     replacedict["createdatetime"]=datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     replacedict['username']=getCernUserName()
 
     resultuploadurl=uploadurl.format(**replacedict)
-    
+
     #check for an existing gridpack
     cmd = ["srmls",(uploadsite).format(**replacedict)+resultuploadurl]
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     process.communicate()
     if process.returncode == 0:
-    	print "File %s exists on dcache!" % ((uploadsite).format(**replacedict)+resultuploadurl)
-     	print 'Remove? [Y/N]'
-     	input = raw_input('-->')
-     	if input == 'y' or input == 'Y':
-     		deleteCommand = ["srmrm",(uploadsite).format(**replacedict)+resultuploadurl]
-     		process = subprocess.Popen(deleteCommand, stdout=subprocess.PIPE)
-     		process.communicate()
-    
+        if not force:
+            print "File %s exists on dcache!" % ((uploadsite).format(**replacedict)+resultuploadurl)
+            print 'Remove? [Y/N]'
+            input = raw_input('-->')
+            if input == 'y' or input == 'Y':
+                force = True
+        if force:
+            deleteCommand = ["srmrm",(uploadsite).format(**replacedict)+resultuploadurl]
+            process = subprocess.Popen(deleteCommand, stdout=subprocess.PIPE)
+            process.communicate()
+
     # upload pack file
     command = ["srmcp", "file:///"+tarfile, (uploadsite).format(**replacedict)+resultuploadurl ]
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
@@ -95,10 +104,13 @@ class Job:
             status="None"
         return status
     def writeJdl(self):
+
         if self.executable is None: self.executable = self.task.executable
+        self.executable = os.path.abspath( self.executable )
+        self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         jdl = (
             '[Type = "Job";\n'
-            'VirtualOrganisation = "cms";\n'
+            'VirtualOrganisation = "dcms";\n'
             'AllowZippedISB = true;\n'
             #'Requirements = (RegExp("rwth-aachen.de", other.GlueCEUniqueId)) && (RegExp("cream", other.GlueCEUniqueId)) && !(RegExp("short", other.GlueCEUniqueId));\n'
             'ShallowRetryCount = 10;\n'
@@ -114,6 +126,8 @@ class Job:
             standardinput.append(self.executable)
         jdl += 'InputSandbox = { "' + ('", "'.join(standardinput+self.inputfiles+self.task.inputfiles)) + '"};\n'
         stds=["out.txt", "err.txt"]
+        if not isinstance(self.outputfiles,list) or not isinstance(self.task.outputfiles,list):
+            raise Exception("You passed a non list object as outputfile argument! Make a list!")
         jdl += 'OutputSandbox = { "' + ('", "'.join(stds+self.outputfiles+self.task.outputfiles)) + '"};\n'
         jdl += 'Arguments = "' + (' '.join([str(self.nodeid), "./"+os.path.basename(self.executable)] + self.arguments)) + '";\n'
         jdl += "]"
@@ -211,7 +225,11 @@ class Job:
         fileNew.close()
 
         localargs=(' '.join(["./prologue.sh","%d"%self.nodeid,"./"+os.path.basename(self.executable)] + self.arguments))
-        localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
+        if "grid-dcap." in localargs:
+            localargs=localargs.replace("grid-dcap.","grid-dcap-extern.")
+        else:
+            localargs=localargs.replace("/pnfs","dcap://grid-dcap-extern.physik.rwth-aachen.de/pnfs")
+
         errFile=open("err.txt","w")
         outFile=open("out.txt","w")
         #print "run "+localargs
@@ -221,6 +239,7 @@ class Job:
         outFile.close()
         errFile.close()
         self.jobid=jobFileName
+        return
 
 
     def getStatus(self):
@@ -283,6 +302,9 @@ class Job:
     @property
     def outputSubDirectory(self):
         return str(self.jobid).replace("https://","").replace(":","_").replace("/","_")
+    @property
+    def jid(self):
+        return str(self.jobid).split("/")[-1]
 
 
 class Task:
@@ -337,6 +359,7 @@ class Task:
         self.jobs.append(job)
     def submit(self, processes=0, local=False):
         log.info('Submit task %s',self.name)
+        self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         if len(self.jobs)==0:
             log.error('No jobs in task %s',self.name)
             return
@@ -418,7 +441,7 @@ class Task:
         self.cleanUp()
     def copyResultsToDCache(self, resultfile, uploadurl="{createdate}/{taskname}/{resultfileprefix}-{nodeid}_{runid}.{resultfilesuffix}", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
         self.stageOutDCache.append((resultfile, uploadsite+uploadurl))
-    def addGridPack(self, uploadurl, extractdir="$CMSSW_BASE", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
+    def addGridPack(self, uploadurl, extractdir="./", uploadsite="srm://grid-srm.physik.rwth-aachen.de:8443/srm/managerv2\?SFN=/pnfs/physik.rwth-aachen.de/cms/store/user/{username}/"):
         self.gridPacks.append((uploadsite+uploadurl, extractdir))
     def makePrologue(self):
         executable = (
@@ -497,7 +520,7 @@ class Task:
         f.close()
     def createdir(self):
         if os.path.exists(self.directory) and self.mode!="RECREATE":
-            raise Exception('Directory ' + self.directory + 'already exists')
+            raise Exception('Directory ' + self.directory + ' already exists')
         elif os.path.exists(self.directory):
             shutil.rmtree(self.directory)
         os.makedirs(self.directory)
@@ -529,6 +552,7 @@ class Task:
         return njobs
     def getStatus(self):
         if self.isBlocked():
+            print self.name, " blocked ignore (if you want to update rm .lock)"
             return self.frontEndStatus
         self.blockTask()
         log.debug('Get status of task %s',self.name)
