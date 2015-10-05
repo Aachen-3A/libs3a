@@ -6,7 +6,7 @@ import pycurl
 from StringIO import StringIO
 
 class Gridmon:
-    def __init__(self, jobid, passphrase, baseurl="https://grid-mon.physik.rwth-aachen.de/cgi-bin/jobmon/rwth-aachen/monitor.cgi", cacert=False):
+    def __init__(self, jobid, passphrase, baseurl="https://grid-mon.physik.rwth-aachen.de/cgi-bin/jobmon/rwth-aachen/monitor.cgi", cacert="/etc/grid-security/certificates/GermanGrid.pem"):
         self.baseurl = baseurl
         self.cacert = cacert
         self.passphrase = passphrase
@@ -25,6 +25,10 @@ class Gridmon:
         c.setopt(c.SSLKEY, home+'/.globus/userkey.pem')
         if self.cacert is False:
             c.setopt(c.SSL_VERIFYPEER, 0)
+        else:
+            c.setopt(c.SSL_VERIFYPEER, 1)
+            c.setopt(c.SSL_VERIFYHOST, 2)
+            c.setopt(c.CAINFO, self.cacert)
         c.perform()
         c.close()
         return buffer.getvalue()
