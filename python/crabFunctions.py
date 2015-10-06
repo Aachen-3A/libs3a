@@ -285,7 +285,7 @@ def crabCommandProcess(q,crabCommandArgs):
             res={ 'status':"CachefileNotFound",'jobs':{}}
             break
         if i>5:
-            res={ 'status':"FuckYou",'jobs':{}}
+            res={ 'status':"YouAreFuckedByCrab",'jobs':{}}
             break
     q.put( res )
 
