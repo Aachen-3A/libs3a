@@ -106,6 +106,10 @@ class Job:
     def writeJdl(self):
 
         if self.executable is None: self.executable = self.task.executable
+        if (self.task.uploadexecutable):
+            relPathExecutable = "./" + os.path.basename(self.executable)
+        else:
+            relPathExecutable = "./" + self.executable
         self.executable = os.path.abspath( self.executable )
         self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         jdl = (
@@ -129,7 +133,7 @@ class Job:
         if not isinstance(self.outputfiles,list) or not isinstance(self.task.outputfiles,list):
             raise Exception("You passed a non list object as outputfile argument! Make a list!")
         jdl += 'OutputSandbox = { "' + ('", "'.join(stds+self.outputfiles+self.task.outputfiles)) + '"};\n'
-        jdl += 'Arguments = "' + (' '.join([str(self.nodeid), "./"+os.path.basename(self.executable)] + self.arguments)) + '";\n'
+        jdl += 'Arguments = "' + (' '.join([str(self.nodeid), relPathExecutable] + self.arguments)) + '";\n'
         jdl += "]"
         self.jdlfilename = "job"+str(self.nodeid)+".jdl"
         jdl_file = open(self.jdlfilename, 'w')
