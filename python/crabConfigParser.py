@@ -11,7 +11,7 @@ from ConfigParser import *
 # This class extends the python ConfigParser class and adds functions to
 # output crab3 config files
 class CrabConfigParser(ConfigParser):
-    
+
     ## The constructor.
     def __init__(self):
         ConfigParser.__init__(self)
@@ -36,14 +36,14 @@ class CrabConfigParser(ConfigParser):
         # add additional sections (may be added in future crab3 versions ?)
         for section in sections:
             outlines.extend(self.getSectionLines(section))
-        print filename
+        #print filename
         with open(filename,'wb') as outfile:
             outfile.write('\n'.join(outlines) + '\n')
     ## Helper function to retrieve crab config output lines for one section
     # @type self: CrabConfigParser
     # @param self:The object pointer.
     # @type section: string
-    # @param section:The section name. 
+    # @param section:The section name.
     # @rtype: list of strings
     # @return: Lines for one section in crab3 config file
     def getSectionLines(self,section):
@@ -63,5 +63,5 @@ class CrabConfigParser(ConfigParser):
                         sectionLines.append('config.%s.%s = %.2f'%(section,configItem[0],float(configItem[1])))
                     except:
                         sectionLines.append('config.%s.%s = \'%s\''%(section,configItem[0],configItem[1]))
-            
+
         return sectionLines
