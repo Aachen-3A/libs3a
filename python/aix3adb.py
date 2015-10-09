@@ -172,7 +172,7 @@ class aix3adb:
         result = s.getMCSkimAndSampleBySkim(skimid)
         return MCSkim(result['skim']), MCSample(result['sample'])
     def getDataSkimAndSampleBySkim(self, skimid):
-        s = xmlrpclib.ServerProxy(self.readpurl)
+        s = xmlrpclib.ServerProxy(self.readurl)
         result = s.getDataSkimAndSampleBySkim(skimid)
         return DataSkim(result['skim']), DataSample(result['sample'])
     def getMCSkimAndSample(self, skimid=None, name=None):
@@ -186,6 +186,19 @@ class aix3adb:
         else:
             raise Exception("No arguments provided.")
         return skim, sample
+    #search
+    def searchMCSkimsAndSamples(self, skimCriteria, sampleCriteria, start=0, limit=20):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.searchMCSkimsAndSamples(skimCriteria, sampleCriteria, start, limit)
+        if "error" in result:
+            raise Aix3adbException(result["error"])
+        return [(MCSkim(x['skim']), MCSample(x['sample'])) for x in result]
+    def searchDataSkimsAndSamples(self, skimCriteria, sampleCriteria, start=0, limit=20):
+        s = xmlrpclib.ServerProxy(self.readurl)
+        result = s.searchDataSkimsAndSamples(skimCriteria, sampleCriteria, start, limit)
+        if "error" in result:
+            raise Aix3adbException(result["error"])
+        return [(DataSkim(x['skim']), DataSample(x['sample'])) for x in result]
 
 
 class aix3adbAuth(aix3adb):

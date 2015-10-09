@@ -14,6 +14,7 @@ from  httplib import HTTPException
 from multiprocessing import Process, Queue
 from CRABAPI.RawCommand import crabCommand
 from CRABClient.UserUtilities import getConsoleLogLevel, setConsoleLogLevel, LOGLEVEL_MUTE
+from CRABClient.ClientExceptions import CachefileNotFoundException
 
 setConsoleLogLevel(LOGLEVEL_MUTE)
 
@@ -149,11 +150,19 @@ class CrabController():
         else:
             try:
                 res = self.callCrabCommand( ('status', '--long', 'crab_%s' % name) )
-                #~ print res
-                return res['status'], res['jobs']
-            except:
+                #print res
+                if 'taskFailureMsg' in res and 'jobs' in res:
+                    return res['status'], res['jobs'], res['taskFailureMsg']
+                elif 'jobs' in res and 'taskFailureMsg' not in res:
+                    return res['status'], res['jobs'],None
+                elif 'jobs' not in res and 'taskFailureMsg' in res:
+                    return res['status'], {},res['taskFailureMsg']
+                else:
+                     return res['status'],{},None
+            except Exception as e:
+                print e
                 self.logger.error("Can not run crab status request")
-                return "NOSTATE",{}
+                return "NOSTATE",{},None
 
     ## Call crab command in a new process and return result dict
     #
@@ -255,10 +264,29 @@ class CrabController():
 # https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3FAQ#Multiple_submission_fails_with_a
 def crabCommandProcess(q,crabCommandArgs):
     # give crab3 the chance for one server glitch
-    try:
-        res = crabCommand(*crabCommandArgs)
-    except HTTPException:
-        res = crabCommand(*crabCommandArgs)
+    i=0
+    while True:
+        i+=1
+        try:
+            res = crabCommand(*crabCommandArgs)
+            break
+        except HTTPException as e:
+            print "crab error ---------------"
+            print e
+            print "end error ---------------"
+            print "will try again!"
+            import time
+            time.sleep(5)
+        except CachefileNotFoundException as e:
+            print "crab error ---------------"
+            print e
+            print "end error ---------------"
+            print crabCommandArgs
+            res={ 'status':"CachefileNotFound",'jobs':{}}
+            break
+        if i>5:
+            res={ 'status':"YouAreFuckedByCrab",'jobs':{}}
+            break
     q.put( res )
 
 ## Class for a single CrabRequest
@@ -296,6 +324,7 @@ class CrabTask:
         self.nFailed    = 0
         self.nFinished    = 0
         self.nComplete    = 0
+        self.failureReason = None
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
         #start with first updates
         if initUpdate:
@@ -323,7 +352,12 @@ class CrabTask:
         self.isUpdating = True
         controller =  CrabController()
         self.state = "UPDATING"
-        self.state , self.jobs = controller.status(self.name)
+        self.state , self.jobs,self.failureReason = controller.status(self.name)
+        if self.state=="FAILED":
+            import time
+            #try it once more
+            time.sleep(2)
+            self.state , self.jobs,self.failureReason = controller.status(self.name)
         self.nJobs = len(self.jobs.keys())
         self.updateJobStats()
         self.isUpdating = False
