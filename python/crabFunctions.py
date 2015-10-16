@@ -13,10 +13,11 @@ import uuid
 from  httplib import HTTPException
 from multiprocessing import Process, Queue
 from CRABAPI.RawCommand import crabCommand
-# from CRABClient.UserUtilities import getConsoleLogLevel, setConsoleLogLevel, LOGLEVEL_MUTE
+from CRABClient.UserUtilities import getConsoleLogLevel, setConsoleLogLevel
+from CRABClient.ClientUtilities import LOGLEVEL_MUTE
 from CRABClient.ClientExceptions import CachefileNotFoundException
 
-# setConsoleLogLevel(LOGLEVEL_MUTE)
+setConsoleLogLevel(LOGLEVEL_MUTE)
 
 
 ## The CrabController class
