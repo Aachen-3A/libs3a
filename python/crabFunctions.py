@@ -403,8 +403,8 @@ class CrabTask:
     def resubmit_failed( self ):
         failedJobIds = []
         controller =  CrabController()
-        for jobkey in crabTask.jobs.keys():
-            job = task.jobs[jobkey]
+        for jobkey in self.jobs.keys():
+            job = self.jobs[jobkey]
             if job['State'] == 'failed':
                 failedJobIds.append( job['JobIds'][-1] )
         controller.resubmit( self.name, joblist = failedJobIds )
@@ -457,9 +457,7 @@ class CrabTask:
         return self.uuid
     ## Function to update JobStatistics
     #
-    # @type self: CrabTask
     # @param self: The object pointer.
-    # @type dCacheFilelist: list of strings
     # @param dCacheFilelist: A list of files on the dCache
     def updateJobStats(self,dCacheFileList = None):
         jobKeys = sorted(self.jobs.keys())
@@ -482,7 +480,7 @@ class CrabTask:
                     stateDict[statekey]+=1
                     # check if finished fails are found on dCache if dCacheFilelist is given
                     if dCacheFileList is not None:
-                        outputFilename = "%s_%s"%( sample, key)
+                        outputFilename = "%s_%s"%( self.name, key)
                         if 'finished' in statekey and any(outputFilename in s for s in dCacheFileList):
                             nComplete +=1
 
