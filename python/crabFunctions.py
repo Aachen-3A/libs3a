@@ -118,11 +118,16 @@ class CrabController():
     def resubmit(self,name,joblist = None):
         if self.dry_run:
             self.logger.info('Dry-run: Created config file. ')
-        if joblist is not None:
-            jobstring ="%s"%','.join(joblist)
+            return {}
+        #~ if joblist is not None:
+            #~ jobstring ="%s"%','.join(joblist)
+            #~ cmd = ('resubmit','--wait', '--jobids=',jobstring, os.path.join(self.workingArea,self._prepareFoldername(name)) )
+        if False:
+            pass
         else:
-            res = self.callCrabCommand(('resubmit','--wait', os.path.join(self.workingArea,self._prepareFoldername(name)) ))
-            self.logger.info("crab resumbit called for task %s"%name)
+            cmd = ('resubmit','--wait', os.path.join(self.workingArea,self._prepareFoldername(name)) )
+        res = self.callCrabCommand( cmd )
+        self.logger.info("crab resumbit called for task %s"%name)
         return res
     ## Returns the hn name for a user with valid proxy
     #
