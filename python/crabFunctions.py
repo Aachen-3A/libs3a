@@ -345,10 +345,38 @@ class CrabTask:
         self.nComplete    = 0
         self.failureReason = None
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
+
+        self._isData = None
+
+        # crab config as a python object should only be used via .config
+        self._crabConfig = None
         #start with first updates
         if initUpdate:
             self.update()
             self.updateJobStats()
+
+    ## Property function to find out if task runs on data
+    #
+    # @param self: CrabTask The object pointer.
+    @property
+    def isData( self ):
+        if self._isData is None:
+            try:
+                test = self.crabConfig.Data.lumiMask
+                self._isData = True
+            except:
+                self._isData = False
+        return self._isData
+
+    ## Function to access crab config object or read it if unititalized
+    #
+    # @param self: CrabTask The object pointer.
+    @property
+    def crabConfig( self ):
+        if self._crabConfig is None:
+            crab = CrabController()
+            self._crabConfig = crab.readCrabConfig( self.name )
+        return self._crabConfig
 
     ## Function to resubmit failed jobs in tasks
     #
