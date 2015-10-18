@@ -5,6 +5,7 @@
 # This module provides common functions for tasks with crab3.
 # You need no create a CrabController object in order to use the functions
 import os,sys
+import imp
 import optparse
 import subprocess
 import logging
@@ -195,6 +196,18 @@ class CrabController():
         except:
             self.logger.error("Error calling crab getlog for %s" %foldername)
             return {}, {}
+
+    ## Read a crab config and return python object
+    #
+    # @param self: The object pointer.
+    # @param name The sample name (crab request name)
+    def readCrabConfig( self, name ):
+        pset = 'crab_%s_cfg.py' % name
+        with open( pset, 'r') as cfgfile:
+            cfo = imp.load_source("pycfg", pset, cfgfile )
+            config = cfo.config
+            del cfo
+        return config
 
     ## Return list of all crab folders in workin area (default cwd)
     #
