@@ -4,6 +4,10 @@ import subprocess
 import cookielib
 import urlparse
 import os
+import datetime
+import getpass
+
+from datetime import datetime
 log = logging.getLogger( 'aix3adb' )
 
 def tryServerAuth(funct):
@@ -47,7 +51,28 @@ class aix3adb:
         self.readurl = 'https://cms-project-aachen3a-datasets.web.cern.ch/cms-project-aachen3a-datasets/aix3adb2/xmlrpc/x3adb_read.php'
         self.domain  = 'cms-project-aachen3a-datasets.web.cern.ch'
         self.passphrase = passphrase
-    def authorize(self, username=None, trykerberos=3):
+
+    def checkKinit( self ):
+        call = [ 'klist' ]
+        p = subprocess.Popen( call, stderr=subprocess.STDOUT, stdout=subprocess.PIPE ,shell=True)
+        stdout, stderr = p.communicate()
+        now = datetime.today()
+        for line in stdout.split('\n'):
+            if "CERN.CH@CERN.CH" in line:
+                splitline = line.split()
+                expireTime = datetime.strptime( splitline[2] + " " + splitline[3] , "%m/%d/%y %H:%M:%S" )
+                timeLeft = expireTime - now
+                hours = timeLeft.seconds / 3600
+                minutes = ( timeLeft.seconds % 3600 ) / 60
+                seconds = ( timeLeft.seconds % 60 )
+                print "kerberos expire time: ", expireTime
+                print "left ", hours, "h ", minutes, "m " , seconds, 's'
+                self.passphrase = getpass.getpass('Press return to proceed or enter your CERN pass phrase for kinit:')
+                if len( self.passphrase ) < 1:
+                    return True
+        return False
+
+    def callKinit( self, username = None , trykerberos=3):
         print "Calling kinit, please enter your CERN password"
         call = ['kinit']
         if username is not None:
@@ -62,7 +87,12 @@ class aix3adb:
             log.info("Result of kinit: " + str(x))
             if x == 0: break
             print "kinit failed. Please try again."
+
+    def authorize(self, username=None, trykerberos=3):
+        if not self.checkKinit:
+            self.callKinit( username = username, trykerberos = trykerberos)
         self.obtainSSOCookies()
+
     def obtainSSOCookies(self):
         call = ['env', '-i', '/home/home1/institut_3a/olschewski/public/cernsso/cern-get-sso-cookie', '--krb', '--url', self.authurl, '--reprocess', '--outfile', self.cookiefile]
         x = subprocess.call(call)
