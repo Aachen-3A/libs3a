@@ -94,7 +94,7 @@ class aix3adb:
         self.obtainSSOCookies()
 
     def obtainSSOCookies(self):
-        call = ['env', '-i', '/home/home1/institut_3a/olschewski/public/cernsso/cern-get-sso-cookie', '--krb', '--url', self.authurl, '--reprocess', '--outfile', self.cookiefile]
+        call = ['env', '-i', 'cern-get-sso-cookie', '--krb', '--url', self.authurl, '--reprocess', '--outfile', self.cookiefile]
         x = subprocess.call(call)
         if x > 0:
             log.error("Failed to retrieve a cookie, authentication not possible")
