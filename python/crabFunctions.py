@@ -4,7 +4,9 @@
 #
 # This module provides common functions for tasks with crab3.
 # You need no create a CrabController object in order to use the functions
-import os,sys
+import os,sys,glob
+import tarfile
+import xml.etree.ElementTree as ET
 import imp
 import optparse
 import subprocess
@@ -17,9 +19,14 @@ from CRABAPI.RawCommand import crabCommand
 from CRABClient.UserUtilities import getConsoleLogLevel, setConsoleLogLevel
 from CRABClient.ClientUtilities import LOGLEVEL_MUTE
 from CRABClient.ClientExceptions import CachefileNotFoundException
-
 setConsoleLogLevel(LOGLEVEL_MUTE)
 
+
+
+import gridFunctions
+import dbutilscms
+import aix3adb
+from  aix3adb import Aix3adbException
 
 ## The CrabController class
 #
@@ -321,7 +328,13 @@ class CrabTask:
     # @param taskname: The object pointer.
     # @type initUpdate: Boolean
     # @param initUpdate: Flag if crab status should be called when an instance is created
-    def __init__(self, taskname , crabController = None , initUpdate = True, localDir = "", outlfn = "" , StorageFileList = [] ):
+    def __init__(self, taskname ,
+                       crabController = None ,
+                       initUpdate = True,
+                       dblink = None,
+                       localDir = "",
+                       outlfn = "" ,
+                       StorageFileList = [] ):
         self.name = taskname
         self.uuid = uuid.uuid4()
         #~ self.lock = multiprocessing.Lock()
@@ -347,10 +360,13 @@ class CrabTask:
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
 
         self._isData = None
+        self.dblink = dblink
         self.resubmitCount = 0
 
         self.debug = False
 
+        self.finalFiles = []
+        self.totalEvents = 0
         # crab config as a python object should only be used via .config
         self._crabConfig = None
         #start with first updates
@@ -397,7 +413,7 @@ class CrabTask:
     ## Function to update Task in associated Jobs
     #
     # @param self: CrabTask The object pointer.
-    def update(self):
+    def update(self, updateDB = False):
         #~ self.lock.acquire()
         self.isUpdating = True
         controller =  CrabController()
@@ -410,15 +426,12 @@ class CrabTask:
             self.state , self.jobs,self.failureReason = controller.status(self.name)
         if self.state == "NOSTATE":
             if self.resubmitCount < 3: self.self.handleNoState()
+        if self.state == "COMPLETED" and self.isFinal:
+            self.state = "FINAL"
         self.nJobs = len(self.jobs.keys())
         self.updateJobStats()
         self.isUpdating = False
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
-        if "COMPLETE" in self.state:
-            if self.nComplete == self.nJobs:
-                self.state = "DONE"
-            else:
-                self.state = "COMPLETE"
         #~ self.lock.release()
 
     ## Function to handle Task which received NOSTATE status
@@ -477,6 +490,217 @@ class CrabTask:
             attrname = "n" + state.capitalize()
             setattr(self, attrname, stateDict[state])
         self.nComplete = nComplete
+
+    ## Function to read log info from log.tar.gz
+    #
+    # @param self: The object pointer.
+    # @param logArchName: path to the compressed log file
+    # @return a dictionary with parsed info
+    def readLogArch(self, logArchName):
+        JobNumber = logArchName.split("/")[-1].split("_")[1].split(".")[0]
+        log = {'readEvents' : 0}
+        with tarfile.open( logArchName, "r") as tar:
+            try:
+                JobXmlFile = tar.extractfile('FrameworkJobReport-%s.xml' % JobNumber)
+                root = ET.fromstring( JobXmlFile.read() )
+                for child in root:
+                    if child.tag == 'InputFile':
+                        for subchild in child:
+                            if subchild.tag == 'EventsRead':
+                                nEvents = int(subchild.text)
+                                log.update({'readEvents' : nEvents})
+                                break
+                        break
+            except:
+                print "Can not parse / read %s" % logArchName
+        return log
+
+    ## Function to finalize task in TAPAS workflow
+    #
+    # Get config files and submit samples
+    def finalizeTask(self , update = False, debug= False ):
+
+        outlfn = self.crabConfig.Data.outLFNDirBase.split('/store/user/')[1]
+        if outlfn.endswith("/"): outlfn =outlfn[:-1]
+        crab = CrabController()
+        # Check files for each job
+        dCacheFiles = gridFunctions.getdcachelist( outlfn )
+        #~ success , failed = crab.getlog( sample )
+        if debug:
+            cmd = 'crab log %s' % crab._prepareFoldername( self.name )
+        else:
+            # CRAB likes to be verbos, even if you tell it to be quiet...
+            cmd = 'crab --quiet log %s' % crab._prepareFoldername( self.name )
+        p = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE, shell=True)#,shell=True,universal_newlines=True)
+        (out,err) = p.communicate()
+        #~ print out
+        crabFolder = crab._prepareFoldername( self.name )
+        #~ print crabFolder
+        logArchs = glob.glob("%s/%s/results/*.log.tar.gz" % (self.crabConfig.General.workArea,crabFolder))
+        finalFiles = []
+        totalEvents = 0
+        #~ sys.exit()
+        for logArchName in logArchs:
+            JobNumber = logArchName.split("/")[-1].split("_")[1].split(".")[0]
+            #~ print logArchName
+            log = self.readLogArch( logArchName )
+            # check if file on dCache
+            dfile = []
+            for layer in dCacheFiles:
+                dfile += [s for s in layer if "%s_%s.pxlio" %( self.name, JobNumber ) in s ]
+            if len(dfile)  > 0 and log['readEvents'] > 0 :
+                finalFiles.append(  {'path':dfile[0], 'nevents':log['readEvents']} )
+                totalEvents += log['readEvents']
+        self.finalFiles = finalFiles
+        self.totalEvents = totalEvents
+        if self.isData:
+            self.addData2db( update )
+        else:
+            self.addMC2db( update )
+
+        with open('finalSample','a') as outfile:
+            outfile.write("%s:%s\n" % ( self.name,  self.crabConfig.Data.inputDataset))
+        self.state = "FINAL"
+
+    def addData2db( self, update=False):
+        crab = crabFunctions.CrabController()
+        # try to get sample db entry and create it otherwise
+        newInDB = False
+        try:
+            self.dbSample = self.dblink.getDataSample( self.name  )
+        except Aix3adbException:
+            newInDB = True
+            self.dbSample = aix3adb.DataSample( )
+            self.dbSample.name = self.name
+        # update fields
+        self.dbSample.energy = 13
+
+        if newInDB:
+            self.dblink.insertDataSample( self.dbSample )
+            # get sample again with its new id
+            self.dbSample = self.dblink.getDataSample( self.name )
+        else:
+            self.dblink.editDataSample( self.dbSample )
+
+        if update and not newInDB:
+            self.dbSkim, self.dbSample  =  self.dblink.getDataLatestSkimAndSampleBySample( self.dbSample.name )
+        else:
+            self.dbSkim = aix3adb.MCSkim()
+
+        self.fillCommonSkimFields( )
+        ## fill additional fields for data
+        self.dbSkim.jsonfile = self.crabConfig.Data.lumiMask.split("/")[-1]
+        if update:
+            self.dblink.editDataSkim( self.dbSkim )
+        else:
+            self.dblink.insertDataSkim( self.dbSkim )
+
+#~ update
+
+    def addMC2db( self, update = False ):
+        crab = CrabController()
+        generators = {}
+        generators.update({ 'MG':'madgraph' })
+        generators.update({ 'PH':'powheg' })
+        generators.update({ 'HW':'herwig6' })
+        generators.update({ 'HP':'herwigpp' })
+        generators.update({ 'HW':'herwig' })
+        generators.update({ 'SP':'sherpa' })
+        generators.update({ 'MC':'mcatnlo' })
+        generators.update({ 'AG':'alpgen' })
+        generators.update({ 'CA':'calchep' })
+        generators.update({ 'CO':'comphep'  })
+        generators.update({ 'P6':'pythia6' })
+        generators.update({ 'P8':'pythia8' })
+        generators.update({ 'PY':'pythia8' })
+        newInDB = False
+            # get infos from McM
+        mcmutil = dbutilscms.McMUtilities()
+        mcmutil.readURL( self.crabConfig.Data.inputDataset )
+        # try to get sample db entry and create it otherwise
+        try:
+            self.dbSample = self.dblink.getMCSample( self.name )
+        except Aix3adbException:
+            self.dbSample = aix3adb.MCSample()
+            newInDB = True
+            self.dbSample.name = self.name
+            self.dbSample.generator = generators[ self.name.split("_")[-1] ]
+            self.dbSample.crosssection = str(mcmutil.getCrossSection())
+            self.dbSample.crosssection_reference = 'McM'
+            self.dbSample.filterefficiency = mcmutil.getGenInfo('filter_efficiency')
+            self.dbSample.filterefficiency_reference = 'McM'
+            self.dbSample.kfactor = 1.
+            self.dbSample.kfactor_reference = "None"
+            self.dbSample.energy = mcmutil.getEnergy()
+
+        if newInDB:
+            self.dbSample = self.dblink.insertMCSample( self.dbSample )
+        else:
+            self.dbSample = self.dblink.editMCSample( self.dbSample )
+
+        if update and not newInDB:
+            self.dbSkim, self.dbSample  =  self.dblink.getMCLatestSkimAndSampleBySample( self.dbSample.name )
+        else:
+            self.dbSkim = aix3adb.MCSkim()
+
+        self.fillCommonSkimFields( )
+
+        if update:
+            self.dblink.editMCSkim( self.dbSkim )
+        else:
+            self.dblink.insertMCSkim( self.dbSkim )
+
+    def fillCommonSkimFields( self ):
+        # create relation to dbsample object
+        self.dbSkim.sampleid = self.dbSample.id
+        self.dbSkim.datasetpath = self.crabConfig.Data.inputDataset
+        outlfn = self.crabConfig.Data.outLFNDirBase.split('/store/user/')[1]
+        crab = CrabController()
+        self.dbSkim.owner = outlfn.split("/")[0]
+        self.dbSkim.iscreated = 1
+        self.dbSkim.isfinished = 1
+        self.dbSkim.isdeprecated  = 0
+        now = datetime.datetime.now()
+        self.dbSkim.files = self.finalFiles
+        self.dbSkim.created_at = now.strftime( "%Y-%m-%d %H-%M-%S" )
+        # where to get the skimmer name ??? MUSiCSkimmer fixed
+        self.dbSkim.skimmer_name = "PxlSkimmer"
+        self.dbSkim.skimmer_version = outlfn.split("/")[2]
+        self.dbSkim.skimmer_cmssw = os.getenv( 'CMSSW_VERSION' )
+        self.dbSkim.skimmer_globaltag = [p.replace("globalTag=","").strip() for p in self.crabConfig.JobType.pyCfgParams if "globalTag" in p][0]
+        self.dbSkim.nevents = str( self.totalEvents )
+
+    @property
+    def isFinal( self ):
+        # find out if we work on data or mc
+        try:
+            test = self.crabConfig.Data.lumiMask
+            runOnMC = False
+        except:
+            runOnMC = True
+        runOnData = not runOnMC
+        # fill search criteria for skim and samples
+        skimCriteria = {}
+        sampleCriteria = {}
+
+        outlfn = self.crabConfig.Data.outLFNDirBase.split('/store/user/')[1]
+        skimCriteria["owner"] = outlfn.split("/")[0]
+        skimCriteria["skimmer_version"] = outlfn.split("/")[2]
+
+        sampleCriteria["name"] = self.name
+        try:
+            if runOnMC:
+                searchResult = self.dblink.searchMCSkimsAndSamples( skimCriteria, sampleCriteria )
+            if runOnData:
+                searchResult = self.dblink.searchDataSkimsAndSamples( skimCriteria, sampleCriteria )
+        except Aix3adbException:
+            return False
+        except:
+            return False
+        if len(searchResult) > 0:
+            self.state = "FINAL"
+            return True
+        return False
 
 ## Class holds job statistics for several Crab tasks
 #
