@@ -347,6 +347,9 @@ class CrabTask:
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
 
         self._isData = None
+        self.resubmitCount = 0
+
+        self.debug = False
 
         # crab config as a python object should only be used via .config
         self._crabConfig = None
@@ -405,6 +408,8 @@ class CrabTask:
             #try it once more
             time.sleep(2)
             self.state , self.jobs,self.failureReason = controller.status(self.name)
+        if self.state == "NOSTATE":
+            if self.resubmitCount < 3: self.self.handleNoState()
         self.nJobs = len(self.jobs.keys())
         self.updateJobStats()
         self.isUpdating = False
@@ -415,6 +420,25 @@ class CrabTask:
             else:
                 self.state = "COMPLETE"
         #~ self.lock.release()
+
+    ## Function to handle Task which received NOSTATE status
+    #
+    # @param self: CrabTask The object pointer.
+    def handleNoState( self ):
+        crab = CrabController()
+        if "The CRAB3 server backend could not resubmit your task because the Grid scheduler answered with an error." in task.failureReason:
+            # move folder and try it again
+            cmd = 'mv %s bak_%s' %(crab._prepareFoldername( self.name ),crab._prepareFoldername( self.name ))
+            p = subprocess.Popen(cmd,stdout=subprocess.PIPE, shell=True)#,shell=True,universal_newlines=True)
+            (out,err) = p.communicate()
+            self.state = "SHEDERR"
+            configName = '%s_cfg.py' %(crab._prepareFoldername( self.name ))
+            crab.submit( configName )
+
+        elif task.failureReason is not None:
+            self.state = "ERRHANDLE"
+            crab.resubmit( self.name )
+        self.resubmitCount += 1
 
     def test_print(self):
         return self.uuid
