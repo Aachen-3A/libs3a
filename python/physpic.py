@@ -65,6 +65,8 @@ class Particle(object):
     def getTLorentzVector(self):
         u"""Returns the ROOT TLorentzVector of the particle"""
         return ROOT.TLorentzVector(self.momentum[0],self.momentum[1],self.momentum[2],self.momentum[3])
+    def deltaR(self,other):
+        return self.tLorentzVector.DeltaR(other.tLorentzVector)
     def __repr__(self):
         return u"ID:%f  pt:%f  eta:%f  phi:%f  e:%f  m:%f"%(self.pdgId,self.pt,self.eta,self.phi,self.energy,self.mass)
     def __str__(self):
@@ -178,6 +180,8 @@ class Plot(object):
         if type(particle)==list:
             if len(particle)==5:
                 self.particles.append(Particle(particle[0],particle[1],particle[2],particle[3],particle[4]))
+    def removeParticle(self,part):
+        self.particles.remove(part)
 
     def drawPolar(self):
         self.fig = plt.figure()

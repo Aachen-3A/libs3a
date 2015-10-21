@@ -168,6 +168,10 @@ class Job:
                 print "Submission server seems busy (EOF detected during communication). Waiting..."
                 time.sleep(60*(i+1))
                 continue
+            if "data_cb_read() - globus_ftp_client: the server responded with an error" in stdout:
+                print "Hickup in the ftp connection. Will try again. Waiting..."
+                time.sleep(60*(i+1))
+                continue
             if "FATAL" in stdout or "ERROR" in stdout or process.returncode != 0:
                 log.error('Submission failed.')
                 log.error('Output:\n' + stdout)
@@ -556,7 +560,7 @@ class Task:
         return njobs
     def getStatus(self):
         if self.isBlocked():
-            print self.name, " blocked ignore (if you want to update rm .lock)"
+            log.info(self.name+ " blocked ignore (if you want to update rm .lock)")
             return self.frontEndStatus
         self.blockTask()
         log.debug('Get status of task %s',self.name)

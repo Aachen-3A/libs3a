@@ -107,7 +107,7 @@ class TabbedText(BaseElement):
             if cardid==self.activeCard:
                 self.heading.addstr(1, ((cardSpacing+1)*2+cardWidth)*cardid+cardSpacing+1, ("{0:^"+str(cardWidth)+"."+str(cardWidth)+"}").format(title), curses.A_REVERSE)
             cardid += 1
-            
+
     def _redraw(self):
         self._redrawHeading()
         textid=0
@@ -286,7 +286,7 @@ def colWidthsReducerMaximum(colWidths, totalWidth):
     while sum(colWidths) > totalWidth:
         colWidths[max(xrange(len(colWidths)),key=colWidths.__getitem__)]-=1
     return colWidths
-    
+
 class SelectTable(BaseElement):
     """A Table where a single row can be selected
     """
@@ -330,7 +330,7 @@ class SelectTable(BaseElement):
             self.header.addstr(0, sum(self.colWidths[:i]), ("{0:^"+str(self.colWidths[i])+"."+str(self.colWidths[i]-1)+"}").format(self.colHeaders[i]), curses.A_UNDERLINE)
         if self.width-sum(self.colWidths)-1 > 0:
             self.header.addstr(0, sum(self.colWidths), " "*(self.width-sum(self.colWidths)-1), curses.A_UNDERLINE)
-        
+
     def addRow(self, row, formatting=None, key=None):
         self.rows.append(row)
         self.formats.append(default(formatting,curses.A_NORMAL))
@@ -359,6 +359,9 @@ class SelectTable(BaseElement):
         if self.cursor-self.position>3/4*self.height and self.position+self.height<self.nrows:
             self.position += 1
     def _redrawRows(self, *rowids):
+        if len(self.rows)==0:
+            #nothing to display
+            return
         for rownumber in rowids:
             if rownumber==self.cursor:
                 formatting = self.formats[rownumber] | curses.A_REVERSE
@@ -370,8 +373,15 @@ class SelectTable(BaseElement):
                 else:
                     direction="<"
                 #self.pad.addstr(rownumber, sum(self.colWidths[:i]), str(cell)[0:self.colWidths[i]-1], formatting)
-                self.pad.addstr(rownumber, sum(self.colWidths[:i]), ("{0:"+direction+str(self.colWidths[i]-1)+"."+str(self.colWidths[i]-1)+"} ").format(str(cell)), formatting)
-            self.pad.addstr(rownumber, sum(self.colWidths), " "*(self.width-sum(self.colWidths)-1), formatting)
+                try:
+                    self.pad.addstr(rownumber, sum(self.colWidths[:i]), ("{0:"+direction+str(self.colWidths[i]-1)+"."+str(self.colWidths[i]-1)+"} ").format(str(cell)), formatting)
+                except:
+                    #print ("{0:"+direction+str(self.colWidths[i]-1)+"."+str(self.colWidths[i]-1)+"} ").format(str(cell))
+                    pass
+            try:
+                self.pad.addstr(rownumber, sum(self.colWidths), " "*(self.width-sum(self.colWidths)-1), formatting)
+            except:
+                pass
     @property
     def nrows(self):
         return len(self.rows)
@@ -402,8 +412,8 @@ class SelectTable(BaseElement):
     @property
     def width(self):
         return min(self._width, self.parent.getmaxyx()[1])
-        
-        
+
+
 
 class StdOutWrapper:
     """This is a Stream object to redirect stdout and stderr to a BottomText element, which
@@ -424,18 +434,18 @@ class StdOutWrapper:
         pass
 
 class CursesHandler(logging.Handler):
-    
+
     def __init__(self, stdscr,bottomText, level=logging.DEBUG):
         logging.Handler.__init__(self, level)
         self.bottomText = bottomText
         self.stdscr = stdscr
     def emit(self, record):
-        attr = {"DEBUG":curses.A_NORMAL, 
-                "INFO":curses.A_NORMAL, 
-                "WARNING":curses.A_BOLD, 
-                "ERROR":curses.A_BOLD, 
+        attr = {"DEBUG":curses.A_NORMAL,
+                "INFO":curses.A_NORMAL,
+                "WARNING":curses.A_BOLD,
+                "ERROR":curses.A_BOLD,
                 "CRITICAL":curses.A_STANDOUT}
-        
+
         self.bottomText.addText(self.format(record)+"\n")
 
 # http://stackoverflow.com/questions/641420/how-should-i-log-while-using-multiprocessing-in-python
