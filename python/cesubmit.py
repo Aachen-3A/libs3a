@@ -560,7 +560,7 @@ class Task:
         return njobs
     def getStatus(self):
         if self.isBlocked():
-            print self.name, " blocked ignore (if you want to update rm .lock)"
+            log.info(self.name+ " blocked ignore (if you want to update rm .lock)")
             return self.frontEndStatus
         self.blockTask()
         log.debug('Get status of task %s',self.name)
