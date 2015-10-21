@@ -689,6 +689,8 @@ class CrabTask:
         skimCriteria["owner"] = outlfn.split("/")[0]
         skimCriteria["skimmer_version"] = outlfn.split("/")[2]
 
+        skimCriteria["skimmer_globaltag"] = [p.replace("globalTag=","").strip() for p in self.crabConfig.JobType.pyCfgParams if "globalTag" in p][0]
+
         sampleCriteria["name"] = self.name
         try:
             if runOnMC:
