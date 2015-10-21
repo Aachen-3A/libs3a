@@ -637,7 +637,11 @@ class CrabTask:
             self.dbSample = self.dblink.editMCSample( self.dbSample )
 
         if update and not newInDB:
-            self.dbSkim, self.dbSample  =  self.dblink.getMCLatestSkimAndSampleBySample( self.dbSample.name )
+            # catch if a sample exists but no undeprecated skim exists
+            try:
+                self.dbSkim, dummySample  =  self.dblink.getMCLatestSkimAndSampleBySample( self.dbSample.name )
+            except Aix3adbException:
+                self.dbSkim = aix3adb.MCSkim()
         else:
             self.dbSkim = aix3adb.MCSkim()
 
