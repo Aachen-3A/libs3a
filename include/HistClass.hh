@@ -814,6 +814,36 @@ namespace HistClass {
             }
         }
     }
+    
+    /*! \brief Function to write many efficiency containers which contain specific strings of the map
+     *
+     * This function writes all efficiency containers of the map with that
+     * contain the given string in there name. The written efficiencies also have to contain a list of strings that are sepe-
+     * rated by a ':'.
+     * \param[in] name String that all efficiency names that should be written contain
+     * \param[in] contains_i String that of names (seperated by ':') that the efficiency name should contain
+     */
+    SUPPRESS_NOT_USED_WARN static void WriteAllEff(const char * name, const char * contains_i) {
+        const std::string contains(contains_i);
+        std::vector<std::string> i_cont = split(contains, ':');
+        std::unordered_map<std::string, TH1D * >::iterator it;
+        for (std::unordered_map<std::string, TEfficiency * >::iterator it = effs.begin(); it != effs.end(); ++it) {
+            if (std::string::npos != it->first.find(name)) {
+                bool do_write = false;
+                for (uint i = 0; i < i_cont.size(); i++) {
+                    if (std::string::npos != it->first.find(i_cont[i])) {
+                        do_write = true;
+                    } else {
+                        do_write = false;
+                        break;
+                    }
+                }
+                if ( do_write ) {
+                    it->second -> Write();
+                }
+            }
+        }
+    }     
 
     /*! \brief Function to write many profile containers of the map
      *

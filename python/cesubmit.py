@@ -106,6 +106,10 @@ class Job:
     def writeJdl(self):
 
         if self.executable is None: self.executable = self.task.executable
+        if (self.task.uploadexecutable):
+            relPathExecutable = "./" + os.path.basename(self.executable)
+        else:
+            relPathExecutable = "./" + self.executable
         self.executable = os.path.abspath( self.executable )
         self.inputfiles = [os.path.abspath( ifile ) for ifile in self.inputfiles ]
         jdl = (
@@ -129,7 +133,7 @@ class Job:
         if not isinstance(self.outputfiles,list) or not isinstance(self.task.outputfiles,list):
             raise Exception("You passed a non list object as outputfile argument! Make a list!")
         jdl += 'OutputSandbox = { "' + ('", "'.join(stds+self.outputfiles+self.task.outputfiles)) + '"};\n'
-        jdl += 'Arguments = "' + (' '.join([str(self.nodeid), "./"+os.path.basename(self.executable)] + self.arguments)) + '";\n'
+        jdl += 'Arguments = "' + (' '.join([str(self.nodeid), relPathExecutable] + self.arguments)) + '";\n'
         jdl += "]"
         self.jdlfilename = "job"+str(self.nodeid)+".jdl"
         jdl_file = open(self.jdlfilename, 'w')
@@ -162,6 +166,10 @@ class Job:
                 continue
             if "FATAL - EOF detected during communication" in stdout:
                 print "Submission server seems busy (EOF detected during communication). Waiting..."
+                time.sleep(60*(i+1))
+                continue
+            if "data_cb_read() - globus_ftp_client: the server responded with an error" in stdout:
+                print "Hickup in the ftp connection. Will try again. Waiting..."
                 time.sleep(60*(i+1))
                 continue
             if "FATAL" in stdout or "ERROR" in stdout or process.returncode != 0:
@@ -552,7 +560,7 @@ class Task:
         return njobs
     def getStatus(self):
         if self.isBlocked():
-            print self.name, " blocked ignore (if you want to update rm .lock)"
+            log.info(self.name+ " blocked ignore (if you want to update rm .lock)")
             return self.frontEndStatus
         self.blockTask()
         log.debug('Get status of task %s',self.name)

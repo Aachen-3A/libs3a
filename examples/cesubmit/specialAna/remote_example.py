@@ -52,7 +52,7 @@ def getFilesfromFile(cfgFile):
                 file_lists.append([ i for i in j])
 
         else:
-            time.sleep(4)
+            #time.sleep(4)
             file_lists=[]
             if "Data" in sample:
                 file_lists_1 = getdcachelist( folder, sample,mem_limit = 1000000000 )
@@ -64,8 +64,9 @@ def getFilesfromFile(cfgFile):
             outfile = open( "data/"+sampleFolder, 'a+b' )
             cPickle.dump( {folder:file_lists}, outfile, -1 )
             outfile.close()
-
         if len(file_lists)>0:
+
+            file_lists=filter(lambda x: "failed" not in x, file_lists)
             sampleList.update({sample:[file_lists,config]})
         else:
             print sample
@@ -98,7 +99,7 @@ def readDcachePickle(file):
     except:
         raise
 
-def makeExe(user,options):
+def makeExe(user,options,md5sum):
     from string import Template
     exe="""
     echo Copying pack...
@@ -122,7 +123,8 @@ def makeExe(user,options):
            echo Did you forget to \\\'remix --copy\\\'? 1>&2
         fi
     fi
-
+    md5sum $PROGRAM
+    echo $MD5SUM
     tar xzvf $PROGRAM
     export PXLANA=$PWD
     export MUSIC_BASE=$PWD
@@ -148,7 +150,8 @@ def makeExe(user,options):
             PROGAM="MUSiC",
             LHAPATHREPLACE="/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/lhapdf6/6.1.4/",
             LHAPATHREPLACE2="/cvmfs/cms.cern.ch/slc6_amd64_gcc481/external/lhapdf6/6.1.4/share/LHAPDF/PDFsets",
-            PROGRAM=options.program
+            PROGRAM=options.program,
+            MD5SUM=md5sum,
         )
     exe=Template(exe).safe_substitute(d)
     exeFile=open("runtemp.sh","w+")
@@ -215,8 +218,12 @@ def prepare_teli(options):
         log.info(output2)
         log.info(output)
         sys.exit(1)
+
+    retcode, output=TimedCall.retry( 3, 600, ("md5sum %s/%s"%(tempdir,options.program)).split(" ") )
+    md5sum=output.split()[0]
     log.info("File "+tempdir+"/%s  copied to dcache"%(options.program))
     os.chdir(thidir)
+    return md5sum
 
 
 def main():
@@ -269,8 +276,8 @@ def main():
     else:
         os.makedirs(options.Output)
     sampleList=getFilesfromFile(cfgFile)
-    prepare_teli(options)
-    makeExe(options.user,options)
+    md5sum=prepare_teli(options)
+    makeExe(options.user,options,md5sum)
 
     thisdir=os.getcwd()
 
