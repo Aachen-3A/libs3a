@@ -181,21 +181,21 @@ class aix3adb:
     def getDataSkim(self, skimid):
         s = xmlrpclib.ServerProxy(self.readurl)
         return DataSkim(s.getDataSkim(skimid))
-    def getMCLatestSkimAndSampleBySample(self, name):
+    def getMCLatestSkimAndSampleBySample(self, name, isfinished=True):
         s = xmlrpclib.ServerProxy(self.readurl)
-        result = s.getMCLatestSkimAndSampleBySample(name)
+        result = s.getMCLatestSkimAndSampleBySample( name, isfinished  )
         return MCSkim(result['skim']), MCSample(result['sample'])
-    def getDataLatestSkimAndSampleBySample(self, name):
+    def getDataLatestSkimAndSampleBySample(self, name, isfinished=True):
         s = xmlrpclib.ServerProxy(self.readurl)
-        result = s.getDataLatestSkimAndSampleBySample(name)
+        result = s.getDataLatestSkimAndSampleBySample(name, isfinished)
         return DataSkim(result['skim']), DataSample(result['sample'])
-    def getMCLatestSkimAndSampleByDatasetpath(self, datasetpath):
+    def getMCLatestSkimAndSampleByDatasetpath(self, datasetpath, isfinished=True):
         s = xmlrpclib.ServerProxy(self.readurl)
-        result = s.getMCLatestSkimAndSampleByDatasetpath( datasetpath )
+        result = s.getMCLatestSkimAndSampleByDatasetpath( datasetpath , isfinished )
         return MCSkim(result['skim']), MCSample(result['sample'])
-    def getDataLatestSkimAndSampleByDatasetpath(self, datasetpath):
+    def getDataLatestSkimAndSampleByDatasetpath(self, datasetpath, isfinished=True):
         s = xmlrpclib.ServerProxy(self.readurl)
-        result = s.getDataLatestSkimAndSampleByDatasetpath( datasetpath )
+        result = s.getDataLatestSkimAndSampleByDatasetpath( datasetpath, isfinished )
         return DataSkim(result['skim']), DataSample(result['sample'])
     def getMCSkimAndSampleBySkim(self, skimid):
         s = xmlrpclib.ServerProxy(self.readurl)
