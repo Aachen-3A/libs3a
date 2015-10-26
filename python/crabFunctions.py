@@ -773,10 +773,11 @@ class CrabTask:
         crab = CrabController()
         self.dbSkim.owner = outlfn.split("/")[0]
         self.dbSkim.iscreated = 1
-        self.dbSkim.isfinished = 1
         self.dbSkim.isdeprecated  = 0
         now = datetime.datetime.now()
         self.dbSkim.files = self.finalFiles
+        if len(self.dbSkim.files ) > 0:
+            self.dbSkim.isfinished = 1
         self.dbSkim.created_at = now.strftime( "%Y-%m-%d %H-%M-%S" )
         # where to get the skimmer name ??? MUSiCSkimmer fixed
         self.dbSkim.skimmer_name = "PxlSkimmer"
