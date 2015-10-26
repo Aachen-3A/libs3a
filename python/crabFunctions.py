@@ -341,14 +341,12 @@ class CrabTask:
                        dblink = None,
                        localDir = "",
                        outlfn = "" ,
-                       StorageFileList = [] ):
         self.name = taskname
         self.uuid = uuid.uuid4()
         #~ self.lock = multiprocessing.Lock()
         self.jobs = {}
         self.localDir = localDir
         self.outlfn = outlfn
-        self.StorageFileList = StorageFileList
         self.isUpdating = False
         self.taskId = -1
         #variables for statistics
