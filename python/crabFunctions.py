@@ -341,6 +341,9 @@ class CrabTask:
                        dblink = None,
                        localDir = "",
                        outlfn = "" ,
+                       globalTag = None,
+                       skimmer_version = None,
+                       json_file = None):
         self.name = taskname
         self.uuid = uuid.uuid4()
         #~ self.lock = multiprocessing.Lock()
@@ -374,6 +377,12 @@ class CrabTask:
         self.totalEvents = 0
         # crab config as a python object should only be used via .config
         self._crabConfig = None
+        self._inDB = None
+
+        self._globalTag_default = globalTag
+        self._skimmer_version_default = skimmer_version
+        self._json_file_default = json_file
+
         #start with first updates
         if initUpdate:
             self.update()
@@ -406,6 +415,43 @@ class CrabTask:
             self._crabConfig = crab.readCrabConfig( self.name )
         return self._crabConfig
 
+    @property
+    def globalTag( self ):
+        try:
+            return self.crabConfig.Data.publishDataName
+        except:
+            pass
+        try:
+            return  self.dbSkim.skimmer_globaltag
+        except:
+            pass
+        return self._globalTag_default
+
+    @property
+    def skimmer_version( self ):
+        try:
+            outlfn = self.crabConfig.Data.outLFNDirBase.split('/store/user/')[1]
+            return outlfn.split("/")[2]
+        except:
+            pass
+        try:
+            return self.dbSkim.skimmer_version
+        except:
+            pass
+        return self._skimmer_version_default
+
+    @property
+    def json_file( self ):
+        if not self.isData: return None
+        try:
+            return self.crabConfig.Data.lumiMask.split("/")[-1]
+        except:
+            pass
+        try:
+            return self.dbSkim.jsonfile
+        except:
+            pass
+        return self._json_file_default
 
     @property
     def inDB( self ):
