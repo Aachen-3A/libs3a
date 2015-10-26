@@ -515,18 +515,38 @@ class CrabTask:
         self.isUpdating = True
         controller =  CrabController()
         self.state = "UPDATING"
-        self.state , self.jobs,self.failureReason = controller.status(self.name)
-        if self.state=="FAILED":
-            import time
-            #try it once more
-            time.sleep(2)
-            self.state , self.jobs,self.failureReason = controller.status(self.name)
-        if self.state == "NOSTATE":
-            if self.resubmitCount < 3: self.self.handleNoState()
-        if self.state == "COMPLETED" and self.isFinal:
+        # check if we should drop this sample due to missing info
+
+        if ((self.globalTag is None) or (self.skimmer_version is None) or (self.isData and self.json_file is None)):
+            self.state = "DROP"
+        if self.isFinal:
             self.state = "FINAL"
-        self.nJobs = len(self.jobs.keys())
-        self.updateJobStats()
+            try:
+                self.nJobs = len ( self.dbSkim.files )
+                self.nFinished = len ( self.dbSkim.files )
+            except:
+                pass
+        elif self.crabConfig:
+            self.state , self.jobs,self.failureReason = controller.status(self.name)
+            if self.state=="FAILED":
+                import time
+                #try it once more
+                time.sleep(2)
+                self.state , self.jobs,self.failureReason = controller.status(self.name)
+            self.nJobs = len(self.jobs.keys())
+            self.updateJobStats()
+            if not self.inDB and self.state in ( 'QUEUED', 'SUBMITTED', "COMPLETED", "FINISHED", 'COMPLETED'):
+                if self.isData: self.addData2db( )
+                else: self.addMC2db( )
+            if self.state == "NOSTATE":
+                if self.resubmitCount < 3: self.self.handleNoState()
+            # add to db if not
+        # Final solution inf state not yet found
+        if self.state == "UPDATING":
+            if not self.inDB:
+                self.state = "NOTFOUND"
+            else:
+                self.state = "CREATED:%s" % self.dbSkim.owner
         self.isUpdating = False
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
         #~ self.lock.release()
@@ -649,9 +669,9 @@ class CrabTask:
         self.finalFiles = finalFiles
         self.totalEvents = totalEvents
         if self.isData:
-            self.addData2db( update )
+            self.addData2db( True )
         else:
-            self.addMC2db( update )
+            self.addMC2db( True )
 
         with open('finalSample','a') as outfile:
             outfile.write("%s:%s\n" % ( self.name,  self.crabConfig.Data.inputDataset))
