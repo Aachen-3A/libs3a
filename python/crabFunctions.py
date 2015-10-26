@@ -406,6 +406,48 @@ class CrabTask:
             self._crabConfig = crab.readCrabConfig( self.name )
         return self._crabConfig
 
+
+    @property
+    def inDB( self ):
+        if self.state == "FINAL": self._inDB = True
+        if self.updateFromDB():
+            try:
+                if int( self.dbSkim.iscreated ):
+                    self._inDB = True
+
+            except:
+                self._inDB = False
+        else:
+            self._inDB = False
+        return self._inDB
+
+    def updateFromDB( self ):
+         # check if we have a db link
+        if self.dblink is None:
+            return False
+
+        # fill search criteria for skim and samples
+        skimCriteria = {}
+        sampleCriteria = {}
+
+        sampleCriteria[ "name" ] = self.name
+        skimCriteria["skimmer_version"] = self.skimmer_version
+        skimCriteria["skimmer_globaltag"] = self.globalTag
+        try:
+            if self.isData:
+                skimCriteria["jsonfile"] = self.json_file
+                searchResult = self.dblink.searchDataSkimsAndSamples( skimCriteria, sampleCriteria )
+            else:
+                searchResult = self.dblink.searchMCSkimsAndSamples( skimCriteria, sampleCriteria )
+                self.dbSkim = searchResult[0][0]
+                self.dbSample = searchResult[0][1]
+                self._inDB = True
+        except Aix3adbException:
+            return False
+        except:
+            return False
+        return True
+
     ## Function to resubmit failed jobs in tasks
     #
     # @param self: CrabTask The object pointer.
