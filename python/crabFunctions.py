@@ -389,8 +389,12 @@ class CrabTask:
                 test = self.crabConfig.Data.lumiMask
                 self._isData = True
             except:
-                self._isData = False
+                if self.name.startswith( "Data_" ):
+                    self._isData = True
+                else:
+                    self._isData = False
         return self._isData
+
 
     ## Function to access crab config object or read it if unititalized
     #
