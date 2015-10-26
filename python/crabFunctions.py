@@ -467,6 +467,13 @@ class CrabTask:
             self._inDB = False
         return self._inDB
 
+    @property
+    def isFinal( self ):
+        # find out if we work on data or mc
+        if self.state == "FINAL": return True
+        if not self.inDB: return False
+        else: return (self.dbSkim.isfinished and hasattr(self.dbSkim, 'files' ) )
+
     def updateFromDB( self ):
          # check if we have a db link
         if self.dblink is None:
@@ -786,37 +793,6 @@ class CrabTask:
         self.dbSkim.skimmer_globaltag = [p.replace("globalTag=","").strip() for p in self.crabConfig.JobType.pyCfgParams if "globalTag" in p][0]
         self.dbSkim.nevents = str( self.totalEvents )
 
-    @property
-    def isFinal( self ):
-        # find out if we work on data or mc
-        try:
-            test = self.crabConfig.Data.lumiMask
-            runOnMC = False
-        except:
-            runOnMC = True
-        runOnData = not runOnMC
-        # fill search criteria for skim and samples
-        skimCriteria = {}
-        sampleCriteria = {}
-
-        outlfn = self.crabConfig.Data.outLFNDirBase.split('/store/user/')[1]
-        skimCriteria["owner"] = outlfn.split("/")[0]
-        skimCriteria["skimmer_version"] = outlfn.split("/")[2]
-
-        sampleCriteria["name"] = self.name
-        try:
-            if runOnMC:
-                searchResult = self.dblink.searchMCSkimsAndSamples( skimCriteria, sampleCriteria )
-            if runOnData:
-                searchResult = self.dblink.searchDataSkimsAndSamples( skimCriteria, sampleCriteria )
-        except Aix3adbException:
-            return False
-        except:
-            return False
-        if len(searchResult) > 0:
-            self.state = "FINAL"
-            return True
-        return False
 
 ## Class holds job statistics for several Crab tasks
 #
