@@ -213,12 +213,15 @@ class CrabController():
     # @param self: The object pointer.
     # @param name The sample name (crab request name)
     def readCrabConfig( self, name ):
-        pset = 'crab_%s_cfg.py' % name
-        with open( pset, 'r') as cfgfile:
-            cfo = imp.load_source("pycfg", pset, cfgfile )
-            config = cfo.config
-            del cfo
-        return config
+        try:
+            pset = 'crab_%s_cfg.py' % name
+            with open( pset, 'r') as cfgfile:
+                cfo = imp.load_source("pycfg", pset, cfgfile )
+                config = cfo.config
+                del cfo
+            return config
+        except:
+            return False
 
     ## Return list of all crab folders in workin area (default cwd)
     #
