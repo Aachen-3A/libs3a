@@ -145,6 +145,10 @@ class CrabController():
     def checkusername(self):
         #depreceated string: cmd = 'crab checkHNname --voGroup=dcms'
         #~ cmd = 'crab checkusername --voGroup=dcms'
+        try:
+            username = os.environ["CERNUSERNAME"]
+            return username
+        except:pass
         res = crabCommand('checkusername')
         try:
             self.username = res['username']
