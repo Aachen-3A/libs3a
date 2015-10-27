@@ -145,6 +145,10 @@ class CrabController():
     def checkusername(self):
         #depreceated string: cmd = 'crab checkHNname --voGroup=dcms'
         #~ cmd = 'crab checkusername --voGroup=dcms'
+        try:
+            username = os.environ["CERNUSERNAME"]
+            return username
+        except:pass
         res = crabCommand('checkusername')
         try:
             self.username = res['username']
@@ -209,12 +213,15 @@ class CrabController():
     # @param self: The object pointer.
     # @param name The sample name (crab request name)
     def readCrabConfig( self, name ):
-        pset = 'crab_%s_cfg.py' % name
-        with open( pset, 'r') as cfgfile:
-            cfo = imp.load_source("pycfg", pset, cfgfile )
-            config = cfo.config
-            del cfo
-        return config
+        try:
+            pset = 'crab_%s_cfg.py' % name
+            with open( pset, 'r') as cfgfile:
+                cfo = imp.load_source("pycfg", pset, cfgfile )
+                config = cfo.config
+                del cfo
+            return config
+        except:
+            return False
 
     ## Return list of all crab folders in workin area (default cwd)
     #
@@ -334,14 +341,15 @@ class CrabTask:
                        dblink = None,
                        localDir = "",
                        outlfn = "" ,
-                       StorageFileList = [] ):
+                       globalTag = None,
+                       skimmer_version = None,
+                       json_file = None):
         self.name = taskname
         self.uuid = uuid.uuid4()
         #~ self.lock = multiprocessing.Lock()
         self.jobs = {}
         self.localDir = localDir
         self.outlfn = outlfn
-        self.StorageFileList = StorageFileList
         self.isUpdating = False
         self.taskId = -1
         #variables for statistics
@@ -369,6 +377,12 @@ class CrabTask:
         self.totalEvents = 0
         # crab config as a python object should only be used via .config
         self._crabConfig = None
+        self._inDB = None
+
+        self._globalTag_default = globalTag
+        self._skimmer_version_default = skimmer_version
+        self._json_file_default = json_file
+
         #start with first updates
         if initUpdate:
             self.update()
@@ -384,8 +398,12 @@ class CrabTask:
                 test = self.crabConfig.Data.lumiMask
                 self._isData = True
             except:
-                self._isData = False
+                if self.name.startswith( "Data_" ):
+                    self._isData = True
+                else:
+                    self._isData = False
         return self._isData
+
 
     ## Function to access crab config object or read it if unititalized
     #
@@ -396,6 +414,92 @@ class CrabTask:
             crab = CrabController()
             self._crabConfig = crab.readCrabConfig( self.name )
         return self._crabConfig
+
+    @property
+    def globalTag( self ):
+        try:
+            return self.crabConfig.Data.publishDataName
+        except:
+            pass
+        try:
+            return  self.dbSkim.skimmer_globaltag
+        except:
+            pass
+        return self._globalTag_default
+
+    @property
+    def skimmer_version( self ):
+        try:
+            outlfn = self.crabConfig.Data.outLFNDirBase.split('/store/user/')[1]
+            return outlfn.split("/")[2]
+        except:
+            pass
+        try:
+            return self.dbSkim.skimmer_version
+        except:
+            pass
+        return self._skimmer_version_default
+
+    @property
+    def json_file( self ):
+        if not self.isData: return None
+        try:
+            return self.crabConfig.Data.lumiMask.split("/")[-1]
+        except:
+            pass
+        try:
+            return self.dbSkim.jsonfile
+        except:
+            pass
+        return self._json_file_default
+
+    @property
+    def inDB( self ):
+        if self.state == "FINAL": self._inDB = True
+        if self.updateFromDB():
+            try:
+                if int( self.dbSkim.iscreated ):
+                    self._inDB = True
+
+            except:
+                self._inDB = False
+        else:
+            self._inDB = False
+        return self._inDB
+
+    @property
+    def isFinal( self ):
+        # find out if we work on data or mc
+        if self.state == "FINAL": return True
+        if not self.inDB: return False
+        else: return (self.dbSkim.isfinished and hasattr(self.dbSkim, 'files' ) )
+
+    def updateFromDB( self ):
+         # check if we have a db link
+        if self.dblink is None:
+            return False
+
+        # fill search criteria for skim and samples
+        skimCriteria = {}
+        sampleCriteria = {}
+
+        sampleCriteria[ "name" ] = self.name
+        skimCriteria["skimmer_version"] = self.skimmer_version
+        skimCriteria["skimmer_globaltag"] = self.globalTag
+        try:
+            if self.isData:
+                skimCriteria["jsonfile"] = self.json_file
+                searchResult = self.dblink.searchDataSkimsAndSamples( skimCriteria, sampleCriteria )
+            else:
+                searchResult = self.dblink.searchMCSkimsAndSamples( skimCriteria, sampleCriteria )
+                self.dbSkim = searchResult[0][0]
+                self.dbSample = searchResult[0][1]
+                self._inDB = True
+        except Aix3adbException:
+            return False
+        except:
+            return False
+        return True
 
     ## Function to resubmit failed jobs in tasks
     #
@@ -418,18 +522,38 @@ class CrabTask:
         self.isUpdating = True
         controller =  CrabController()
         self.state = "UPDATING"
-        self.state , self.jobs,self.failureReason = controller.status(self.name)
-        if self.state=="FAILED":
-            import time
-            #try it once more
-            time.sleep(2)
-            self.state , self.jobs,self.failureReason = controller.status(self.name)
-        if self.state == "NOSTATE":
-            if self.resubmitCount < 3: self.self.handleNoState()
-        if self.state == "COMPLETED" and self.isFinal:
+        # check if we should drop this sample due to missing info
+
+        if ((self.globalTag is None) or (self.skimmer_version is None) or (self.isData and self.json_file is None)):
+            self.state = "DROP"
+        if self.isFinal:
             self.state = "FINAL"
-        self.nJobs = len(self.jobs.keys())
-        self.updateJobStats()
+            try:
+                self.nJobs = len ( self.dbSkim.files )
+                self.nFinished = len ( self.dbSkim.files )
+            except:
+                pass
+        elif self.crabConfig:
+            self.state , self.jobs,self.failureReason = controller.status(self.name)
+            if self.state=="FAILED":
+                import time
+                #try it once more
+                time.sleep(2)
+                self.state , self.jobs,self.failureReason = controller.status(self.name)
+            self.nJobs = len(self.jobs.keys())
+            self.updateJobStats()
+            if not self.inDB and self.state in ( 'QUEUED', 'SUBMITTED', "COMPLETED", "FINISHED", 'COMPLETED'):
+                if self.isData: self.addData2db( )
+                else: self.addMC2db( )
+            if self.state == "NOSTATE":
+                if self.resubmitCount < 3: self.self.handleNoState()
+            # add to db if not
+        # Final solution inf state not yet found
+        if self.state == "UPDATING":
+            if not self.inDB:
+                self.state = "NOTFOUND"
+            else:
+                self.state = "CREATED:%s" % self.dbSkim.owner
         self.isUpdating = False
         self.lastUpdate = datetime.datetime.now().strftime( "%Y-%m-%d_%H.%M.%S" )
         #~ self.lock.release()
@@ -552,9 +676,9 @@ class CrabTask:
         self.finalFiles = finalFiles
         self.totalEvents = totalEvents
         if self.isData:
-            self.addData2db( update )
+            self.addData2db( True )
         else:
-            self.addMC2db( update )
+            self.addMC2db( True )
 
         with open('finalSample','a') as outfile:
             outfile.write("%s:%s\n" % ( self.name,  self.crabConfig.Data.inputDataset))
@@ -656,10 +780,11 @@ class CrabTask:
         crab = CrabController()
         self.dbSkim.owner = outlfn.split("/")[0]
         self.dbSkim.iscreated = 1
-        self.dbSkim.isfinished = 1
         self.dbSkim.isdeprecated  = 0
         now = datetime.datetime.now()
         self.dbSkim.files = self.finalFiles
+        if len(self.dbSkim.files ) > 0:
+            self.dbSkim.isfinished = 1
         self.dbSkim.created_at = now.strftime( "%Y-%m-%d %H-%M-%S" )
         # where to get the skimmer name ??? MUSiCSkimmer fixed
         self.dbSkim.skimmer_name = "PxlSkimmer"
@@ -668,37 +793,6 @@ class CrabTask:
         self.dbSkim.skimmer_globaltag = [p.replace("globalTag=","").strip() for p in self.crabConfig.JobType.pyCfgParams if "globalTag" in p][0]
         self.dbSkim.nevents = str( self.totalEvents )
 
-    @property
-    def isFinal( self ):
-        # find out if we work on data or mc
-        try:
-            test = self.crabConfig.Data.lumiMask
-            runOnMC = False
-        except:
-            runOnMC = True
-        runOnData = not runOnMC
-        # fill search criteria for skim and samples
-        skimCriteria = {}
-        sampleCriteria = {}
-
-        outlfn = self.crabConfig.Data.outLFNDirBase.split('/store/user/')[1]
-        skimCriteria["owner"] = outlfn.split("/")[0]
-        skimCriteria["skimmer_version"] = outlfn.split("/")[2]
-
-        sampleCriteria["name"] = self.name
-        try:
-            if runOnMC:
-                searchResult = self.dblink.searchMCSkimsAndSamples( skimCriteria, sampleCriteria )
-            if runOnData:
-                searchResult = self.dblink.searchDataSkimsAndSamples( skimCriteria, sampleCriteria )
-        except Aix3adbException:
-            return False
-        except:
-            return False
-        if len(searchResult) > 0:
-            self.state = "FINAL"
-            return True
-        return False
 
 ## Class holds job statistics for several Crab tasks
 #
